@@ -7,7 +7,7 @@ export const prerender = false;
 const RESEND_API_KEY = import.meta.env.RESEND_API_KEY;
 
 if (!RESEND_API_KEY) {
-	console.error('RESEND_API_KEY no está configurada. ');
+	console.error('RESEND_API_KEY no está configurada.');
 }
 
 const resend = new Resend(RESEND_API_KEY);

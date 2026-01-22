@@ -1,15 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
 
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server', // Server-rendered para soportar endpoints API
-  adapter: node({
-    mode: 'standalone'
-  }),
+  // Sin output específico - usa el default (static) para desarrollo
+  // El endpoint API con prerender: false funcionará en modo dev
   vite: {
     plugins: [tailwindcss()]
   }
