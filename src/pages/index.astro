@@ -4,9 +4,8 @@ const TARGET_DATE = new Date();
 TARGET_DATE.setMonth(TARGET_DATE.getMonth() + 5);
 const TARGET_DATE_ISO = TARGET_DATE.toISOString();
 import '../styles/global.css';
-import logoImage from '../assets/bimooralogo-sin.png';
-import FloatingCard from '../components/FloatingCard.astro';
 
+import LogoSinFondo from '../assets/bimooralogo-sinfondo.png'
 // Structured Data for SEO
 const structuredData = {
 	"@context": "https://schema.org",
@@ -55,7 +54,7 @@ const structuredData = {
 		<meta property="og:url" content="https://bimoora.com" />
 		<meta property="og:title" content="Bimoora — Donde el amor deja memoria | App para Parejas" />
 		<meta property="og:description" content="Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día." />
-		<meta property="og:image" content={logoImage.src} />
+		<meta property="og:image" content={LogoSinFondo.src} />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
 		<meta property="og:image:alt" content="Bimoora - Donde el amor deja memoria" />
@@ -67,12 +66,12 @@ const structuredData = {
 		<meta name="twitter:url" content="https://bimoora.com" />
 		<meta name="twitter:title" content="Bimoora — Donde el amor deja memoria | App para Parejas" />
 		<meta name="twitter:description" content="Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día." />
-		<meta name="twitter:image" content={logoImage.src} />
+		<meta name="twitter:image" content={LogoSinFondo.src} />
 		<meta name="twitter:image:alt" content="Bimoora - Donde el amor deja memoria" />
 		
 		<!-- Favicon -->
-		<link rel="icon" type="image/png" href={logoImage.src} />
-		<link rel="apple-touch-icon" href={logoImage.src} />
+		<link rel="icon" type="image/png" href={LogoSinFondo.src} />
+		<link rel="apple-touch-icon" href={LogoSinFondo.src} />
 		
 		<!-- Preconnect for performance -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
