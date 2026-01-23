@@ -2,11 +2,12 @@
 import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
+import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
-  // Sin output específico - usa el default (static) para desarrollo
-  // El endpoint API con prerender: false funcionará en modo dev
+  output: 'server',
+  adapter: netlify(),
   vite: {
     plugins: [tailwindcss()]
   }
