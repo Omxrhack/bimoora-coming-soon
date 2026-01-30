@@ -1,0 +1,310 @@
+---
+import '../styles/global.css';
+import LogoSinFondo from '../assets/bimooralogo-sinfondo.png';
+
+const structuredData = {
+	"@context": "https://schema.org",
+	"@type": "WebPage",
+	"name": "Términos y Condiciones - Bimoora",
+	"description": "Términos y condiciones de uso de Bimoora. Lee las reglas que rigen el uso de nuestra plataforma."
+};
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<title>Términos y Condiciones — Bimoora</title>
+		<meta name="title" content="Términos y Condiciones — Bimoora" />
+		<meta name="description" content="Términos y condiciones de uso de Bimoora. Lee las reglas que rigen el uso de nuestra plataforma." />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#A89CFF" />
+		
+		<link rel="canonical" href="https://bimoora.com/terms" />
+		
+		<link rel="icon" type="image/png" href={LogoSinFondo.src} />
+		<link rel="apple-touch-icon" href={LogoSinFondo.src} />
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+		
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	</head>
+	<body class="bg-[#FDFBFF] min-h-screen">
+		<!-- Background gradient orbs -->
+		<div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
+		<div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/10 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+
+		<!-- Navbar -->
+		<nav class="sticky top-0 z-50 px-4 py-3 md:px-6 md:py-4 bg-[#FDFBFF]/80 backdrop-blur-md border-b border-[#E8D4F8]/50">
+			<div class="max-w-4xl mx-auto flex items-center justify-between">
+				
+				<a 
+					href="/"
+					class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#6B7280] hover:text-[#A89CFF] transition-colors"
+				>
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+					</svg>
+					Volver al inicio
+				</a>
+			</div>
+		</nav>
+
+		<main class="relative z-10">
+			<!-- Header -->
+			<header class="border-b border-[#E8D4F8]/50 bg-white/50 backdrop-blur-sm">
+				<div class="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
+					<h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E1B4B] mb-2">
+						Términos y Condiciones
+					</h1>
+					<p class="text-[#6B7280]">
+						Última actualización: 29 de enero de 2026
+					</p>
+				</div>
+			</header>
+
+			<!-- Content -->
+			<div class="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-16 lg:py-24">
+				<!-- Summary Card -->
+				<div class="bg-gradient-to-br from-[#E8D4F8]/30 to-[#A89CFF]/10 rounded-2xl p-6 md:p-8 lg:p-10 mb-14 md:mb-16 border border-[#E8D4F8]/50 shadow-lg shadow-[#A89CFF]/5">
+					<h2 class="text-lg font-semibold text-[#1E1B4B] mb-4 flex items-center gap-2">
+						<span class="w-8 h-8 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center">
+							<svg class="w-4 h-4 text-[#A89CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+						</span>
+						Resumen en simple
+					</h2>
+					<ul class="space-y-3 text-[#6B7280]">
+						<li class="flex items-start gap-3">
+							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
+							<span>Bimoora es un servicio para parejas. Debes tener al menos 16 años para usarlo.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
+							<span>Tus recuerdos son tuyos. No los vendemos ni compartimos con terceros.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
+							<span>Puedes eliminar tu cuenta y datos cuando quieras.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
+							<span>Usa el servicio con respeto. Contenido ilegal o dañino no está permitido.</span>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Full Terms -->
+				<article class="space-y-14 md:space-y-16">
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							1. Aceptación de los Términos
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Al acceder o utilizar Bimoora ("el Servicio", "la Plataforma" o "la Aplicación") 
+							operado por Bimoora ("nosotros", "nuestro" o "la Empresa"), 
+							aceptas estar sujeto a estos Términos y Condiciones.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							Si no estás de acuerdo con alguna parte de estos términos, no podrás acceder al Servicio. 
+							Te recomendamos leer este documento completo antes de crear una cuenta.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							2. Requisitos de Edad
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Para usar Bimoora debes tener al menos 16 años de edad. Al crear una cuenta, 
+							declaras y garantizas que cumples con este requisito de edad mínima.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							Si descubrimos que un usuario no cumple con el requisito de edad, 
+							nos reservamos el derecho de suspender o eliminar su cuenta sin previo aviso.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							3. Cuenta y Credenciales
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Al crear una cuenta en Bimoora, eres responsable de mantener la confidencialidad 
+							de tu contraseña y de todas las actividades que ocurran bajo tu cuenta.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Debes proporcionar información precisa, completa y actualizada durante el registro. 
+							El uso de información falsa puede resultar en la terminación de tu cuenta.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							Debes notificarnos inmediatamente sobre cualquier uso no autorizado de tu cuenta 
+							o cualquier otra violación de seguridad.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							4. Uso Permitido y Prohibido
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							<strong class="text-[#1E1B4B]">Uso permitido:</strong> Bimoora está diseñado 
+							para que parejas guarden y compartan recuerdos de manera privada. Puedes usar el 
+							Servicio para almacenar fotos, textos, fechas y otros contenidos personales.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							<strong class="text-[#1E1B4B]">Uso prohibido:</strong> No está permitido:
+						</p>
+						<ul class="list-disc pl-6 text-[#6B7280] space-y-2 mb-4">
+							<li>Subir contenido ilegal, difamatorio, obsceno o que infrinja derechos de terceros</li>
+							<li>Usar el Servicio para acosar, amenazar o dañar a otras personas</li>
+							<li>Intentar acceder a cuentas o datos de otros usuarios</li>
+							<li>Usar el Servicio con fines comerciales no autorizados</li>
+							<li>Interferir con el funcionamiento normal de la Plataforma</li>
+							<li>Violar cualquier ley o regulación aplicable</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							5. Contenido del Usuario
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Conservas todos los derechos sobre el contenido que subas a Bimoora 
+							(fotos, textos, recuerdos, etc.). No reclamamos propiedad sobre tu contenido.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Al usar el Servicio, nos otorgas una licencia limitada para almacenar, 
+							procesar y mostrar tu contenido únicamente con el fin de proporcionar el Servicio.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							Eres responsable del contenido que subes. Garantizas que tienes los derechos 
+							necesarios sobre dicho contenido y que no infringe los derechos de terceros.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							6. Propiedad Intelectual
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							La Plataforma, incluyendo su diseño, código, logotipos, marcas y contenido 
+							original, es propiedad de Bimoora y está protegida por leyes de propiedad intelectual.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							No puedes copiar, modificar, distribuir, vender o alquilar ninguna parte 
+							del Servicio sin nuestro consentimiento previo por escrito.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							7. Pagos y Suscripciones
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Bimoora ofrece planes gratuitos y de pago. Los detalles de cada plan 
+							se encuentran en nuestra página de precios.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Las suscripciones se renuevan automáticamente al final de cada período 
+							de facturación, a menos que canceles antes de la fecha de renovación.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							Los precios pueden cambiar con notificación previa de al menos 30 días. 
+							Si no estás de acuerdo con un cambio de precio, puedes cancelar tu suscripción.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							8. Limitación de Responsabilidad
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							El Servicio se proporciona "tal cual" y "según disponibilidad". 
+							No garantizamos que el Servicio esté libre de errores o interrupciones.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							En la máxima medida permitida por la ley, Bimoora no será responsable 
+							por daños indirectos, incidentales, especiales o consecuentes.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							Nuestra responsabilidad total no excederá el monto que hayas pagado 
+							por el Servicio en los últimos 12 meses.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							9. Terminación de Cuenta
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Puedes eliminar tu cuenta en cualquier momento desde la configuración 
+							de la aplicación. Al hacerlo, tu contenido será eliminado de forma permanente.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							Nos reservamos el derecho de suspender o terminar tu cuenta si violas 
+							estos Términos, sin previo aviso y sin obligación de reembolso.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							10. Cambios a los Términos
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Podemos modificar estos Términos en cualquier momento. Te notificaremos 
+							sobre cambios significativos a través del correo asociado a tu cuenta 
+							o mediante un aviso en la aplicación.
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							El uso continuado del Servicio después de la publicación de cambios 
+							constituye tu aceptación de los nuevos Términos.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
+							11. Contacto
+						</h2>
+						<p class="text-[#6B7280] leading-relaxed mb-4">
+							Si tienes preguntas sobre estos Términos y Condiciones, puedes contactarnos en:
+						</p>
+						<p class="text-[#6B7280] leading-relaxed">
+							<strong class="text-[#1E1B4B]">Correo electrónico:</strong>{" "}
+							<a href="mailto:soporte@bimoora.com" class="text-[#A89CFF] hover:text-[#A89CFF]/80 underline underline-offset-2 transition-colors">
+							    soporte@bimoora.com
+							</a>
+						</p>
+					</section>
+				</article>
+
+				<!-- Back link -->
+				
+			</div>
+		</main>
+
+		<!-- Footer -->
+		<footer class="relative z-10 border-t border-[#E8D4F8]/50 bg-white/50 backdrop-blur-sm">
+			<div class="max-w-4xl mx-auto px-4 lg:px-8 py-8">
+				<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+					<p class="text-sm text-[#9CA3AF]">
+						© 2026 Bimoora. Todos los derechos reservados.
+					</p>
+					<div class="flex items-center gap-6">
+						<a href="/privacy" class="text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors">
+							Privacidad
+						</a>
+						<a href="/terms" class="text-sm text-[#A89CFF] font-medium">
+							Términos
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

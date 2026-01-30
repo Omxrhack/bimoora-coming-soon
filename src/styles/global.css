@@ -2,6 +2,33 @@
 
 :root {
   font-family: 'Poppins', system-ui, sans-serif;
+  
+  /* Light mode colors */
+  --bg-primary: #FDFBFF;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F8F6FC;
+  --text-primary: #1E1B4B;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border-color: rgba(232, 212, 248, 0.5);
+  --border-color-strong: rgba(232, 212, 248, 0.8);
+  --card-bg: #FFFFFF;
+  --card-shadow: rgba(168, 156, 255, 0.15);
+  --overlay-bg: rgba(253, 251, 255, 0.8);
+}
+
+.dark {
+  --bg-primary: #0F0D1A;
+  --bg-secondary: #1A1726;
+  --bg-tertiary: #252133;
+  --text-primary: #F8F6FC;
+  --text-secondary: #A8A3B8;
+  --text-muted: #6B6680;
+  --border-color: rgba(168, 156, 255, 0.2);
+  --border-color-strong: rgba(168, 156, 255, 0.4);
+  --card-bg: #1A1726;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --overlay-bg: rgba(15, 13, 26, 0.8);
 }
 
 body {
@@ -10,6 +37,9 @@ body {
   font-family: 'Poppins', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Animación float para las tarjetas */

@@ -1,4 +1,5 @@
 /// <reference types="astro/client" />
+/// <reference types="@astrojs/react/client" />
 
 declare module '*.png' {
   const value: ImageMetadata;

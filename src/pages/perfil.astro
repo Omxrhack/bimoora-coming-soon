@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+import ProfileContent from '../components/profile/ProfileContent';
+import LogoSinFondo from '../assets/bimooralogo-sinfondo.png';
+
+// Structured Data for SEO
+const structuredData = {
+	"@context": "https://schema.org",
+	"@type": "WebPage",
+	"name": "Mi Perfil - Bimoora",
+	"description": "Tu perfil en Bimoora. Gestiona tu cuenta y personaliza tu experiencia."
+};
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<!-- Primary Meta Tags -->
+		<title>Mi Perfil — Bimoora</title>
+		<meta name="title" content="Mi Perfil — Bimoora" />
+		<meta name="description" content="Tu perfil en Bimoora. Gestiona tu cuenta y personaliza tu experiencia." />
+		<meta name="robots" content="noindex, nofollow" />
+		<meta name="theme-color" content="#A89CFF" />
+		
+		<!-- Canonical URL -->
+		<link rel="canonical" href="https://bimoora.com/perfil" />
+		
+		<!-- Favicon -->
+		<link rel="icon" type="image/png" href={LogoSinFondo.src} />
+		<link rel="apple-touch-icon" href={LogoSinFondo.src} />
+		
+		<!-- Preconnect for performance -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+		
+		<!-- Structured Data (JSON-LD) -->
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+	</head>
+	<body>
+		<ProfileContent client:load />
+	</body>
+</html>

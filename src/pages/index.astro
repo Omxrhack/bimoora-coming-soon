@@ -1,11 +1,23 @@
 ---
-// Target date: 3 months from now
+import { ViewTransitions } from 'astro:transitions';
+import '../styles/global.css';
+
+// Components
+import Navbar from '../components/landing/Navbar';
+import Concept from '../components/landing/Concept.astro';
+import Features from '../components/landing/Features.astro';
+import HowItWorks from '../components/landing/HowItWorks.astro';
+import Security from '../components/landing/Security.astro';
+import FAQ from '../components/landing/FAQ.astro';
+import Footer from '../components/landing/Footer.astro';
+
+import LogoSinFondo from '../assets/bimooralogo-sinfondo.png';
+
+// Target date for countdown
 const TARGET_DATE = new Date();
 TARGET_DATE.setMonth(TARGET_DATE.getMonth() + 5);
 const TARGET_DATE_ISO = TARGET_DATE.toISOString();
-import '../styles/global.css';
 
-import LogoSinFondo from '../assets/bimooralogo-sinfondo.png'
 // Structured Data for SEO
 const structuredData = {
 	"@context": "https://schema.org",
@@ -26,8 +38,6 @@ const structuredData = {
 	}
 };
 ---
-
-
 
 <html lang="es">
 	<head>
@@ -80,13 +90,29 @@ const structuredData = {
 		
 		<!-- Structured Data (JSON-LD) -->
 		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+		
+		<!-- View Transitions -->
+		<ViewTransitions />
+		
+		<!-- Dark mode script (runs before page renders to prevent flash) -->
+		<script is:inline>
+			const savedTheme = localStorage.getItem('theme');
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+				document.documentElement.classList.add('dark');
+			}
+		</script>
 	</head>
-	<body>
-		<main class="min-h-screen bg-[#FDFBFF] flex flex-col items-center justify-center px-6 relative overflow-hidden">
+	<body class="bg-[#FDFBFF] dark:bg-[#0F0D1A] transition-colors duration-300">
+		<!-- Navbar -->
+		<Navbar client:load />
+
+		<!-- Hero Section -->
+		<section id="inicio" class="min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-12 relative overflow-hidden">
 			<!-- Background gradient orbs -->
-			<div class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse-slow" />
-			<div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse-slow" style="animation-delay: 1s;" />
-			<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;" />
+			<div class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 dark:bg-[#A89CFF]/10 rounded-full blur-3xl -translate-y-1/2 animate-pulse-slow" />
+			<div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 dark:bg-[#A89CFF]/10 rounded-full blur-3xl translate-y-1/2 animate-pulse-slow" style="animation-delay: 1s;" />
+			<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 dark:bg-[#FF8FAB]/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;" />
 			
 			<!-- Decorative particles -->
 			<div class="absolute top-20 right-20 w-2 h-2 bg-[#A89CFF]/40 rounded-full animate-twinkle" style="animation-delay: 0s;"></div>
@@ -94,57 +120,62 @@ const structuredData = {
 			<div class="absolute bottom-40 right-32 w-2 h-2 bg-[#E8D4F8]/50 rounded-full animate-twinkle" style="animation-delay: 3s;"></div>
 			<div class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-twinkle" style="animation-delay: 2s;"></div>
 
-			<!-- Floating Cards Container - Se llenará dinámicamente -->
-			<div id="floating-cards-container"></div>
+			<!-- Floating Cards Container - Hidden on mobile -->
+			<div id="floating-cards-container" class="hidden md:block"></div>
 
-			<div class="relative z-30 flex flex-col items-center text-center max-w-2xl">
+			<div class="relative z-30 flex flex-col items-center text-center max-w-2xl" transition:animate="slide">
+				<!-- Badge -->
 			
+				<span class="font-bold flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm text-sm text-[#6B7280] dark:text-[#A8A3B8] mb-6 animate-fade-in-up">
+					Próximamente
+				</span>
+	
 
 				<!-- Brand name -->
-				<h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold text-[#1E1B4B] mb-2 animate-fade-in-up drop-shadow-sm" style="animation-delay: 0.1s;">
-					<span class="bg-gradient-to-r from-[#1E1B4B] via-[#A89CFF] to-[#1E1B4B] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">Bimoora</span>
+				<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[#1E1B4B] dark:text-white mb-4 animate-fade-in-up drop-shadow-sm" style="animation-delay: 0.1s;" transition:name="hero-title">
+					<span class="bg-gradient-to-r from-[#1E1B4B] dark:from-white via-[#A89CFF] to-[#1E1B4B] dark:to-white bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">Bimoora</span>
 				</h1>
 
-				<!-- Coming soon text -->
-				<p class="text-2xl md:text-3xl lg:text-4xl font-medium text-[#A89CFF] mb-4 animate-fade-in-up" style="animation-delay: 0.2s;">
-					Próximamente
+				<!-- Tagline -->
+				<p class="text-xl md:text-2xl lg:text-3xl font-medium text-[#A89CFF] mb-6 animate-fade-in-up" style="animation-delay: 0.2s;">
+					Donde el amor deja memoria
 				</p>
 
-				<p class="text-[#6B7280] text-lg md:text-xl mb-12 max-w-md leading-relaxed animate-fade-in-up" style="animation-delay: 0.3s;">
-					Un espacio privado para dos. Donde el amor deja memoria.
+				<p class="text-[#6B7280] dark:text-[#A8A3B8] text-lg md:text-xl mb-10 max-w-lg leading-relaxed animate-fade-in-up" style="animation-delay: 0.3s;">
+					Un espacio privado para dos. Guarden sus recuerdos, escriban su historia, celebren su amor.
 				</p>
 
 				<!-- Countdown -->
-				<div class="flex gap-3 md:gap-6 mb-12 animate-fade-in-up" id="countdown" style="animation-delay: 0.4s;">
+				<div class="flex gap-4 md:gap-6 mb-10 animate-fade-in-up" id="countdown" style="animation-delay: 0.4s;">
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-white shadow-lg shadow-[#A89CFF]/10 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-xl hover:shadow-[#A89CFF]/20 transition-all duration-300">
-							<span class="text-2xl md:text-4xl font-semibold text-[#1E1B4B]" id="days">--</span>
+						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
+							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="days">--</span>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] font-medium">Días</span>
+						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Días</span>
 					</div>
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-white shadow-lg shadow-[#A89CFF]/10 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-xl hover:shadow-[#A89CFF]/20 transition-all duration-300">
-							<span class="text-2xl md:text-4xl font-semibold text-[#1E1B4B]" id="hours">--</span>
+						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
+							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="hours">--</span>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] font-medium">Horas</span>
+						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Horas</span>
 					</div>
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-white shadow-lg shadow-[#A89CFF]/10 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-xl hover:shadow-[#A89CFF]/20 transition-all duration-300">
-							<span class="text-2xl md:text-4xl font-semibold text-[#1E1B4B]" id="minutes">--</span>
+						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
+							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="minutes">--</span>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] font-medium">Minutos</span>
+						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Minutos</span>
 					</div>
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-white shadow-lg shadow-[#A89CFF]/10 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-xl hover:shadow-[#A89CFF]/20 transition-all duration-300">
-							<span class="text-2xl md:text-4xl font-semibold text-[#1E1B4B]" id="seconds">--</span>
+						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
+							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="seconds">--</span>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] font-medium">Segundos</span>
+						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Segundos</span>
 					</div>
 				</div>
 
 				<!-- Notify me section -->
 				<div class="w-full max-w-md animate-fade-in-up" style="animation-delay: 0.5s;">
-					<p class="text-sm md:text-base text-[#6B7280] mb-4 font-medium">
+					<p class="text-sm md:text-base text-[#6B7280] dark:text-[#A8A3B8] mb-4 font-medium">
 						Sé el primero en saber cuando lancemos
 					</p>
 					<form class="flex flex-col sm:flex-row gap-3" id="notify-form">
@@ -153,16 +184,16 @@ const structuredData = {
 							placeholder="tu@email.com"
 							required
 							id="email-input"
-							class="flex-1 px-4 py-3 rounded-xl border border-[#E8D4F8] bg-white text-[#1E1B4B] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/70 hover:shadow-md"
+							class="flex-1 px-5 py-3.5 rounded-xl border border-[#E8D4F8] dark:border-[#A89CFF]/30 bg-white dark:bg-[#1A1726] text-[#1E1B4B] dark:text-white placeholder:text-[#9CA3AF] dark:placeholder:text-[#6B6680] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/70 hover:shadow-md shadow-sm"
 						/>
 						<button
 							type="submit"
 							id="submit-button"
-							class="button-hover w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-medium rounded-xl active:opacity-75 transition-all duration-300 shadow-lg shadow-[#A89CFF]/25 flex items-center justify-center gap-2 min-w-[140px] text-sm md:text-base relative overflow-hidden group"
+							class="button-hover w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl active:opacity-75 transition-all duration-300 shadow-lg shadow-[#A89CFF]/25 flex items-center justify-center gap-2 min-w-[160px] text-sm md:text-base relative overflow-hidden group"
 						>
 							<span id="button-text">Notificarme</span>
 							<span id="button-spinner" class="hidden">
-								<svg class="animate-spin h-4 w-4 md:h-5 md:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+								<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 									<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
 									<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 								</svg>
@@ -171,41 +202,54 @@ const structuredData = {
 					</form>
 				</div>
 
-				<!-- Toast Notification -->
-				<div id="toast" class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-50 hidden w-[calc(100%-2rem)] max-w-sm md:max-w-md">
-					<div class="bg-white rounded-xl shadow-soft-lg border border-[#E8D4F8] px-4 py-3 md:px-6 md:py-4 flex items-center gap-2 md:gap-3 animate-slide-down">
-						<div id="toast-icon" class="flex-shrink-0">
-							<!-- Icono se inserta aquí -->
-						</div>
-						<p id="toast-message" class="text-xs md:text-sm font-medium text-[#1E1B4B] flex-1"></p>
-					</div>
-				</div>
+				
+			</div>
 
-				<!-- Loading Overlay -->
-				<div id="loading-overlay" class="fixed inset-0 bg-[#FDFBFF]/80 backdrop-blur-sm z-40 hidden items-center justify-center p-4">
-					<div class="bg-white rounded-2xl shadow-soft-lg p-6 md:p-8 flex flex-col items-center gap-3 md:gap-4 w-full max-w-xs md:max-w-sm">
-						<div class="relative">
-							<div class="w-12 h-12 md:w-16 md:h-16 border-4 border-[#E8D4F8] border-t-[#A89CFF] rounded-full animate-spin"></div>
-							<div class="absolute inset-0 flex items-center justify-center">
-								<svg class="w-6 h-6 md:w-8 md:h-8 text-[#A89CFF]" fill="currentColor" viewBox="0 0 24 24">
-									<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-								</svg>
-							</div>
-						</div>
-						<p class="text-sm md:text-base text-[#1E1B4B] font-medium text-center">Enviando tu solicitud...</p>
-						<p class="text-xs md:text-sm text-[#6B7280] text-center">Un momento, por favor</p>
-					</div>
+			<!-- Toast Notification -->
+			<div id="toast" class="fixed top-20 md:top-24 left-1/2 transform -translate-x-1/2 z-50 hidden w-[calc(100%-2rem)] max-w-sm md:max-w-md">
+				<div class="bg-white dark:bg-[#1A1726] rounded-xl shadow-2xl border border-[#E8D4F8] dark:border-[#A89CFF]/30 px-4 py-3 md:px-6 md:py-4 flex items-center gap-3 animate-slide-down">
+					<div id="toast-icon" class="flex-shrink-0"></div>
+					<p id="toast-message" class="text-sm font-medium text-[#1E1B4B] dark:text-white flex-1"></p>
 				</div>
 			</div>
 
-			<!-- Footer -->
-			<footer class="absolute bottom-6 text-sm md:text-base text-[#9CA3AF] font-medium">
-				Donde el amor deja memoria
-			</footer>
-		</main>
+			<!-- Loading Overlay -->
+			<div id="loading-overlay" class="fixed inset-0 bg-[#FDFBFF]/80 dark:bg-[#0F0D1A]/80 backdrop-blur-sm z-40 hidden items-center justify-center p-4">
+				<div class="bg-white dark:bg-[#1A1726] rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-4 w-full max-w-sm border border-transparent dark:border-[#A89CFF]/20">
+					<div class="relative">
+						<div class="w-16 h-16 border-4 border-[#E8D4F8] dark:border-[#A89CFF]/30 border-t-[#A89CFF] rounded-full animate-spin"></div>
+						<div class="absolute inset-0 flex items-center justify-center">
+							<svg class="w-8 h-8 text-[#A89CFF]" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+							</svg>
+						</div>
+					</div>
+					<p class="text-base text-[#1E1B4B] dark:text-white font-medium text-center">Enviando tu solicitud...</p>
+					<p class="text-sm text-[#6B7280] dark:text-[#A8A3B8] text-center">Un momento, por favor</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Concept Section -->
+		<Concept />
+
+		<!-- Features Section -->
+		<Features />
+
+		<!-- How It Works Section -->
+		<HowItWorks />
+
+		<!-- Security Section -->
+		<Security />
+
+		<!-- FAQ Section -->
+		<FAQ />
+
+		<!-- Footer -->
+		<Footer />
 
 		<script define:vars={{ targetDateISO: TARGET_DATE_ISO }}>
-			// Target date: 3 months from now
+			// Target date
 			const targetDateObj = new Date(targetDateISO);
 
 			function calculateTimeLeft() {
@@ -240,18 +284,18 @@ const structuredData = {
 			updateCountdown();
 
 			// Update every second
-			const timer = setInterval(updateCountdown, 1000);
+			setInterval(updateCountdown, 1000);
 
-			// Definir todas las cards disponibles con posiciones seguras
+			// Floating cards
 			const allCards = [
 				{
 					title: "Aniversario",
-					subtitle: "En 5 días.",
+					subtitle: "En 5 días",
 					icon: "calendar",
 					gradientFrom: "from-[#FFC8DD]",
 					gradientTo: "to-[#FF8FAB]",
-					desktopPosition: { left: "calc(50% - 420px)", top: "5rem" },
-					mobilePosition: { left: "0.5rem", top: "0.5rem" } // Esquina superior izquierda
+					desktopPosition: { left: "calc(50% - 480px)", top: "8rem" },
+					mobilePosition: { left: "0.5rem", top: "5.5rem" }
 				},
 				{
 					title: "Racha activa",
@@ -259,8 +303,8 @@ const structuredData = {
 					icon: "heart",
 					gradientFrom: "from-[#A89CFF]",
 					gradientTo: "to-[#8EC5FC]",
-					desktopPosition: { right: "calc(39% - 420px)", bottom: "10rem" },
-					mobilePosition: { right: "0.5rem", bottom: "4rem" } // Esquina inferior derecha
+					desktopPosition: { right: "calc(50% - 480px)", bottom: "12rem" },
+					mobilePosition: { right: "0.5rem", bottom: "6rem" }
 				},
 				{
 					title: "Nueva nota",
@@ -268,8 +312,8 @@ const structuredData = {
 					icon: "message",
 					gradientFrom: "from-[#FF8FAB]",
 					gradientTo: "to-[#FFC8DD]",
-					desktopPosition: { left: "calc(40% - 420px)", top: "16rem" },
-					mobilePosition: { left: "0.5rem", top: "auto", bottom: "auto" } // Lado izquierdo, se ajustará dinámicamente
+					desktopPosition: { left: "calc(50% - 520px)", top: "20rem" },
+					mobilePosition: { left: "0.5rem", bottom: "4rem" }
 				},
 				{
 					title: "Recuerdo compartido",
@@ -277,59 +321,18 @@ const structuredData = {
 					icon: "photo",
 					gradientFrom: "from-[#8EC5FC]",
 					gradientTo: "to-[#E0C3FC]",
-					desktopPosition: { right: "calc(40% - 420px)", top: "12rem" },
-					mobilePosition: { right: "0.5rem", top: "0.5rem" } // Esquina superior derecha
+					desktopPosition: { right: "calc(50% - 520px)", top: "16rem" },
+					mobilePosition: { right: "0.5rem", top: "5.5rem" }
 				},
-				{
-					title: "Momento especial",
-					subtitle: "Hoy a las 3pm",
-					icon: "star",
-					gradientFrom: "from-[#E8D4F8]",
-					gradientTo: "to-[#A89CFF]",
-					desktopPosition: { left: "calc(40% - 420px)", bottom: "16rem" },
-					mobilePosition: { left: "0.5rem", bottom: "4rem" } // Esquina inferior izquierda
-				},
-				{
-					title: "Sorpresa",
-					subtitle: "¡Próximamente!",
-					icon: "gift",
-					gradientFrom: "from-[#FFC8DD]",
-					gradientTo: "to-[#E8D4F8]",
-					desktopPosition: { right: "calc(32% - 420px)", top: "24rem" },
-					mobilePosition: { right: "0.5rem", top: "auto", bottom: "auto" } // Lado derecho, se ajustará dinámicamente
-				},
-				
 			];
 
-			// Iconos SVG
 			const icons = {
-				calendar: `<svg class="h-3 w-3 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`,
-				heart: `<svg class="h-3 w-3 md:h-5 md:w-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>`,
-				star: `<svg class="h-3 w-3 md:h-5 md:w-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>`,
-				message: `<svg class="h-3 w-3 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>`,
-				photo: `<svg class="h-3 w-3 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`,
-				gift: `<svg class="h-3 w-3 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>`,
-				sparkles: `<svg class="h-3 w-3 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>`
+				calendar: `<svg class="h-4 w-4 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`,
+				heart: `<svg class="h-4 w-4 md:h-5 md:w-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>`,
+				message: `<svg class="h-4 w-4 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>`,
+				photo: `<svg class="h-4 w-4 md:h-5 md:w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`,
 			};
 
-			// Función para mezclar array (Fisher-Yates)
-			function shuffleArray(array) {
-				const shuffled = [...array];
-				for (let i = shuffled.length - 1; i > 0; i--) {
-					const j = Math.floor(Math.random() * (i + 1));
-					[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-				}
-				return shuffled;
-			}
-
-			// Seleccionar 3-4 cards aleatoriamente (solo para móvil)
-			function selectRandomCards() {
-				const shuffled = shuffleArray(allCards);
-				const numCards = Math.floor(Math.random() * 2) + 3; // 3 o 4 cards
-				return shuffled.slice(0, numCards);
-			}
-
-			// Crear y renderizar las cards
 			function renderCards() {
 				const container = document.getElementById('floating-cards-container');
 				if (!container) return;
@@ -337,42 +340,37 @@ const structuredData = {
 				container.innerHTML = '';
 				const isMobile = window.innerWidth < 768;
 
-				// En móvil: mostrar 3-4 cards aleatorias en posiciones seguras
-				// En desktop: mostrar todas las cards en sus posiciones originales
-				const cardsToRender = isMobile ? selectRandomCards() : allCards;
-
-				// Posiciones móviles seguras distribuidas en las esquinas
 				const mobilePositions = [
-					{ left: "1.5rem", top: "5.5rem" }, // Esquina superior izquierda
-					{ right: "0.5rem", top: "1.5rem" }, // Esquina superior derecha
-					{ left: "1.5rem", bottom: "4rem" }, // Esquina inferior izquierda
-					{ right: "0.5rem", bottom: "6rem" }, // Esquina inferior derecha
+					{ left: "1rem", top: "6rem" },
+					{ right: "1rem", top: "6rem" },
+					{ left: "1rem", bottom: "5rem" },
+					{ right: "1rem", bottom: "5rem" },
 				];
+
+				const cardsToRender = isMobile ? allCards.slice(0, 4) : allCards;
 
 				cardsToRender.forEach((card, index) => {
 					const cardElement = document.createElement('div');
-					cardElement.className = 'absolute z-10 md:z-20 animate-float rounded-xl md:rounded-2xl bg-white p-2 md:p-4 shadow-soft-lg floating-card group';
+					cardElement.className = 'absolute z-10 md:z-20 animate-float rounded-xl md:rounded-2xl bg-white/90 dark:bg-[#1A1726]/90 backdrop-blur-sm p-2.5 md:p-4 shadow-xl shadow-[#A89CFF]/10 dark:shadow-black/20 border border-[#E8D4F8]/30 dark:border-[#A89CFF]/20 floating-card group hover:scale-105 transition-transform';
 					cardElement.style.animationDelay = `${(index + 1) * 0.5}s`;
 
-					// En móvil usar posiciones seguras, en desktop usar posiciones originales
 					const position = isMobile 
-						? (mobilePositions[index % mobilePositions.length] || mobilePositions[0])
+						? mobilePositions[index % mobilePositions.length]
 						: card.desktopPosition;
 
-					// Aplicar posiciones
 					if (position.left) cardElement.style.left = position.left;
 					if (position.right) cardElement.style.right = position.right;
 					if (position.top) cardElement.style.top = position.top;
 					if (position.bottom) cardElement.style.bottom = position.bottom;
 
 					cardElement.innerHTML = `
-						<div class="flex items-center gap-1.5 md:gap-3">
-							<div class="flex h-6 w-6 md:h-10 md:w-10 items-center justify-center rounded-full bg-gradient-to-br ${card.gradientFrom} ${card.gradientTo} shadow-md transition-transform duration-300 floating-card-icon">
+						<div class="flex items-center gap-2 md:gap-3">
+							<div class="flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full bg-gradient-to-br ${card.gradientFrom} ${card.gradientTo} shadow-md">
 								${icons[card.icon] || icons.heart}
 							</div>
 							<div>
-								<p class="text-[9px] md:text-xs text-[#4B445A] font-medium leading-tight">${card.title}</p>
-								<p class="text-[10px] md:text-sm font-semibold text-[#1e2539] leading-tight">${card.subtitle}</p>
+								<p class="text-[10px] md:text-xs text-[#6B7280] dark:text-[#A8A3B8] font-medium leading-tight">${card.title}</p>
+								<p class="text-xs md:text-sm font-semibold text-[#1E1B4B] dark:text-white leading-tight">${card.subtitle}</p>
 							</div>
 						</div>
 					`;
@@ -381,19 +379,15 @@ const structuredData = {
 				});
 			}
 
-			// Renderizar cards al cargar
 			renderCards();
 
-			// Re-renderizar al redimensionar para ajustar posiciones
 			let resizeTimeout;
 			window.addEventListener('resize', () => {
 				clearTimeout(resizeTimeout);
-				resizeTimeout = setTimeout(() => {
-					renderCards();
-				}, 250);
+				resizeTimeout = setTimeout(renderCards, 250);
 			});
 
-			// Handle form submission
+			// Form handling
 			const form = document.getElementById('notify-form');
 			const submitButton = document.getElementById('submit-button');
 			const buttonText = document.getElementById('button-text');
@@ -410,12 +404,11 @@ const structuredData = {
 				const toastContainer = toast.querySelector('div');
 				if (!toastContainer) return;
 
-				// Limpiar icono anterior
 				toastIcon.innerHTML = '';
 
 				if (type === 'success') {
 					toastIcon.innerHTML = `
-						<svg class="w-5 h-5 md:w-6 md:h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 						</svg>
 					`;
@@ -423,7 +416,7 @@ const structuredData = {
 					toastContainer.classList.add('border-green-200');
 				} else {
 					toastIcon.innerHTML = `
-						<svg class="w-5 h-5 md:w-6 md:h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
 						</svg>
 					`;
@@ -434,7 +427,6 @@ const structuredData = {
 				toastMessage.textContent = message;
 				toast.classList.remove('hidden');
 
-				// Auto ocultar después de 4 segundos
 				setTimeout(() => {
 					toast.classList.add('hidden');
 				}, 4000);
@@ -451,7 +443,6 @@ const structuredData = {
 						return;
 					}
 
-					// Mostrar estado de carga
 					submitButton.disabled = true;
 					buttonText.textContent = 'Enviando...';
 					buttonSpinner.classList.remove('hidden');
@@ -462,9 +453,7 @@ const structuredData = {
 					try {
 						const response = await fetch('/api/subscribe', {
 							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json',
-							},
+							headers: { 'Content-Type': 'application/json' },
 							body: JSON.stringify({ email }),
 						});
 
@@ -480,7 +469,6 @@ const structuredData = {
 						console.error('Error:', error);
 						showToast('Hubo un error al enviar tu solicitud. Por favor, intenta de nuevo.', 'error');
 					} finally {
-						// Restaurar botón
 						setTimeout(() => {
 							submitButton.disabled = false;
 							buttonText.textContent = 'Notificarme';
@@ -492,6 +480,17 @@ const structuredData = {
 					}
 				});
 			}
+
+			// Smooth scroll for anchor links
+			document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+				anchor.addEventListener('click', function (e) {
+					e.preventDefault();
+					const target = document.querySelector(this.getAttribute('href'));
+					if (target) {
+						target.scrollIntoView({ behavior: 'smooth' });
+					}
+				});
+			});
 		</script>
 	</body>
 </html>

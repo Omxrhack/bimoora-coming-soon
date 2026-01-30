@@ -1,0 +1,36 @@
+---
+import { supabase } from '../../lib/supabase';
+
+// Obtener el código de la URL
+const code = Astro.url.searchParams.get('code');
+const error = Astro.url.searchParams.get('error');
+const errorDescription = Astro.url.searchParams.get('error_description');
+
+let redirectUrl = '/auth/acceder';
+let message = '';
+
+if (error) {
+  // Si hay un error de OAuth
+  message = errorDescription || 'Error en la autenticación';
+  redirectUrl = `/auth/acceder?error=${encodeURIComponent(message)}`;
+} else if (code) {
+  try {
+    // Intercambiar el código por la sesión
+    const { data, error: sessionError } = await supabase.auth.exchangeCodeForSession(code);
+    
+    if (sessionError) {
+      message = sessionError.message;
+      redirectUrl = `/auth/acceder?error=${encodeURIComponent(message)}`;
+    } else if (data.session) {
+      // Sesión establecida correctamente, redirigir al perfil
+      redirectUrl = '/perfil';
+    }
+  } catch (e) {
+    message = 'Error procesando la autenticación';
+    redirectUrl = `/auth/acceder?error=${encodeURIComponent(message)}`;
+  }
+}
+
+// Redirigir
+return Astro.redirect(redirectUrl);
+---

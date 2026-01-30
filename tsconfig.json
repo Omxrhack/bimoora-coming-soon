@@ -6,7 +6,7 @@
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
-    "jsxImportSource": "astro",
+    "jsxImportSource": "react",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": false,
@@ -14,7 +14,7 @@
     "allowJs": true,
     "checkJs": false,
     "isolatedModules": true,
-    "types": ["astro/client"],
+    "types": ["astro/client", "@types/react", "@types/react-dom"],
     "paths": {
       "@/*": ["src/*"]
     }
