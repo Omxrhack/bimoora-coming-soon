@@ -30,20 +30,20 @@ const iconPaths: Record<string, string> = {
 }
 ---
 
-<section id="como-funciona" class="py-20 lg:py-32 bg-white dark:bg-[#1A1726] relative overflow-hidden transition-colors duration-300">
+<section id="como-funciona" class="py-20 lg:py-32 bg-white relative overflow-hidden transition-colors duration-300">
   <!-- Background decorations -->
-  <div class="absolute top-0 left-1/2 w-[600px] h-[600px] bg-[#E8D4F8]/10 dark:bg-[#A89CFF]/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+  <div class="absolute top-0 left-1/2 w-[600px] h-[600px] bg-[#E8D4F8]/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
   
   <div class="container mx-auto px-4 lg:px-8 relative z-10">
     <!-- Header -->
     <div class="text-center max-w-2xl mx-auto mb-16">
-      <span class="inline-block px-4 py-1.5 rounded-full bg-[#FFC8DD]/20 dark:bg-[#FF8FAB]/20 text-[#FF8FAB] font-medium text-sm tracking-wide uppercase mb-4">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-[#FFC8DD]/20 text-[#FF8FAB] font-medium text-sm tracking-wide uppercase mb-4">
         Cómo funciona
       </span>
-      <h2 class="text-3xl lg:text-4xl xl:text-5xl font-bold text-[#1E1B4B] dark:text-white leading-tight mb-6">
+      <h2 class="text-3xl lg:text-4xl xl:text-5xl font-bold text-[#1E1B4B] leading-tight mb-6">
         Tres pasos para empezar
       </h2>
-      <p class="text-lg text-[#6B7280] dark:text-[#A8A3B8]">
+      <p class="text-lg text-[#6B7280]">
         Conectar con tu pareja nunca fue tan fácil. En minutos estarán creando recuerdos juntos.
       </p>
     </div>
@@ -70,15 +70,15 @@ const iconPaths: Record<string, string> = {
               </svg>
               
               <!-- Step number badge -->
-              <span class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white dark:bg-[#252133] shadow-lg flex items-center justify-center text-sm font-bold text-[#1E1B4B] dark:text-white">
+              <span class="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center text-sm font-bold text-[#1E1B4B]">
                 {step.number}
               </span>
             </div>
             
-            <h3 class="text-xl font-semibold text-[#1E1B4B] dark:text-white mb-3">
+            <h3 class="text-xl font-semibold text-[#1E1B4B] mb-3">
               {step.title}
             </h3>
-            <p class="text-[#6B7280] dark:text-[#A8A3B8] leading-relaxed">
+            <p class="text-[#6B7280] leading-relaxed">
               {step.description}
             </p>
           </div>

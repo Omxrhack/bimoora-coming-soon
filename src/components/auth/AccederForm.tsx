@@ -53,12 +53,12 @@ function AccederFormContent() {
   }
 
   return (
-    <div className="min-h-screen flex relative overflow-hidden">
+    <div className="min-h-screen flex relative overflow-hidden transition-colors duration-300">
       {/* Background gradient orbs - same as index */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }} />
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '2s' }} />
-      
+
       {/* Decorative particles */}
       <div className="absolute top-20 right-20 w-2 h-2 bg-[#A89CFF]/40 rounded-full animate-pulse" style={{ animationDuration: '2s' }} />
       <div className="absolute top-40 left-20 w-1.5 h-1.5 bg-[#FF8FAB]/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
@@ -66,7 +66,7 @@ function AccederFormContent() {
       <div className="absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1.5s' }} />
 
       {/* Left Panel - Form */}
-      <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10">
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10 transition-colors duration-300">
         <div className="w-full max-w-md mx-auto">
           {/* Back link */}
           <a
@@ -78,7 +78,7 @@ function AccederFormContent() {
           </a>
 
           {/* Logo */}
-         
+
 
           {/* Header */}
           <div className="mb-8">
@@ -105,7 +105,7 @@ function AccederFormContent() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="pl-10 h-12 bg-white border-[#E8D4F8] focus:border-[#A89CFF] focus:ring-[#A89CFF]/20 rounded-xl"
+                  className="pl-10 h-12 bg-white border-[#E8D4F8] text-[#1E1B4B] placeholder:text-[#9CA3AF] focus:border-[#A89CFF] focus:ring-[#A89CFF]/20 rounded-xl"
                 />
               </div>
             </div>
@@ -116,7 +116,7 @@ function AccederFormContent() {
                   Contraseña
                 </Label>
                 <a
-                  href="/auth/recuperar"
+                  href="/auth/solicitar-codigo"
                   className="text-sm text-[#A89CFF] hover:text-[#A89CFF]/80 transition-colors"
                 >
                   ¿Olvidaste tu contraseña?
@@ -131,7 +131,7 @@ function AccederFormContent() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="pl-10 pr-10 h-12 bg-white border-[#E8D4F8] focus:border-[#A89CFF] focus:ring-[#A89CFF]/20 rounded-xl"
+                  className="pl-10 pr-10 h-12 bg-white border-[#E8D4F8] text-[#1E1B4B] placeholder:text-[#9CA3AF] focus:border-[#A89CFF] focus:ring-[#A89CFF]/20 rounded-xl"
                 />
                 <button
                   type="button"
@@ -149,8 +149,8 @@ function AccederFormContent() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Checkbox 
-                id="remember" 
+              <Checkbox
+                id="remember"
                 className="border-[#E8D4F8] data-[state=checked]:bg-[#A89CFF] data-[state=checked]:border-[#A89CFF]"
               />
               <Label htmlFor="remember" className="text-sm text-[#6B7280] cursor-pointer font-normal">
@@ -229,30 +229,30 @@ function AccederFormContent() {
       </div>
 
       {/* Right Panel - Visual */}
-      <div className="hidden lg:flex flex-1 relative overflow-hidden">
+      <div className="hidden lg:flex flex-1 relative overflow-hidden transition-colors duration-300">
         <div className="absolute inset-0 bg-gradient-to-br from-[#E8D4F8] via-[#A89CFF]/5 to-[#FDFBFF]" />
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#A89CFF]/15 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-[#FFC8DD]/20 rounded-full blur-3xl" />
-        
+
         <div className="relative flex items-center justify-center w-full p-12">
           <div className="text-center max-w-md">
             {/* Decorative mockup */}
             <div className="relative w-64 h-[420px] mx-auto mb-8">
-              <div className="absolute inset-0 bg-white rounded-[2.5rem] shadow-2xl border border-[#E8D4F8] overflow-hidden">
+              <div className="absolute inset-0 bg-white rounded-[2.5rem] shadow-2xl shadow-[#A89CFF]/20 border border-[#E8D4F8] overflow-hidden transition-colors">
                 <div className="absolute inset-2 bg-gradient-to-b from-[#E8D4F8]/30 to-[#FDFBFF] rounded-[2rem] overflow-hidden">
                   <div className="p-5 pt-10">
-                    <div className="w-10 h-10 rounded-xl bg-[#A89CFF]/20 mb-3 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-[#A89CFF]/20 flex items-center justify-center mx-auto mb-3">
                       <Heart className="w-5 h-5 text-[#A89CFF]" />
                     </div>
-                    <div className="h-3 w-24 bg-[#A89CFF]/20 rounded-full mb-2" />
-                    <div className="h-2 w-20 bg-[#E8D4F8] rounded-full mb-6" />
-                    
+                    <div className="h-3 w-24 bg-[#A89CFF]/20 rounded-full mx-auto mb-2" />
+                    <div className="h-2 w-20 bg-[#E8D4F8] rounded-full mx-auto mb-6" />
+
                     <div className="space-y-3">
                       {[1, 2, 3].map((i) => (
                         <div key={i} className="bg-white/80 backdrop-blur rounded-xl p-3 border border-[#E8D4F8]/50">
                           <div className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/30" />
-                            <div className="flex-1">
+                            <div className="flex-1 text-left">
                               <div className="h-2 w-16 bg-[#E8D4F8] rounded-full mb-1" />
                               <div className="h-1.5 w-24 bg-[#E8D4F8]/50 rounded-full" />
                             </div>
@@ -264,7 +264,7 @@ function AccederFormContent() {
                 </div>
               </div>
             </div>
-            
+
             <h2 className="text-2xl font-bold text-[#1E1B4B] mb-3">
               Tu espacio te espera
             </h2>

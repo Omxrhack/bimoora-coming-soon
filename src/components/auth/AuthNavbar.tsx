@@ -63,8 +63,8 @@ export default function AuthNavbar({ className = "" }: AuthNavbarProps) {
   if (isLoading) {
     return (
       <div className={`flex items-center gap-2 md:gap-3 ${className}`}>
-        <div className="w-20 h-9 bg-[#E8D4F8]/30 dark:bg-[#A89CFF]/15 rounded-lg animate-pulse" />
-        <div className="w-24 h-10 bg-[#E8D4F8]/30 dark:bg-[#A89CFF]/15 rounded-xl animate-pulse" />
+        <div className="w-20 h-9 bg-[#E8D4F8]/30 rounded-lg animate-pulse" />
+        <div className="w-24 h-10 bg-[#E8D4F8]/30 rounded-xl animate-pulse" />
       </div>
     )
   }
@@ -92,14 +92,14 @@ export default function AuthNavbar({ className = "" }: AuthNavbarProps) {
   // Si no está autenticado, mostrar botones de login/registro
   return (
     <div className={`flex items-center gap-2 md:gap-3 ${className}`}>
-      <a 
-        href="/auth/acceder" 
-        className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base font-medium text-[#1E1B4B] dark:text-white hover:text-[#A89CFF] transition-colors"
+      <a
+        href="/auth/acceder"
+        className="px-3 py-2 md:px-4 md:py-2 text-sm md:text-base font-medium text-[#1E1B4B] hover:text-[#A89CFF] transition-colors"
       >
         Iniciar sesión
       </a>
-      <a 
-        href="/auth/crear-cuenta" 
+      <a
+        href="/auth/crear-cuenta"
         className="px-4 py-2 md:px-5 md:py-2.5 text-sm md:text-base font-medium text-white bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-105 transition-all"
       >
         Registrarse

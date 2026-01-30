@@ -1,8 +1,16 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+// ============================================================================
+// VERIFY CODE PAGE
+// ============================================================================
+// REGLA CRÍTICA: Esta página NUNCA debe llamar a signInWithOtp/sendOtp
+// automáticamente (en useEffect o al montar). Solo debe verificar el código.
+// El único lugar donde se envía OTP es el botón "Reenviar código".
+// ============================================================================
+
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Mail, Shield, RefreshCw } from 'lucide-react';
-import { requestOtp, verifyOtp } from '@/services/authOtp';
+import { resendOtp, verifyOtp } from '@/services/authOtp';
 
 interface VerifyCodeProps {
   /** Email del usuario (se puede pasar como prop o leer de URL) */
@@ -11,76 +19,139 @@ interface VerifyCodeProps {
   redirectTo?: string;
 }
 
-export default function VerifyCode({ 
-  email: emailProp, 
-  redirectTo = '/perfil' 
+export default function VerifyCode({
+  email: emailProp,
+  redirectTo = '/perfil'
 }: VerifyCodeProps) {
-  // Leer email de props o de la URL
-  const getInitialEmail = () => {
-    if (emailProp) return emailProp;
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('email') || '';
-    }
-    return '';
-  };
+  // ========================================================================
+  // ESTADO
+  // ========================================================================
 
-  const [email, setEmail] = useState(getInitialEmail);
+  // Control de hidratación SSR
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Datos del formulario
+  const [email, setEmail] = useState(emailProp || '');
+  const [otpType, setOtpType] = useState<'signup' | 'magiclink' | 'recovery' | 'email'>('email');
   const [code, setCode] = useState(['', '', '', '', '', '']);
-  const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
+
+  // Estados de loading
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+
+  // Mensajes
   const [error, setError] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  // Cooldown para reenvío (en segundos)
   const [cooldown, setCooldown] = useState(0);
-  
+
+  // Referencias a inputs
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  
-  // Guards para evitar doble envío (StrictMode, doble click)
+
+  // ========================================================================
+  // GUARDS ANTI-REPETICIÓN
+  // ========================================================================
+  // Estos refs previenen dobles llamadas por:
+  // - StrictMode de React 18 (desmonta/remonta en dev)
+  // - Doble click rápido
+  // - Re-renderizados durante operaciones async
+
   const isVerifyingRef = useRef(false);
   const isResendingRef = useRef(false);
   const hasInitializedRef = useRef(false);
 
-  // Leer email de URL al montar en cliente (con guard para StrictMode)
+  // ========================================================================
+  // INICIALIZACIÓN (solo una vez, con guard para StrictMode)
+  // ========================================================================
   useEffect(() => {
-    if (hasInitializedRef.current) return;
-    hasInitializedRef.current = true;
-    
-    if (!emailProp && typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const urlEmail = params.get('email');
-      if (urlEmail) setEmail(decodeURIComponent(urlEmail).trim().toLowerCase());
+    // Guard: evitar doble ejecución en StrictMode
+    if (hasInitializedRef.current) {
+      console.log('[VerifyCode] Init blocked: already initialized');
+      return;
     }
+    hasInitializedRef.current = true;
+
+    console.log('[VerifyCode] Initializing component');
+
+    // Leer parámetros de URL solo en cliente
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+
+      // Email de URL si no viene por prop
+      if (!emailProp) {
+        const urlEmail = params.get('email');
+        if (urlEmail) {
+          const decodedEmail = decodeURIComponent(urlEmail).trim().toLowerCase();
+          setEmail(decodedEmail);
+          console.log('[VerifyCode] Email from URL:', decodedEmail);
+        }
+      }
+
+      // Tipo de OTP
+      const urlType = params.get('type');
+      if (urlType && ['signup', 'magiclink', 'recovery', 'email'].includes(urlType)) {
+        setOtpType(urlType as typeof otpType);
+        console.log('[VerifyCode] OTP type from URL:', urlType);
+      }
+    }
+
+    // Marcar como montado para evitar hydration mismatch
+    setIsMounted(true);
+
+    // IMPORTANTE: NO llamamos a sendOtp aquí. El usuario ya tiene un código
+    // enviado desde la página de registro/login.
   }, [emailProp]);
 
-  // Cooldown timer para reenvío
+  // ========================================================================
+  // COOLDOWN TIMER
+  // ========================================================================
   useEffect(() => {
-    if (cooldown > 0) {
-      const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, [cooldown]);
 
-  // Auto-focus en el primer input
+  // ========================================================================
+  // AUTO-FOCUS (solo después de montar)
+  // ========================================================================
   useEffect(() => {
-    inputRefs.current[0]?.focus();
-  }, []);
+    if (isMounted && inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, [isMounted]);
 
-  const handleCodeChange = (index: number, value: string) => {
+  // ========================================================================
+  // HANDLERS DE INPUT
+  // ========================================================================
+  const handleCodeChange = useCallback((index: number, value: string) => {
     // Solo permitir dígitos
     const digit = value.replace(/[^0-9]/g, '').slice(-1);
-    
-    const newCode = [...code];
-    newCode[index] = digit;
-    setCode(newCode);
+
+    setCode(prev => {
+      const newCode = [...prev];
+      newCode[index] = digit;
+      return newCode;
+    });
 
     // Auto-avanzar al siguiente input
     if (digit && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
-  };
+  }, []);
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Prevenir submit con Enter (el formulario solo debe enviarse con el botón)
+  const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Prevenir submit con Enter
     if (e.key === 'Enter') {
       e.preventDefault();
       return;
@@ -89,110 +160,131 @@ export default function VerifyCode({
     if (e.key === 'Backspace' && !code[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-  };
+  }, [code]);
 
-  const handlePaste = (e: React.ClipboardEvent) => {
+  const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
     if (pasted.length === 6) {
       setCode(pasted.split(''));
-      // Solo focus, NO auto-submit
       inputRefs.current[5]?.focus();
     }
-  };
+  }, []);
 
-  const fullCode = code.join('');
-
-  const handleVerify = async (e: React.FormEvent) => {
+  // ========================================================================
+  // VERIFICAR CÓDIGO
+  // ========================================================================
+  const handleVerify = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    // Guard reforzado: evitar doble submit
+
+    const fullCode = code.join('');
+
+    // Guards anti-repetición
     if (isVerifyingRef.current) {
-      console.log('[VerifyCode] Blocked: already verifying');
+      console.log('[VerifyCode] Verify blocked: already verifying (ref)');
       return;
     }
-    if (loading) {
-      console.log('[VerifyCode] Blocked: loading state');
+    if (isVerifying) {
+      console.log('[VerifyCode] Verify blocked: already verifying (state)');
       return;
     }
-    
+
     if (fullCode.length !== 6) {
       setError('Ingresa el código completo de 6 dígitos');
       return;
     }
 
-    // Bloquear inmediatamente
+    // Bloquear inmediatamente (ref primero, luego state)
     isVerifyingRef.current = true;
-    setLoading(true);
+    setIsVerifying(true);
     setError(null);
-    setInfo(null);
-    
-    console.log('[VerifyCode] Calling verifyOtp...');
+    setSuccess(null);
 
-    const { error: verifyError } = await verifyOtp(email, fullCode);
-    
-    console.log('[VerifyCode] verifyOtp result:', verifyError ? 'error' : 'success');
+    console.log('[VerifyCode] Calling verifyOtp with type:', otpType);
 
-    setLoading(false);
-    // NO liberar isVerifyingRef aquí para evitar doble llamada durante redirect
+    const result = await verifyOtp(email, fullCode, otpType);
 
-    if (verifyError) {
-      // Solo liberar si hay error (para permitir reintentar)
+    setIsVerifying(false);
+    // NO liberar isVerifyingRef durante redirect para evitar doble llamada
+
+    if (result.error) {
+      // Liberar guard solo si hay error (para permitir reintentar)
       isVerifyingRef.current = false;
-      
-      const msg = (verifyError as Error)?.message || 'Código inválido.';
-      const errCode = (verifyError as any)?.code || '';
-      
-      // Detectar error de expiración por código o mensaje
-      if (errCode === 'otp_expired' || msg.toLowerCase().includes('expired') || msg.toLowerCase().includes('expirado')) {
-        setError('Tu código ha expirado o ya fue usado. Solicita uno nuevo haciendo clic en "Reenviar código".');
-      } else if (msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('inválido')) {
-        setError('Código inválido. Verifica que ingresaste los 6 dígitos correctamente.');
+
+      if (result.isExpired) {
+        setError('Tu código ha expirado o ya fue usado. Haz clic en "Reenviar código" para obtener uno nuevo.');
+      } else if (result.isInvalid) {
+        setError('Código incorrecto. Verifica los 6 dígitos.');
       } else {
-        setError('Código inválido o ya utilizado. Solicita uno nuevo.');
+        setError('No se pudo verificar el código. Intenta de nuevo.');
       }
-      
-      // Limpiar código en error
+
+      // Limpiar código
       setCode(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
     } else {
-      setInfo('¡Verificado! Redirigiendo...');
+      setSuccess('¡Verificado! Redirigiendo...');
       setTimeout(() => {
         window.location.href = redirectTo;
       }, 1000);
     }
-  };
+  }, [code, email, otpType, isVerifying, redirectTo]);
 
-  const handleResend = async () => {
-    // Guard: evitar doble envío
-    if (cooldown > 0 || isResendingRef.current || resending) return;
-    
+  // ========================================================================
+  // REENVIAR CÓDIGO
+  // ========================================================================
+  const handleResend = useCallback(async () => {
+    // Guards anti-repetición
+    if (cooldown > 0) {
+      console.log('[VerifyCode] Resend blocked: cooldown active');
+      return;
+    }
+    if (isResendingRef.current) {
+      console.log('[VerifyCode] Resend blocked: already resending (ref)');
+      return;
+    }
+    if (isResending) {
+      console.log('[VerifyCode] Resend blocked: already resending (state)');
+      return;
+    }
+
+    // Bloquear inmediatamente
     isResendingRef.current = true;
-    setResending(true);
+    setIsResending(true);
     setError(null);
-    setInfo(null);
+    setSuccess(null);
 
-    const { error: resendError } = await requestOtp(email, false);
+    console.log('[VerifyCode] Calling resendOtp for:', email);
 
-    setResending(false);
+    const result = await resendOtp(email);
+
+    setIsResending(false);
     isResendingRef.current = false;
 
-    if (resendError) {
-      const msg = (resendError as Error)?.message || '';
-      if (msg.toLowerCase().includes('rate') || msg.toLowerCase().includes('limit')) {
-        setError('Demasiados intentos. Espera unos minutos.');
-        setCooldown(120); // 2 minutos de cooldown en rate limit
+    if (result.error) {
+      if (result.isRateLimited) {
+        const waitTime = result.retryAfterSeconds || 60;
+        setError(`Demasiados intentos. Espera ${waitTime} segundos.`);
+        setCooldown(waitTime);
       } else {
         setError('No se pudo reenviar el código. Intenta más tarde.');
+        setCooldown(30); // Cooldown mínimo en error
       }
     } else {
-      setInfo('¡Nuevo código enviado! Revisa tu correo (también spam).');
-      setCooldown(60); // 60 segundos de cooldown normal
+      setSuccess('¡Nuevo código enviado! Revisa tu correo (también spam).');
+      setCooldown(60); // Cooldown normal de 60s
       setCode(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
+      // Al reenviar manualmente, el nuevo token es tipo 'email'
+      setOtpType('email');
     }
-  };
+  }, [cooldown, email, isResending]);
+
+  // ========================================================================
+  // RENDER
+  // ========================================================================
+  const fullCode = code.join('');
 
   return (
     <div className="min-h-screen flex relative overflow-hidden">
@@ -200,7 +292,7 @@ export default function VerifyCode({
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }} />
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '2s' }} />
-      
+
       {/* Decorative particles */}
       <div className="absolute top-20 right-20 w-2 h-2 bg-[#A89CFF]/40 rounded-full animate-pulse" style={{ animationDuration: '2s' }} />
       <div className="absolute top-40 left-20 w-1.5 h-1.5 bg-[#FF8FAB]/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
@@ -208,12 +300,12 @@ export default function VerifyCode({
       <div className="absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-pulse" style={{ animationDuration: '2s', animationDelay: '1.5s' }} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 dark:bg-[#0F0D1A]/80 backdrop-blur-sm relative z-10">
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10">
         <div className="w-full max-w-md mx-auto">
           {/* Back link */}
           <a
             href="/auth/crear-cuenta"
-            className="inline-flex items-center gap-2 text-sm text-[#6B7280] dark:text-[#A8A3B8] hover:text-[#A89CFF] transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Volver al registro
@@ -221,30 +313,29 @@ export default function VerifyCode({
 
           {/* Header with icon */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/20 dark:from-[#A89CFF]/10 dark:to-[#E8D4F8]/10 mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/20 mb-4">
               <Shield className="w-8 h-8 text-[#A89CFF]" />
             </div>
-            <h1 className="text-2xl font-bold text-[#1E1B4B] dark:text-white mb-2">
+            <h1 className="text-2xl font-bold text-[#1E1B4B] mb-2">
               Verificar código
             </h1>
-            <p className="text-[#6B7280] dark:text-[#A8A3B8]">
+            <p className="text-[#6B7280]">
               Ingresa el código de 6 dígitos enviado a
             </p>
             <div className="flex items-center justify-center gap-2 mt-2">
               <Mail className="w-4 h-4 text-[#A89CFF]" />
-              <span className="font-medium text-[#1E1B4B] dark:text-white">{email}</span>
+              <span className="font-medium text-[#1E1B4B]">
+                {isMounted ? email : <span className="inline-block w-40 h-5 bg-[#E8D4F8]/30 rounded animate-pulse" />}
+              </span>
             </div>
           </div>
 
           {/* Card */}
-          <div className="bg-white/80 dark:bg-[#1A1726]/80 backdrop-blur-md rounded-2xl shadow-xl shadow-[#A89CFF]/10 p-8 border border-[#E8D4F8]/30 dark:border-[#A89CFF]/20">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl shadow-[#A89CFF]/10 p-8 border border-[#E8D4F8]/30">
             <form onSubmit={handleVerify} className="space-y-6">
-              {/* Email oculto */}
-              <input type="hidden" value={email} />
-
               {/* Inputs de código OTP */}
               <div className="space-y-3">
-                <label className="block text-sm font-medium text-[#1E1B4B] dark:text-white text-center">
+                <label className="block text-sm font-medium text-[#1E1B4B] text-center">
                   Código de verificación
                 </label>
                 <div className="flex justify-center gap-3" onPaste={handlePaste}>
@@ -258,44 +349,38 @@ export default function VerifyCode({
                       value={digit}
                       onChange={(e) => handleCodeChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
-                      className="w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 border-[#E8D4F8] dark:border-[#A89CFF]/30 bg-white dark:bg-[#252133] text-[#1E1B4B] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/50"
+                      disabled={isVerifying}
+                      className="w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 border-[#E8D4F8] bg-white text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/50 disabled:opacity-50 disabled:cursor-not-allowed"
                       aria-label={`Dígito ${index + 1}`}
                     />
                   ))}
                 </div>
-                <p className="text-xs text-center text-[#9CA3AF] dark:text-[#6B6680]">
-                  El código expira en 5 minutos
+                <p className="text-xs text-center text-[#9CA3AF]">
+                  El código expira en 60 minutos
                 </p>
               </div>
 
               {/* Success message */}
-              {info && (
-                <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800/50 rounded-xl">
-                  <p className="text-sm text-green-700 dark:text-green-400 text-center font-medium">{info}</p>
+              {success && (
+                <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
+                  <p className="text-sm text-green-700 text-center font-medium">{success}</p>
                 </div>
               )}
 
               {/* Error message */}
               {error && (
-                <div className="p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-200 dark:border-red-800/50 rounded-xl">
-                  <p className="text-sm text-red-700 dark:text-red-400 text-center font-medium">{error}</p>
+                <div className="p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl">
+                  <p className="text-sm text-red-700 text-center font-medium">{error}</p>
                 </div>
               )}
 
               {/* Verify button */}
               <button
                 type="submit"
-                disabled={loading || fullCode.length !== 6 || isVerifyingRef.current}
-                onClick={(e) => {
-                  // Protección adicional contra doble click
-                  if (isVerifyingRef.current || loading) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }
-                }}
+                disabled={isVerifying || fullCode.length !== 6}
                 className="w-full px-6 py-3.5 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#A89CFF]/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none"
               >
-                {loading ? (
+                {isVerifying ? (
                   <span className="flex items-center justify-center gap-2">
                     <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
@@ -312,24 +397,24 @@ export default function VerifyCode({
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#E8D4F8]/50 dark:border-[#A89CFF]/20"></div>
+                <div className="w-full border-t border-[#E8D4F8]/50"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white dark:bg-[#1A1726] text-[#9CA3AF] dark:text-[#6B6680]">
+                <span className="px-4 bg-white text-[#9CA3AF]">
                   ¿No recibiste el código?
                 </span>
               </div>
             </div>
 
-            {/* Resend button */}
+            {/* Resend button with countdown */}
             <button
               type="button"
               onClick={handleResend}
-              disabled={resending || cooldown > 0}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E8D4F8] dark:border-[#A89CFF]/30 text-[#A89CFF] font-medium rounded-xl hover:bg-[#A89CFF]/5 hover:border-[#A89CFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isResending || cooldown > 0}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E8D4F8] text-[#A89CFF] font-medium rounded-xl hover:bg-[#A89CFF]/5 hover:border-[#A89CFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <RefreshCw className={`w-4 h-4 ${resending ? 'animate-spin' : ''}`} />
-              {resending ? (
+              <RefreshCw className={`w-4 h-4 ${isResending ? 'animate-spin' : ''}`} />
+              {isResending ? (
                 'Enviando...'
               ) : cooldown > 0 ? (
                 `Reenviar en ${cooldown}s`
@@ -343,7 +428,7 @@ export default function VerifyCode({
               <button
                 type="button"
                 onClick={() => window.location.href = '/auth/crear-cuenta'}
-                className="text-sm text-[#6B7280] dark:text-[#A8A3B8] hover:text-[#A89CFF] transition-colors"
+                className="text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors"
               >
                 ← Usar otro correo electrónico
               </button>
@@ -351,7 +436,7 @@ export default function VerifyCode({
           </div>
 
           {/* Footer text */}
-          <p className="mt-8 text-center text-xs text-[#9CA3AF] dark:text-[#6B6680]">
+          <p className="mt-8 text-center text-xs text-[#9CA3AF]">
             Si no encuentras el correo, revisa tu carpeta de spam
           </p>
         </div>

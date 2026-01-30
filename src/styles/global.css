@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
 :root {
   font-family: 'Poppins', system-ui, sans-serif;
-  
+
   /* Light mode colors */
   --bg-primary: #FDFBFF;
   --bg-secondary: #FFFFFF;
@@ -17,19 +18,7 @@
   --overlay-bg: rgba(253, 251, 255, 0.8);
 }
 
-.dark {
-  --bg-primary: #0F0D1A;
-  --bg-secondary: #1A1726;
-  --bg-tertiary: #252133;
-  --text-primary: #F8F6FC;
-  --text-secondary: #A8A3B8;
-  --text-muted: #6B6680;
-  --border-color: rgba(168, 156, 255, 0.2);
-  --border-color-strong: rgba(168, 156, 255, 0.4);
-  --card-bg: #1A1726;
-  --card-shadow: rgba(0, 0, 0, 0.3);
-  --overlay-bg: rgba(15, 13, 26, 0.8);
-}
+
 
 body {
   margin: 0;
@@ -44,9 +33,12 @@ body {
 
 /* Animación float para las tarjetas */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -67,6 +59,7 @@ body {
     opacity: 0;
     transform: translate(-50%, -20px);
   }
+
   100% {
     opacity: 1;
     transform: translate(-50%, 0);
@@ -120,7 +113,7 @@ body {
 }
 
 /* Asegurar que el contenido del botón esté sobre el efecto shine */
-.button-hover > * {
+.button-hover>* {
   position: relative;
   z-index: 2;
 }
@@ -130,6 +123,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -140,6 +134,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -156,10 +151,13 @@ body {
 
 /* Animación de pulso lento para los orbs */
 @keyframes pulse-slow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.5;
     transform: scale(1.05);
@@ -172,10 +170,13 @@ body {
 
 /* Animación de twinkle para partículas */
 @keyframes twinkle {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.2);
@@ -212,9 +213,12 @@ body {
 
 /* Animación de gradiente para el título */
 @keyframes gradient {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }

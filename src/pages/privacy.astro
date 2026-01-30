@@ -1,12 +1,14 @@
 ---
-import '../styles/global.css';
-import LogoSinFondo from '../assets/bimooralogo-sinfondo.png';
+import "../styles/global.css";
+
+import LogoSinFondo from "../assets/bimooralogo-sinfondo.png";
 
 const structuredData = {
 	"@context": "https://schema.org",
 	"@type": "WebPage",
-	"name": "Política de Privacidad - Bimoora",
-	"description": "Política de privacidad de Bimoora. Conoce cómo recopilamos, usamos y protegemos tu información personal."
+	name: "Política de Privacidad - Bimoora",
+	description:
+		"Política de privacidad de Bimoora. Conoce cómo recopilamos, usamos y protegemos tu información personal.",
 };
 ---
 
@@ -15,40 +17,64 @@ const structuredData = {
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
-		
+
 		<title>Política de Privacidad — Bimoora</title>
 		<meta name="title" content="Política de Privacidad — Bimoora" />
-		<meta name="description" content="Política de privacidad de Bimoora. Conoce cómo recopilamos, usamos y protegemos tu información personal." />
+		<meta
+			name="description"
+			content="Política de privacidad de Bimoora. Conoce cómo recopilamos, usamos y protegemos tu información personal."
+		/>
 		<meta name="robots" content="index, follow" />
 		<meta name="theme-color" content="#A89CFF" />
-		
+
 		<link rel="canonical" href="https://bimoora.com/privacy" />
-		
+
 		<link rel="icon" type="image/png" href={LogoSinFondo.src} />
 		<link rel="apple-touch-icon" href={LogoSinFondo.src} />
-		
+
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-		
-		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify(structuredData)}
+		/>
 	</head>
-	<body class="bg-[#FDFBFF] min-h-screen m-[5rem]">
+	<body class="bg-[#FDFBFF] min-h-screen transition-colors duration-300">
 		<!-- Background gradient orbs -->
-		<div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none" />
-		<div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/10 rounded-full blur-3xl translate-y-1/2 pointer-events-none" />
+		<div
+			class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/20 rounded-full blur-3xl -translate-y-1/2 pointer-events-none"
+		>
+		</div>
+		<div
+			class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/10 rounded-full blur-3xl translate-y-1/2 pointer-events-none"
+		>
+		</div>
 
 		<!-- Navbar -->
-		<nav class="sticky top-0 z-50 px-4 py-3 md:px-6 md:py-4 bg-[#FDFBFF]/80 backdrop-blur-md border-b border-[#E8D4F8]/50">
+		<nav
+			class="sticky top-0 z-50 px-4 py-3 md:px-6 md:py-4 bg-[#FDFBFF]/80 backdrop-blur-md border-b border-[#E8D4F8]/50"
+		>
 			<div class="max-w-4xl mx-auto flex items-center justify-between">
-				
-
-				<a 
+				<a
 					href="/"
 					class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#6B7280] hover:text-[#A89CFF] transition-colors"
 				>
-					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+					<svg
+						class="w-4 h-4"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
 					</svg>
 					Volver al inicio
 				</a>
@@ -57,9 +83,15 @@ const structuredData = {
 
 		<main class="relative z-10">
 			<!-- Header -->
-			<header class="border-b border-[#E8D4F8]/50 bg-white/50 backdrop-blur-sm">
-				<div class="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
-					<h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E1B4B] mb-2">
+			<header
+				class="border-b border-[#E8D4F8]/50 bg-white/50 backdrop-blur-sm"
+			>
+				<div
+					class="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16"
+				>
+					<h1
+						class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E1B4B] mb-2"
+					>
 						Política de Privacidad
 					</h1>
 					<p class="text-[#6B7280]">
@@ -71,31 +103,67 @@ const structuredData = {
 			<!-- Content -->
 			<div class="max-w-4xl mx-auto px-6 md:px-8 lg:px-12 py-16 lg:py-24">
 				<!-- Summary Card -->
-				<div class="bg-gradient-to-br from-[#E8D4F8]/30 to-[#A89CFF]/10 rounded-2xl p-6 md:p-8 lg:p-10 mb-14 md:mb-16 border border-[#E8D4F8]/50 shadow-lg shadow-[#A89CFF]/5">
-					<h2 class="text-lg font-semibold text-[#1E1B4B] mb-4 flex items-center gap-2">
-						<span class="w-8 h-8 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center">
-							<svg class="w-4 h-4 text-[#A89CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+				<div
+					class="bg-gradient-to-br from-[#E8D4F8]/30 to-[#A89CFF]/10 rounded-2xl p-6 md:p-8 lg:p-10 mb-14 md:mb-16 border border-[#E8D4F8]/50 shadow-lg shadow-[#A89CFF]/5"
+				>
+					<h2
+						class="text-lg font-semibold text-[#1E1B4B] mb-4 flex items-center gap-2"
+					>
+						<span
+							class="w-8 h-8 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center"
+						>
+							<svg
+								class="w-4 h-4 text-[#A89CFF]"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+								></path>
 							</svg>
 						</span>
 						Resumen en simple
 					</h2>
 					<ul class="space-y-3 text-[#6B7280]">
 						<li class="flex items-start gap-3">
-							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
-							<span>Solo recopilamos los datos necesarios para que el servicio funcione.</span>
+							<span
+								class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"
+							></span>
+							<span
+								>Solo recopilamos los datos necesarios para que
+								el servicio funcione.</span
+							>
 						</li>
 						<li class="flex items-start gap-3">
-							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
-							<span>Tus recuerdos son privados. No los leemos, analizamos ni vendemos.</span>
+							<span
+								class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"
+							></span>
+							<span
+								>Tus recuerdos son privados. No los leemos,
+								analizamos ni vendemos.</span
+							>
 						</li>
 						<li class="flex items-start gap-3">
-							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
-							<span>Usamos cifrado para proteger tu información en tránsito.</span>
+							<span
+								class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"
+							></span>
+							<span
+								>Usamos cifrado para proteger tu información en
+								tránsito.</span
+							>
 						</li>
 						<li class="flex items-start gap-3">
-							<span class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"></span>
-							<span>Puedes acceder, corregir o eliminar tus datos cuando quieras.</span>
+							<span
+								class="w-2 h-2 rounded-full bg-[#A89CFF] mt-2 flex-shrink-0"
+							></span>
+							<span
+								>Puedes acceder, corregir o eliminar tus datos
+								cuando quieras.</span
+							>
 						</li>
 					</ul>
 				</div>
@@ -107,25 +175,60 @@ const structuredData = {
 							1. Qué Datos Recopilamos
 						</h2>
 						<p class="text-[#6B7280] leading-relaxed mb-4">
-							En Bimoora recopilamos únicamente la información necesaria para proporcionarte el Servicio:
+							En Bimoora recopilamos únicamente la información
+							necesaria para proporcionarte el Servicio:
 						</p>
-						
-						<h3 class="text-lg font-medium text-[#1E1B4B] mt-6 mb-3">
+
+						<h3
+							class="text-lg font-medium text-[#1E1B4B] mt-6 mb-3"
+						>
 							Información que nos proporcionas directamente:
 						</h3>
-						<ul class="list-disc pl-6 text-[#6B7280] space-y-2 mb-4">
-							<li><strong class="text-[#1E1B4B]">Datos de cuenta:</strong> Correo electrónico y contraseña (almacenada de forma cifrada)</li>
-							<li><strong class="text-[#1E1B4B]">Perfil opcional:</strong> Nombre de usuario o apodo (si decides añadirlo)</li>
-							<li><strong class="text-[#1E1B4B]">Contenido del usuario:</strong> Fotos, textos, fechas y otros recuerdos que guardes en la plataforma</li>
+						<ul
+							class="list-disc pl-6 text-[#6B7280] space-y-2 mb-4"
+						>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Datos de cuenta:</strong
+								> Correo electrónico y contraseña (almacenada de forma
+								cifrada)
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Perfil opcional:</strong
+								> Nombre de usuario o apodo (si decides añadirlo)
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Contenido del usuario:</strong
+								> Fotos, textos, fechas y otros recuerdos que guardes
+								en la plataforma
+							</li>
 						</ul>
 
-						<h3 class="text-lg font-medium text-[#1E1B4B] mt-6 mb-3">
+						<h3
+							class="text-lg font-medium text-[#1E1B4B] mt-6 mb-3"
+						>
 							Información recopilada automáticamente:
 						</h3>
 						<ul class="list-disc pl-6 text-[#6B7280] space-y-2">
-							<li><strong class="text-[#1E1B4B]">Datos de uso:</strong> Información básica sobre cómo interactúas con la aplicación (sin leer el contenido de tus recuerdos)</li>
-							<li><strong class="text-[#1E1B4B]">Datos del dispositivo:</strong> Tipo de dispositivo, sistema operativo y versión de la aplicación</li>
-							<li><strong class="text-[#1E1B4B]">Datos de conexión:</strong> Dirección IP y datos de sesión para seguridad</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Datos de uso:</strong
+								> Información básica sobre cómo interactúas con la
+								aplicación (sin leer el contenido de tus recuerdos)
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Datos del dispositivo:</strong
+								> Tipo de dispositivo, sistema operativo y versión
+								de la aplicación
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Datos de conexión:</strong
+								> Dirección IP y datos de sesión para seguridad
+							</li>
 						</ul>
 					</section>
 
@@ -133,25 +236,68 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							2. Para Qué Usamos tus Datos
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
 							Utilizamos tu información exclusivamente para:
 						</p>
 						<ul class="list-disc pl-6 text-[#6B7280] space-y-2">
-							<li><strong class="text-[#1E1B4B]">Proporcionar el Servicio:</strong> Crear tu cuenta, almacenar tus recuerdos y sincronizar datos entre dispositivos</li>
-							<li><strong class="text-[#1E1B4B]">Comunicación:</strong> Enviarte notificaciones importantes sobre tu cuenta, actualizaciones de seguridad y cambios en el servicio</li>
-							<li><strong class="text-[#1E1B4B]">Seguridad:</strong> Proteger tu cuenta de accesos no autorizados y detectar actividad sospechosa</li>
-							<li><strong class="text-[#1E1B4B]">Mejora del servicio:</strong> Analizar datos agregados y anonimizados para mejorar la experiencia de usuario</li>
-							<li><strong class="text-[#1E1B4B]">Soporte:</strong> Responder a tus consultas y resolver problemas técnicos</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Proporcionar el Servicio:</strong
+								> Crear tu cuenta, almacenar tus recuerdos y sincronizar
+								datos entre dispositivos
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Comunicación:</strong
+								> Enviarte notificaciones importantes sobre tu cuenta,
+								actualizaciones de seguridad y cambios en el servicio
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Seguridad:</strong
+								> Proteger tu cuenta de accesos no autorizados y detectar
+								actividad sospechosa
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Mejora del servicio:</strong
+								> Analizar datos agregados y anonimizados para mejorar
+								la experiencia de usuario
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Soporte:</strong
+								> Responder a tus consultas y resolver problemas técnicos
+							</li>
 						</ul>
-						<div class="mt-6 p-4 bg-[#A89CFF]/10 rounded-xl border border-[#A89CFF]/20">
-							<p class="text-[#1E1B4B] font-medium flex items-center gap-2">
-								<svg class="w-5 h-5 text-[#A89CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						<div
+							class="mt-6 p-4 bg-[#A89CFF]/10 rounded-xl border border-[#A89CFF]/20"
+						>
+							<p
+								class="text-[#1E1B4B] font-medium flex items-center gap-2"
+							>
+								<svg
+									class="w-5 h-5 text-[#A89CFF]"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+									></path>
 								</svg>
 								Importante
 							</p>
 							<p class="text-[#6B7280] mt-2">
-								Nunca leemos, analizamos ni utilizamos el contenido de tus recuerdos (fotos, textos, notas) para ningún propósito que no sea almacenarlos y mostrártelos.
+								Nunca leemos, analizamos ni utilizamos el
+								contenido de tus recuerdos (fotos, textos,
+								notas) para ningún propósito que no sea
+								almacenarlos y mostrártelos.
 							</p>
 						</div>
 					</section>
@@ -160,14 +306,34 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							3. Base Legal del Tratamiento
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
 							El tratamiento de tus datos se basa en:
 						</p>
 						<ul class="list-disc pl-6 text-[#6B7280] space-y-2">
-							<li><strong class="text-[#1E1B4B]">Consentimiento:</strong> Al crear una cuenta, consientes el tratamiento de tus datos según esta política</li>
-							<li><strong class="text-[#1E1B4B]">Ejecución de contrato:</strong> El tratamiento es necesario para proporcionarte el servicio que has solicitado</li>
-							<li><strong class="text-[#1E1B4B]">Interés legítimo:</strong> Para mejorar la seguridad y prevenir fraudes</li>
-							<li><strong class="text-[#1E1B4B]">Obligación legal:</strong> Cuando sea requerido por ley</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Consentimiento:</strong
+								> Al crear una cuenta, consientes el tratamiento de
+								tus datos según esta política
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Ejecución de contrato:</strong
+								> El tratamiento es necesario para proporcionarte
+								el servicio que has solicitado
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Interés legítimo:</strong
+								> Para mejorar la seguridad y prevenir fraudes
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Obligación legal:</strong
+								> Cuando sea requerido por ley
+							</li>
 						</ul>
 					</section>
 
@@ -175,22 +341,61 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							4. Compartición de Datos
 						</h2>
-						<div class="mb-4 p-4 bg-green-50 rounded-xl border border-green-200">
-							<p class="text-green-800 font-semibold flex items-center gap-2">
-								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+						<div
+							class="mb-4 p-4 bg-green-50 rounded-xl border border-green-200"
+						>
+							<p
+								class="text-green-800 font-semibold flex items-center gap-2"
+							>
+								<svg
+									class="w-5 h-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+									></path>
 								</svg>
 								No vendemos tus datos.
 							</p>
 						</div>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
-							Solo compartimos información en las siguientes circunstancias:
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
+							Solo compartimos información en las siguientes
+							circunstancias:
 						</p>
 						<ul class="list-disc pl-6 text-[#6B7280] space-y-2">
-							<li><strong class="text-[#1E1B4B]">Proveedores de servicios:</strong> Trabajamos con proveedores de confianza (almacenamiento en la nube, procesamiento de pagos) que procesan datos en nuestro nombre y bajo estrictas obligaciones de confidencialidad</li>
-							<li><strong class="text-[#1E1B4B]">Tu pareja:</strong> El contenido que decides compartir en un espacio compartido es visible para la persona que has invitado</li>
-							<li><strong class="text-[#1E1B4B]">Cumplimiento legal:</strong> Si estamos legalmente obligados a divulgar información por una orden judicial o requerimiento legal válido</li>
-							<li><strong class="text-[#1E1B4B]">Protección de derechos:</strong> Para proteger los derechos, seguridad o propiedad de Bimoora, nuestros usuarios o el público</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Proveedores de servicios:</strong
+								> Trabajamos con proveedores de confianza (almacenamiento
+								en la nube, procesamiento de pagos) que procesan datos
+								en nuestro nombre y bajo estrictas obligaciones de
+								confidencialidad
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Tu pareja:</strong
+								> El contenido que decides compartir en un espacio
+								compartido es visible para la persona que has invitado
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Cumplimiento legal:</strong
+								> Si estamos legalmente obligados a divulgar información
+								por una orden judicial o requerimiento legal válido
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Protección de derechos:</strong
+								> Para proteger los derechos, seguridad o propiedad
+								de Bimoora, nuestros usuarios o el público
+							</li>
 						</ul>
 					</section>
 
@@ -198,18 +403,41 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							5. Retención de Datos
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
-							Conservamos tus datos mientras mantengas una cuenta activa en Bimoora:
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
+							Conservamos tus datos mientras mantengas una cuenta
+							activa en Bimoora:
 						</p>
 						<ul class="list-disc pl-6 text-[#6B7280] space-y-2">
-							<li><strong class="text-[#1E1B4B]">Datos de cuenta:</strong> Mientras tu cuenta esté activa</li>
-							<li><strong class="text-[#1E1B4B]">Contenido (recuerdos):</strong> Mientras tu cuenta esté activa o hasta que lo elimines</li>
-							<li><strong class="text-[#1E1B4B]">Datos de uso:</strong> Máximo 24 meses para análisis agregados</li>
-							<li><strong class="text-[#1E1B4B]">Copias de seguridad:</strong> Hasta 90 días después de la eliminación de datos</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Datos de cuenta:</strong
+								> Mientras tu cuenta esté activa
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Contenido (recuerdos):</strong
+								> Mientras tu cuenta esté activa o hasta que lo elimines
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Datos de uso:</strong
+								> Máximo 24 meses para análisis agregados
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Copias de seguridad:</strong
+								> Hasta 90 días después de la eliminación de datos
+							</li>
 						</ul>
-						<p class="text-[#6B7280] leading-relaxed mt-4">
-							Cuando eliminas tu cuenta, eliminamos tu contenido de nuestros servidores activos inmediatamente 
-							y de las copias de seguridad en un plazo máximo de 30 días.
+						<p
+							class="text-[#6B7280] leading-relaxed mt-4"
+						>
+							Cuando eliminas tu cuenta, eliminamos tu contenido
+							de nuestros servidores activos inmediatamente y de
+							las copias de seguridad en un plazo máximo de 30
+							días.
 						</p>
 					</section>
 
@@ -217,50 +445,129 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							6. Seguridad
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
-							Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos:
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
+							Implementamos medidas de seguridad técnicas y
+							organizativas para proteger tus datos:
 						</p>
 						<div class="grid sm:grid-cols-2 gap-4">
-							<div class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm">
-								<div class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3">
-									<svg class="w-5 h-5 text-[#A89CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+							<div
+								class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm"
+							>
+								<div
+									class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3"
+								>
+									<svg
+										class="w-5 h-5 text-[#A89CFF]"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+										></path>
 									</svg>
 								</div>
-								<h4 class="font-medium text-[#1E1B4B] mb-1">Cifrado en tránsito</h4>
-								<p class="text-sm text-[#6B7280]">Toda la comunicación utiliza TLS/HTTPS</p>
+								<h4 class="font-medium text-[#1E1B4B] mb-1">
+									Cifrado en tránsito
+								</h4>
+								<p class="text-sm text-[#6B7280]">
+									Toda la comunicación utiliza TLS/HTTPS
+								</p>
 							</div>
-							<div class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm">
-								<div class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3">
-									<svg class="w-5 h-5 text-[#A89CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+							<div
+								class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm"
+							>
+								<div
+									class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3"
+								>
+									<svg
+										class="w-5 h-5 text-[#A89CFF]"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+										></path>
 									</svg>
 								</div>
-								<h4 class="font-medium text-[#1E1B4B] mb-1">Contraseñas seguras</h4>
-								<p class="text-sm text-[#6B7280]">Almacenadas con algoritmos de hash seguros</p>
+								<h4 class="font-medium text-[#1E1B4B] mb-1">
+									Contraseñas seguras
+								</h4>
+								<p class="text-sm text-[#6B7280]">
+									Almacenadas con algoritmos de hash seguros
+								</p>
 							</div>
-							<div class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm">
-								<div class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3">
-									<svg class="w-5 h-5 text-[#A89CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+							<div
+								class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm"
+							>
+								<div
+									class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3"
+								>
+									<svg
+										class="w-5 h-5 text-[#A89CFF]"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+										></path>
 									</svg>
 								</div>
-								<h4 class="font-medium text-[#1E1B4B] mb-1">Acceso restringido</h4>
-								<p class="text-sm text-[#6B7280]">Solo personal autorizado tiene acceso</p>
+								<h4 class="font-medium text-[#1E1B4B] mb-1">
+									Acceso restringido
+								</h4>
+								<p class="text-sm text-[#6B7280]">
+									Solo personal autorizado tiene acceso
+								</p>
 							</div>
-							<div class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm">
-								<div class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3">
-									<svg class="w-5 h-5 text-[#A89CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+							<div
+								class="p-4 bg-white rounded-xl border border-[#E8D4F8]/50 shadow-sm"
+							>
+								<div
+									class="w-10 h-10 rounded-lg bg-[#A89CFF]/20 flex items-center justify-center mb-3"
+								>
+									<svg
+										class="w-5 h-5 text-[#A89CFF]"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+										></path>
 									</svg>
 								</div>
-								<h4 class="font-medium text-[#1E1B4B] mb-1">Monitorización</h4>
-								<p class="text-sm text-[#6B7280]">Vigilancia continua de amenazas</p>
+								<h4 class="font-medium text-[#1E1B4B] mb-1">
+									Monitorización
+								</h4>
+								<p class="text-sm text-[#6B7280]">
+									Vigilancia continua de amenazas
+								</p>
 							</div>
 						</div>
-						<p class="text-[#6B7280] leading-relaxed mt-6">
-							Aunque tomamos precauciones razonables, ningún sistema es completamente seguro. 
-							Te recomendamos usar contraseñas únicas y activar la verificación en dos pasos.
+						<p
+							class="text-[#6B7280] leading-relaxed mt-6"
+						>
+							Aunque tomamos precauciones razonables, ningún
+							sistema es completamente seguro. Te recomendamos
+							usar contraseñas únicas y activar la verificación en
+							dos pasos.
 						</p>
 					</section>
 
@@ -268,20 +575,59 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							7. Tus Derechos
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
-							Tienes los siguientes derechos sobre tus datos personales:
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
+							Tienes los siguientes derechos sobre tus datos
+							personales:
 						</p>
 						<ul class="list-disc pl-6 text-[#6B7280] space-y-2">
-							<li><strong class="text-[#1E1B4B]">Acceso:</strong> Puedes solicitar una copia de los datos que tenemos sobre ti</li>
-							<li><strong class="text-[#1E1B4B]">Rectificación:</strong> Puedes corregir datos inexactos desde la configuración de tu cuenta</li>
-							<li><strong class="text-[#1E1B4B]">Eliminación:</strong> Puedes eliminar tu cuenta y todos tus datos en cualquier momento</li>
-							<li><strong class="text-[#1E1B4B]">Portabilidad:</strong> Puedes exportar tus recuerdos en formatos comunes (planes Plus y Pareja)</li>
-							<li><strong class="text-[#1E1B4B]">Oposición:</strong> Puedes oponerte al tratamiento de tus datos para ciertos fines</li>
-							<li><strong class="text-[#1E1B4B]">Limitación:</strong> Puedes solicitar la limitación del tratamiento en ciertas circunstancias</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Acceso:</strong
+								> Puedes solicitar una copia de los datos que tenemos
+								sobre ti
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Rectificación:</strong
+								> Puedes corregir datos inexactos desde la configuración
+								de tu cuenta
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Eliminación:</strong
+								> Puedes eliminar tu cuenta y todos tus datos en cualquier
+								momento
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Portabilidad:</strong
+								> Puedes exportar tus recuerdos en formatos comunes
+								(planes Plus y Pareja)
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Oposición:</strong
+								> Puedes oponerte al tratamiento de tus datos para
+								ciertos fines
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Limitación:</strong
+								> Puedes solicitar la limitación del tratamiento en
+								ciertas circunstancias
+							</li>
 						</ul>
-						<p class="text-[#6B7280] leading-relaxed mt-4">
-							Para ejercer estos derechos, contacta con nosotros en{" "}
-							<a href="mailto:privacidad@bimoora.com" class="text-[#A89CFF] hover:text-[#A89CFF]/80 underline underline-offset-2 transition-colors">
+						<p
+							class="text-[#6B7280] leading-relaxed mt-4"
+						>
+							Para ejercer estos derechos, contacta con nosotros
+							en{" "}
+							<a
+								href="mailto:privacidad@bimoora.com"
+								class="text-[#A89CFF] hover:text-[#A89CFF]/80 underline underline-offset-2 transition-colors"
+							>
 								privacidad@bimoora.com
 							</a>.
 						</p>
@@ -291,17 +637,37 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							8. Cookies
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
-							Utilizamos cookies y tecnologías similares de forma limitada:
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
+							Utilizamos cookies y tecnologías similares de forma
+							limitada:
 						</p>
 						<ul class="list-disc pl-6 text-[#6B7280] space-y-2">
-							<li><strong class="text-[#1E1B4B]">Cookies esenciales:</strong> Necesarias para el funcionamiento del servicio (autenticación, sesión)</li>
-							<li><strong class="text-[#1E1B4B]">Cookies de preferencias:</strong> Para recordar tus preferencias (como el modo oscuro)</li>
-							<li><strong class="text-[#1E1B4B]">Cookies analíticas:</strong> Para entender cómo se usa la aplicación de forma agregada (opcional)</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Cookies esenciales:</strong
+								> Necesarias para el funcionamiento del servicio (autenticación,
+								sesión)
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Cookies de preferencias:</strong
+								> Para recordar tus preferencias (como el modo oscuro)
+							</li>
+							<li>
+								<strong class="text-[#1E1B4B]"
+									>Cookies analíticas:</strong
+								> Para entender cómo se usa la aplicación de forma
+								agregada (opcional)
+							</li>
 						</ul>
-						<p class="text-[#6B7280] leading-relaxed mt-4">
-							No utilizamos cookies de publicidad ni rastreo de terceros. Puedes gestionar 
-							las cookies desde la configuración de tu navegador.
+						<p
+							class="text-[#6B7280] leading-relaxed mt-4"
+						>
+							No utilizamos cookies de publicidad ni rastreo de
+							terceros. Puedes gestionar las cookies desde la
+							configuración de tu navegador.
 						</p>
 					</section>
 
@@ -309,13 +675,20 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							9. Cambios a esta Política
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
-							Podemos actualizar esta Política de Privacidad ocasionalmente. Te notificaremos 
-							sobre cambios significativos a través del correo asociado a tu cuenta.
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
+							Podemos actualizar esta Política de Privacidad
+							ocasionalmente. Te notificaremos sobre cambios
+							significativos a través del correo asociado a tu
+							cuenta.
 						</p>
-						<p class="text-[#6B7280] leading-relaxed">
-							Te recomendamos revisar esta página periódicamente para estar informado 
-							sobre cómo protegemos tu información.
+						<p
+							class="text-[#6B7280] leading-relaxed"
+						>
+							Te recomendamos revisar esta página periódicamente
+							para estar informado sobre cómo protegemos tu
+							información.
 						</p>
 					</section>
 
@@ -323,40 +696,62 @@ const structuredData = {
 						<h2 class="text-2xl font-semibold text-[#1E1B4B] mb-4">
 							10. Contacto
 						</h2>
-						<p class="text-[#6B7280] leading-relaxed mb-4">
-							Si tienes preguntas sobre esta Política de Privacidad o sobre el tratamiento de tus datos, contacta con nosotros:
+						<p
+							class="text-[#6B7280] leading-relaxed mb-4"
+						>
+							Si tienes preguntas sobre esta Política de
+							Privacidad o sobre el tratamiento de tus datos,
+							contacta con nosotros:
 						</p>
-						<div class="bg-gradient-to-br from-[#E8D4F8]/20 to-[#A89CFF]/10 rounded-xl p-5 border border-[#E8D4F8]/50 space-y-3">
+						<div
+							class="bg-gradient-to-br from-[#E8D4F8]/20 to-[#A89CFF]/10 rounded-xl p-5 border border-[#E8D4F8]/50 space-y-3"
+						>
 							<p class="text-[#6B7280]">
-								<strong class="text-[#1E1B4B]">Correo electrónico:</strong>{" "}
-								<a href="mailto:privacidad@bimoora.com" class="text-[#A89CFF] hover:text-[#A89CFF]/80 underline underline-offset-2 transition-colors">
+								<strong class="text-[#1E1B4B]"
+									>Correo electrónico:</strong
+								>{" "}
+								<a
+									href="mailto:privacidad@bimoora.com"
+									class="text-[#A89CFF] hover:text-[#A89CFF]/80 underline underline-offset-2 transition-colors"
+								>
 									privacidad@bimoora.com
 								</a>
 							</p>
 							<p class="text-[#6B7280]">
-								<strong class="text-[#1E1B4B]">Responsable:</strong> Bimoora
+								<strong class="text-[#1E1B4B]"
+									>Responsable:</strong
+								> Bimoora
 							</p>
 						</div>
 					</section>
 				</article>
 
 				<!-- Back link -->
-				
 			</div>
 		</main>
 
 		<!-- Footer -->
-		<footer class="relative z-10 border-t border-[#E8D4F8]/50 bg-white/50 backdrop-blur-sm">
+		<footer
+			class="relative z-10 border-t border-[#E8D4F8]/50 bg-white/50 backdrop-blur-sm"
+		>
 			<div class="max-w-4xl mx-auto px-4 lg:px-8 py-8">
-				<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+				<div
+					class="flex flex-col sm:flex-row items-center justify-between gap-4"
+				>
 					<p class="text-sm text-[#9CA3AF]">
 						© 2026 Bimoora. Todos los derechos reservados.
 					</p>
 					<div class="flex items-center gap-6">
-						<a href="/privacy" class="text-sm text-[#A89CFF] font-medium">
+						<a
+							href="/privacy"
+							class="text-sm text-[#A89CFF] font-medium"
+						>
 							Privacidad
 						</a>
-						<a href="/terms" class="text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors">
+						<a
+							href="/terms"
+							class="text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors"
+						>
 							Términos
 						</a>
 					</div>

@@ -1,7 +1,15 @@
 "use client";
 
-import { useState } from 'react';
-import { requestOtp } from '@/services/authOtp';
+// ============================================================================
+// REQUEST CODE PAGE
+// ============================================================================
+// Esta página envía OTP al email del usuario.
+// ÚNICA ubicación donde se llama sendOtp (además del botón Reenviar en VerifyCode).
+// ============================================================================
+
+import { useState, useRef, useCallback } from 'react';
+import { sendOtp } from '@/services/authOtp';
+import { ArrowLeft, Mail } from 'lucide-react';
 
 interface RequestCodeProps {
   /** true para registro (crear usuario), false para login */
@@ -10,144 +18,246 @@ interface RequestCodeProps {
   redirectTo?: string;
 }
 
-export default function RequestCode({ 
-  isSignupMode = false, 
-  redirectTo = '/auth/verificar-codigo' 
+export default function RequestCode({
+  isSignupMode = false,
+  redirectTo = '/auth/verificar-codigo'
 }: RequestCodeProps) {
+  // Estado del formulario
   const [email, setEmail] = useState('');
   const [isSignup, setIsSignup] = useState(isSignupMode);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [cooldown, setCooldown] = useState(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // ========================================================================
+  // GUARDS ANTI-REPETICIÓN
+  // ========================================================================
+  const isSubmittingRef = useRef(false);
+
+  // ========================================================================
+  // COOLDOWN TIMER
+  // ========================================================================
+  // Se activa si hay rate limit
+  useState(() => {
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  });
+
+  // ========================================================================
+  // SUBMIT HANDLER
+  // ========================================================================
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setMessage(null);
+    e.stopPropagation();
+
+    // Guards anti-repetición
+    if (isSubmittingRef.current) {
+      console.log('[RequestCode] Submit blocked: already submitting (ref)');
+      return;
+    }
+    if (isLoading) {
+      console.log('[RequestCode] Submit blocked: already loading (state)');
+      return;
+    }
+    if (cooldown > 0) {
+      console.log('[RequestCode] Submit blocked: cooldown active');
+      return;
+    }
 
     const trimmedEmail = email.trim().toLowerCase();
-    const { error: otpError } = await requestOtp(trimmedEmail, isSignup);
+    if (!trimmedEmail) {
+      setError('Ingresa un email válido');
+      return;
+    }
 
-    setLoading(false);
+    // Bloquear inmediatamente
+    isSubmittingRef.current = true;
+    setIsLoading(true);
+    setError(null);
+    setSuccess(null);
 
-    if (otpError) {
-      const msg = (otpError as Error)?.message || 'No se pudo enviar el código.';
-      
-      // Manejar rate limit
-      if (msg.toLowerCase().includes('rate') || msg.toLowerCase().includes('limit')) {
-        setError('Demasiados intentos. Por favor espera unos minutos e intenta de nuevo.');
-      } else if (msg.toLowerCase().includes('not found') || msg.toLowerCase().includes('no user')) {
-        setError('No existe una cuenta con este email. ¿Quieres registrarte?');
+    console.log('[RequestCode] Calling sendOtp for:', trimmedEmail, 'isSignup:', isSignup);
+
+    const result = await sendOtp(trimmedEmail, isSignup);
+
+    setIsLoading(false);
+    isSubmittingRef.current = false;
+
+    if (result.error) {
+      if (result.isRateLimited) {
+        const waitTime = result.retryAfterSeconds || 60;
+        setError(`Demasiados intentos. Espera ${waitTime} segundos.`);
+        setCooldown(waitTime);
       } else {
-        setError(msg);
+        const msg = (result.error as Error)?.message || '';
+        if (msg.toLowerCase().includes('not found') || msg.toLowerCase().includes('no user')) {
+          setError('No existe una cuenta con este email. ¿Quieres registrarte?');
+        } else {
+          setError(msg || 'No se pudo enviar el código.');
+        }
       }
     } else {
-      setMessage('¡Código enviado! Revisa tu correo electrónico.');
-      // Redirigir a verificación con el email como parámetro
+      setSuccess('¡Código enviado! Revisa tu correo electrónico.');
+      // Redirigir a verificación
       setTimeout(() => {
-        window.location.href = `${redirectTo}?email=${encodeURIComponent(trimmedEmail)}`;
+        const type = isSignup ? 'signup' : 'email';
+        window.location.href = `${redirectTo}?email=${encodeURIComponent(trimmedEmail)}&type=${type}`;
       }, 1500);
     }
-  };
+  }, [email, isSignup, isLoading, cooldown, redirectTo]);
 
+  // ========================================================================
+  // RENDER
+  // ========================================================================
   return (
-    <div className="w-full max-w-md mx-auto p-6">
-      <div className="bg-white dark:bg-[#1A1726] rounded-2xl shadow-xl p-8 border border-[#E8D4F8]/30 dark:border-[#A89CFF]/20">
-        <h1 className="text-2xl font-bold text-[#1E1B4B] dark:text-white mb-2 text-center">
-          {isSignup ? 'Crear cuenta' : 'Iniciar sesión'}
-        </h1>
-        <p className="text-[#6B7280] dark:text-[#A8A3B8] text-center mb-6">
-          Te enviaremos un código de 6 dígitos a tu correo
-        </p>
+    <div className="min-h-screen flex relative overflow-hidden">
+      {/* Background gradient orbs */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }} />
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s', animationDelay: '2s' }} />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label 
-              htmlFor="email" 
-              className="block text-sm font-medium text-[#1E1B4B] dark:text-white mb-2"
-            >
-              Correo electrónico
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="tu@email.com"
-              className="w-full px-4 py-3 rounded-xl border border-[#E8D4F8] dark:border-[#A89CFF]/30 bg-white dark:bg-[#252133] text-[#1E1B4B] dark:text-white placeholder:text-[#9CA3AF] dark:placeholder:text-[#6B6680] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all"
-            />
-          </div>
-
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={isSignup}
-              onChange={(e) => setIsSignup(e.target.checked)}
-              className="w-4 h-4 rounded border-[#E8D4F8] dark:border-[#A89CFF]/30 text-[#A89CFF] focus:ring-[#A89CFF]/50"
-            />
-            <span className="text-sm text-[#6B7280] dark:text-[#A8A3B8]">
-              Crear cuenta nueva (registro)
-            </span>
-          </label>
-
-          <button
-            type="submit"
-            disabled={loading || !email.trim()}
-            className="w-full px-6 py-3 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10">
+        <div className="w-full max-w-md mx-auto">
+          {/* Back link */}
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors mb-8"
           >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                Enviando...
-              </span>
-            ) : (
-              'Enviar código'
-            )}
-          </button>
-        </form>
+            <ArrowLeft className="w-4 h-4" />
+            Volver al inicio
+          </a>
 
-        {message && (
-          <div className="mt-4 p-3 bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl">
-            <p className="text-sm text-green-700 dark:text-green-400 text-center">{message}</p>
-          </div>
-        )}
+          {/* Card */}
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl shadow-[#A89CFF]/10 p-8 border border-[#E8D4F8]/30">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/20 mb-4">
+                <Mail className="w-7 h-7 text-[#A89CFF]" />
+              </div>
+              <h1 className="text-2xl font-bold text-[#1E1B4B] mb-2">
+                {isSignup ? 'Crear cuenta' : 'Iniciar sesión'}
+              </h1>
+              <p className="text-[#6B7280]">
+                Te enviaremos un código de 6 dígitos a tu correo
+              </p>
+            </div>
 
-        {error && (
-          <div className="mt-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl">
-            <p className="text-sm text-red-700 dark:text-red-400 text-center">{error}</p>
-          </div>
-        )}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-[#1E1B4B] mb-2"
+                >
+                  Correo electrónico
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={isLoading}
+                  placeholder="tu@email.com"
+                  className="w-full px-4 py-3 rounded-xl border border-[#E8D4F8] bg-white text-[#1E1B4B] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
 
-        <p className="mt-6 text-center text-sm text-[#6B7280] dark:text-[#A8A3B8]">
-          {isSignup ? (
-            <>
-              ¿Ya tienes cuenta?{' '}
-              <button 
-                type="button"
-                onClick={() => setIsSignup(false)}
-                className="text-[#A89CFF] hover:underline font-medium"
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isSignup}
+                  onChange={(e) => setIsSignup(e.target.checked)}
+                  disabled={isLoading}
+                  className="w-4 h-4 rounded border-[#E8D4F8] text-[#A89CFF] focus:ring-[#A89CFF]/50"
+                />
+                <span className="text-sm text-[#6B7280]">
+                  Crear cuenta nueva (registro)
+                </span>
+              </label>
+
+              {/* Success message */}
+              {success && (
+                <div className="p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
+                  <p className="text-sm text-green-700 text-center font-medium">{success}</p>
+                </div>
+              )}
+
+              {/* Error message */}
+              {error && (
+                <div className="p-3 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl">
+                  <p className="text-sm text-red-700 text-center font-medium">{error}</p>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isLoading || !email.trim() || cooldown > 0}
+                className="w-full px-6 py-3.5 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                Iniciar sesión
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Enviando...
+                  </span>
+                ) : cooldown > 0 ? (
+                  `Espera ${cooldown}s`
+                ) : (
+                  'Enviar código'
+                )}
               </button>
-            </>
-          ) : (
-            <>
-              ¿No tienes cuenta?{' '}
-              <button 
-                type="button"
-                onClick={() => setIsSignup(true)}
-                className="text-[#A89CFF] hover:underline font-medium"
+            </form>
+
+            <p className="mt-6 text-center text-sm text-[#6B7280]">
+              {isSignup ? (
+                <>
+                  ¿Ya tienes cuenta?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setIsSignup(false)}
+                    className="text-[#A89CFF] hover:underline font-medium"
+                  >
+                    Iniciar sesión
+                  </button>
+                </>
+              ) : (
+                <>
+                  ¿No tienes cuenta?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setIsSignup(true)}
+                    className="text-[#A89CFF] hover:underline font-medium"
+                  >
+                    Registrarse
+                  </button>
+                </>
+              )}
+            </p>
+
+            <div className="mt-4 text-center">
+              <a
+                href="/auth/acceder"
+                className="text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors"
               >
-                Registrarse
-              </button>
-            </>
-          )}
-        </p>
+                O inicia sesión con contraseña
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

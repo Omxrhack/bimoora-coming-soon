@@ -1,17 +1,17 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-import '../styles/global.css';
+import { ViewTransitions } from "astro:transitions";
+import "../styles/global.css";
 
 // Components
-import Navbar from '../components/landing/Navbar';
-import Concept from '../components/landing/Concept.astro';
-import Features from '../components/landing/Features.astro';
-import HowItWorks from '../components/landing/HowItWorks.astro';
-import Security from '../components/landing/Security.astro';
-import FAQ from '../components/landing/FAQ.astro';
-import Footer from '../components/landing/Footer.astro';
+import Navbar from "../components/landing/Navbar";
+import Concept from "../components/landing/Concept.astro";
+import Features from "../components/landing/Features.astro";
+import HowItWorks from "../components/landing/HowItWorks.astro";
+import Security from "../components/landing/Security.astro";
+import FAQ from "../components/landing/FAQ.astro";
+import Footer from "../components/landing/Footer.astro";
 
-import LogoSinFondo from '../assets/bimooralogo-sinfondo.png';
+import LogoSinFondo from "../assets/bimooralogo-sinfondo.png";
 
 // Target date for countdown
 const TARGET_DATE = new Date();
@@ -22,20 +22,21 @@ const TARGET_DATE_ISO = TARGET_DATE.toISOString();
 const structuredData = {
 	"@context": "https://schema.org",
 	"@type": "SoftwareApplication",
-	"name": "Bimoora",
-	"applicationCategory": "LifestyleApplication",
-	"operatingSystem": "iOS, Android",
-	"description": "Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día.",
-	"offers": {
+	name: "Bimoora",
+	applicationCategory: "LifestyleApplication",
+	operatingSystem: "iOS, Android",
+	description:
+		"Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día.",
+	offers: {
 		"@type": "Offer",
-		"price": "0",
-		"priceCurrency": "USD"
+		price: "0",
+		priceCurrency: "USD",
 	},
-	"aggregateRating": {
+	aggregateRating: {
 		"@type": "AggregateRating",
-		"ratingValue": "4.9",
-		"ratingCount": "10000"
-	}
+		ratingValue: "4.9",
+		ratingCount: "10000",
+	},
 };
 ---
 
@@ -44,147 +45,266 @@ const structuredData = {
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
-		
+
 		<!-- Primary Meta Tags -->
 		<title>Bimoora — Donde el amor deja memoria | App para Parejas</title>
-		<meta name="title" content="Bimoora — Donde el amor deja memoria | App para Parejas" />
-		<meta name="description" content="Bimoora: un espacio privado para dos. App para parejas con notas, recuerdos y diario inteligente que cuida tu conexión cada día. Descubre donde el amor deja memoria." />
-		<meta name="keywords" content="app para parejas, diario de pareja, notas de amor, recuerdos de pareja, app de relación, diario inteligente, espacio privado parejas, Bimoora" />
+		<meta
+			name="title"
+			content="Bimoora — Donde el amor deja memoria | App para Parejas"
+		/>
+		<meta
+			name="description"
+			content="Bimoora: un espacio privado para dos. App para parejas con notas, recuerdos y diario inteligente que cuida tu conexión cada día. Descubre donde el amor deja memoria."
+		/>
+		<meta
+			name="keywords"
+			content="app para parejas, diario de pareja, notas de amor, recuerdos de pareja, app de relación, diario inteligente, espacio privado parejas, Bimoora"
+		/>
 		<meta name="author" content="Bimoora" />
-		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+		<meta
+			name="robots"
+			content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+		/>
 		<meta name="language" content="Spanish" />
 		<meta name="revisit-after" content="7 days" />
 		<meta name="theme-color" content="#A89CFF" />
-		
+
 		<!-- Canonical URL -->
 		<link rel="canonical" href="https://bimoora.com" />
-		
+
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="https://bimoora.com" />
-		<meta property="og:title" content="Bimoora — Donde el amor deja memoria | App para Parejas" />
-		<meta property="og:description" content="Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día." />
+		<meta
+			property="og:title"
+			content="Bimoora — Donde el amor deja memoria | App para Parejas"
+		/>
+		<meta
+			property="og:description"
+			content="Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día."
+		/>
 		<meta property="og:image" content={LogoSinFondo.src} />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content="Bimoora - Donde el amor deja memoria" />
+		<meta
+			property="og:image:alt"
+			content="Bimoora - Donde el amor deja memoria"
+		/>
 		<meta property="og:site_name" content="Bimoora" />
 		<meta property="og:locale" content="es_ES" />
-		
+
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:url" content="https://bimoora.com" />
-		<meta name="twitter:title" content="Bimoora — Donde el amor deja memoria | App para Parejas" />
-		<meta name="twitter:description" content="Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día." />
+		<meta
+			name="twitter:title"
+			content="Bimoora — Donde el amor deja memoria | App para Parejas"
+		/>
+		<meta
+			name="twitter:description"
+			content="Un espacio privado para dos: notas, recuerdos y un diario inteligente que cuida su conexión cada día."
+		/>
 		<meta name="twitter:image" content={LogoSinFondo.src} />
-		<meta name="twitter:image:alt" content="Bimoora - Donde el amor deja memoria" />
-		
+		<meta
+			name="twitter:image:alt"
+			content="Bimoora - Donde el amor deja memoria"
+		/>
+
 		<!-- Favicon -->
 		<link rel="icon" type="image/png" href={LogoSinFondo.src} />
 		<link rel="apple-touch-icon" href={LogoSinFondo.src} />
-		
+
 		<!-- Preconnect for performance -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-		
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
 		<!-- Structured Data (JSON-LD) -->
-		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-		
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify(structuredData)}
+		/>
+
 		<!-- View Transitions -->
 		<ViewTransitions />
-		
-		<!-- Dark mode script (runs before page renders to prevent flash) -->
-		<script is:inline>
-			const savedTheme = localStorage.getItem('theme');
-			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-				document.documentElement.classList.add('dark');
-			}
-		</script>
 	</head>
-	<body class="bg-[#FDFBFF] dark:bg-[#0F0D1A] transition-colors duration-300">
+	<body class="transition-colors duration-300">
 		<!-- Navbar -->
 		<Navbar client:load />
 
 		<!-- Hero Section -->
-		<section id="inicio" class="min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-12 relative overflow-hidden">
+		<section
+			id="inicio"
+			class="min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-12 relative overflow-hidden"
+		>
 			<!-- Background gradient orbs -->
-			<div class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 dark:bg-[#A89CFF]/10 rounded-full blur-3xl -translate-y-1/2 animate-pulse-slow" />
-			<div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 dark:bg-[#A89CFF]/10 rounded-full blur-3xl translate-y-1/2 animate-pulse-slow" style="animation-delay: 1s;" />
-			<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 dark:bg-[#FF8FAB]/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;" />
-			
+			<div
+				class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse-slow"
+			>
+			</div>
+			<div
+				class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse-slow"
+				style="animation-delay: 1s;"
+			>
+			</div>
+			<div
+				class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse-slow"
+				style="animation-delay: 2s;"
+			>
+			</div>
+
 			<!-- Decorative particles -->
-			<div class="absolute top-20 right-20 w-2 h-2 bg-[#A89CFF]/40 rounded-full animate-twinkle" style="animation-delay: 0s;"></div>
-			<div class="absolute top-40 left-20 w-1.5 h-1.5 bg-[#FF8FAB]/40 rounded-full animate-twinkle" style="animation-delay: 1.5s;"></div>
-			<div class="absolute bottom-40 right-32 w-2 h-2 bg-[#E8D4F8]/50 rounded-full animate-twinkle" style="animation-delay: 3s;"></div>
-			<div class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-twinkle" style="animation-delay: 2s;"></div>
+			<div
+				class="absolute top-20 right-20 w-2 h-2 bg-[#A89CFF]/40 rounded-full animate-twinkle"
+				style="animation-delay: 0s;"
+			>
+			</div>
+			<div
+				class="absolute top-40 left-20 w-1.5 h-1.5 bg-[#FF8FAB]/40 rounded-full animate-twinkle"
+				style="animation-delay: 1.5s;"
+			>
+			</div>
+			<div
+				class="absolute bottom-40 right-32 w-2 h-2 bg-[#E8D4F8]/50 rounded-full animate-twinkle"
+				style="animation-delay: 3s;"
+			>
+			</div>
+			<div
+				class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-twinkle"
+				style="animation-delay: 2s;"
+			>
+			</div>
 
 			<!-- Floating Cards Container - Hidden on mobile -->
 			<div id="floating-cards-container" class="hidden md:block"></div>
 
-			<div class="relative z-30 flex flex-col items-center text-center max-w-2xl" transition:animate="slide">
+			<div
+				class="relative z-30 flex flex-col items-center text-center max-w-2xl"
+				transition:animate="slide"
+			>
 				<!-- Badge -->
-			
-				<span class="font-bold flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm text-sm text-[#6B7280] dark:text-[#A8A3B8] mb-6 animate-fade-in-up">
+
+				<span
+					class="font-bold flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-sm text-sm text-[#6B7280] mb-6 animate-fade-in-up"
+				>
 					Próximamente
 				</span>
-	
 
 				<!-- Brand name -->
-				<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-[#1E1B4B] dark:text-white mb-4 animate-fade-in-up drop-shadow-sm" style="animation-delay: 0.1s;" transition:name="hero-title">
-					<span class="bg-gradient-to-r from-[#1E1B4B] dark:from-white via-[#A89CFF] to-[#1E1B4B] dark:to-white bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">Bimoora</span>
+				<h1
+					class="text-5xl md:text-6xl lg:text-7xl font-bold text-[#1E1B4B] mb-4 animate-fade-in-up drop-shadow-sm"
+					style="animation-delay: 0.1s;"
+					transition:name="hero-title"
+				>
+					<span
+						class="bg-gradient-to-r from-[#1E1B4B] via-[#A89CFF] to-[#1E1B4B] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient"
+						>Bimoora</span
+					>
 				</h1>
 
 				<!-- Tagline -->
-				<p class="text-xl md:text-2xl lg:text-3xl font-medium text-[#A89CFF] mb-6 animate-fade-in-up" style="animation-delay: 0.2s;">
+				<p
+					class="text-xl md:text-2xl lg:text-3xl font-medium text-[#A89CFF] mb-6 animate-fade-in-up"
+					style="animation-delay: 0.2s;"
+				>
 					Donde el amor deja memoria
 				</p>
 
-				<p class="text-[#6B7280] dark:text-[#A8A3B8] text-lg md:text-xl mb-10 max-w-lg leading-relaxed animate-fade-in-up" style="animation-delay: 0.3s;">
-					Un espacio privado para dos. Guarden sus recuerdos, escriban su historia, celebren su amor.
+				<p
+					class="text-[#6B7280] text-lg md:text-xl mb-10 max-w-lg leading-relaxed animate-fade-in-up"
+					style="animation-delay: 0.3s;"
+				>
+					Un espacio privado para dos. Guarden sus recuerdos, escriban
+					su historia, celebren su amor.
 				</p>
 
 				<!-- Countdown -->
-				<div class="flex gap-4 md:gap-6 mb-10 animate-fade-in-up" id="countdown" style="animation-delay: 0.4s;">
+				<div
+					class="flex gap-4 md:gap-6 mb-10 animate-fade-in-up"
+					id="countdown"
+					style="animation-delay: 0.4s;"
+				>
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
-							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="days">--</span>
+						<div
+							class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white shadow-xl shadow-[#A89CFF]/15 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300"
+						>
+							<span
+								class="text-3xl md:text-4xl font-bold text-[#1E1B4B]"
+								id="days">--</span
+							>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Días</span>
+						<span
+							class="text-xs md:text-sm text-[#6B7280] font-medium"
+							>Días</span
+						>
 					</div>
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
-							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="hours">--</span>
+						<div
+							class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white shadow-xl shadow-[#A89CFF]/15 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300"
+						>
+							<span
+								class="text-3xl md:text-4xl font-bold text-[#1E1B4B]"
+								id="hours">--</span
+							>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Horas</span>
+						<span
+							class="text-xs md:text-sm text-[#6B7280] font-medium"
+							>Horas</span
+						>
 					</div>
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
-							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="minutes">--</span>
+						<div
+							class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white shadow-xl shadow-[#A89CFF]/15 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300"
+						>
+							<span
+								class="text-3xl md:text-4xl font-bold text-[#1E1B4B]"
+								id="minutes">--</span
+							>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Minutos</span>
+						<span
+							class="text-xs md:text-sm text-[#6B7280] font-medium"
+							>Minutos</span
+						>
 					</div>
 					<div class="flex flex-col items-center countdown-item">
-						<div class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white dark:bg-[#1A1726] shadow-xl shadow-[#A89CFF]/15 dark:shadow-black/20 border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300">
-							<span class="text-3xl md:text-4xl font-bold text-[#1E1B4B] dark:text-white" id="seconds">--</span>
+						<div
+							class="w-18 h-18 md:w-24 md:h-24 rounded-2xl bg-white shadow-xl shadow-[#A89CFF]/15 border border-[#E8D4F8]/50 flex items-center justify-center mb-2 hover:scale-110 hover:shadow-2xl hover:shadow-[#A89CFF]/25 transition-all duration-300"
+						>
+							<span
+								class="text-3xl md:text-4xl font-bold text-[#1E1B4B]"
+								id="seconds">--</span
+							>
 						</div>
-						<span class="text-xs md:text-sm text-[#6B7280] dark:text-[#A8A3B8] font-medium">Segundos</span>
+						<span
+							class="text-xs md:text-sm text-[#6B7280] font-medium"
+							>Segundos</span
+						>
 					</div>
 				</div>
 
 				<!-- Notify me section -->
-				<div class="w-full max-w-md animate-fade-in-up" style="animation-delay: 0.5s;">
-					<p class="text-sm md:text-base text-[#6B7280] dark:text-[#A8A3B8] mb-4 font-medium">
+				<div
+					class="w-full max-w-md animate-fade-in-up"
+					style="animation-delay: 0.5s;"
+				>
+					<p
+						class="text-sm md:text-base text-[#6B7280] mb-4 font-medium"
+					>
 						Sé el primero en saber cuando lancemos
 					</p>
-					<form class="flex flex-col sm:flex-row gap-3" id="notify-form">
+					<form
+						class="flex flex-col sm:flex-row gap-3"
+						id="notify-form"
+					>
 						<input
 							type="email"
 							placeholder="tu@email.com"
 							required
 							id="email-input"
-							class="flex-1 px-5 py-3.5 rounded-xl border border-[#E8D4F8] dark:border-[#A89CFF]/30 bg-white dark:bg-[#1A1726] text-[#1E1B4B] dark:text-white placeholder:text-[#9CA3AF] dark:placeholder:text-[#6B6680] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/70 hover:shadow-md shadow-sm"
+							class="flex-1 px-5 py-3.5 rounded-xl border border-[#E8D4F8] bg-white text-[#1E1B4B] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/70 hover:shadow-md shadow-sm"
 						/>
 						<button
 							type="submit"
@@ -193,39 +313,81 @@ const structuredData = {
 						>
 							<span id="button-text">Notificarme</span>
 							<span id="button-spinner" class="hidden">
-								<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-									<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-									<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+								<svg
+									class="animate-spin h-5 w-5 text-white"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+								>
+									<circle
+										class="opacity-25"
+										cx="12"
+										cy="12"
+										r="10"
+										stroke="currentColor"
+										stroke-width="4"></circle>
+									<path
+										class="opacity-75"
+										fill="currentColor"
+										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+									></path>
 								</svg>
 							</span>
 						</button>
 					</form>
 				</div>
-
-				
 			</div>
 
 			<!-- Toast Notification -->
-			<div id="toast" class="fixed top-20 md:top-24 left-1/2 transform -translate-x-1/2 z-50 hidden w-[calc(100%-2rem)] max-w-sm md:max-w-md">
-				<div class="bg-white dark:bg-[#1A1726] rounded-xl shadow-2xl border border-[#E8D4F8] dark:border-[#A89CFF]/30 px-4 py-3 md:px-6 md:py-4 flex items-center gap-3 animate-slide-down">
+			<div
+				id="toast"
+				class="fixed top-20 md:top-24 left-1/2 transform -translate-x-1/2 z-50 hidden w-[calc(100%-2rem)] max-w-sm md:max-w-md"
+			>
+				<div
+					class="bg-white rounded-xl shadow-2xl border border-[#E8D4F8] px-4 py-3 md:px-6 md:py-4 flex items-center gap-3 animate-slide-down"
+				>
 					<div id="toast-icon" class="flex-shrink-0"></div>
-					<p id="toast-message" class="text-sm font-medium text-[#1E1B4B] dark:text-white flex-1"></p>
+					<p
+						id="toast-message"
+						class="text-sm font-medium text-[#1E1B4B] flex-1"
+					>
+					</p>
 				</div>
 			</div>
 
 			<!-- Loading Overlay -->
-			<div id="loading-overlay" class="fixed inset-0 bg-[#FDFBFF]/80 dark:bg-[#0F0D1A]/80 backdrop-blur-sm z-40 hidden items-center justify-center p-4">
-				<div class="bg-white dark:bg-[#1A1726] rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-4 w-full max-w-sm border border-transparent dark:border-[#A89CFF]/20">
+			<div
+				id="loading-overlay"
+				class="fixed inset-0 bg-[#FDFBFF]/80 backdrop-blur-sm z-40 hidden items-center justify-center p-4"
+			>
+				<div
+					class="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center gap-4 w-full max-w-sm border border-transparent"
+				>
 					<div class="relative">
-						<div class="w-16 h-16 border-4 border-[#E8D4F8] dark:border-[#A89CFF]/30 border-t-[#A89CFF] rounded-full animate-spin"></div>
-						<div class="absolute inset-0 flex items-center justify-center">
-							<svg class="w-8 h-8 text-[#A89CFF]" fill="currentColor" viewBox="0 0 24 24">
-								<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+						<div
+							class="w-16 h-16 border-4 border-[#E8D4F8] border-t-[#A89CFF] rounded-full animate-spin"
+						>
+						</div>
+						<div
+							class="absolute inset-0 flex items-center justify-center"
+						>
+							<svg
+								class="w-8 h-8 text-[#A89CFF]"
+								fill="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+								></path>
 							</svg>
 						</div>
 					</div>
-					<p class="text-base text-[#1E1B4B] dark:text-white font-medium text-center">Enviando tu solicitud...</p>
-					<p class="text-sm text-[#6B7280] dark:text-[#A8A3B8] text-center">Un momento, por favor</p>
+					<p class="text-base text-[#1E1B4B] font-medium text-center">
+						Enviando tu solicitud...
+					</p>
+					<p class="text-sm text-[#6B7280] text-center">
+						Un momento, por favor
+					</p>
 				</div>
 			</div>
 		</section>
@@ -253,7 +415,8 @@ const structuredData = {
 			const targetDateObj = new Date(targetDateISO);
 
 			function calculateTimeLeft() {
-				const difference = targetDateObj.getTime() - new Date().getTime();
+				const difference =
+					targetDateObj.getTime() - new Date().getTime();
 
 				if (difference <= 0) {
 					return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -269,15 +432,28 @@ const structuredData = {
 
 			function updateCountdown() {
 				const timeLeft = calculateTimeLeft();
-				const daysEl = document.getElementById('days');
-				const hoursEl = document.getElementById('hours');
-				const minutesEl = document.getElementById('minutes');
-				const secondsEl = document.getElementById('seconds');
+				const daysEl = document.getElementById("days");
+				const hoursEl = document.getElementById("hours");
+				const minutesEl = document.getElementById("minutes");
+				const secondsEl = document.getElementById("seconds");
 
-				if (daysEl) daysEl.textContent = String(timeLeft.days).padStart(2, '0');
-				if (hoursEl) hoursEl.textContent = String(timeLeft.hours).padStart(2, '0');
-				if (minutesEl) minutesEl.textContent = String(timeLeft.minutes).padStart(2, '0');
-				if (secondsEl) secondsEl.textContent = String(timeLeft.seconds).padStart(2, '0');
+				if (daysEl)
+					daysEl.textContent = String(timeLeft.days).padStart(2, "0");
+				if (hoursEl)
+					hoursEl.textContent = String(timeLeft.hours).padStart(
+						2,
+						"0",
+					);
+				if (minutesEl)
+					minutesEl.textContent = String(timeLeft.minutes).padStart(
+						2,
+						"0",
+					);
+				if (secondsEl)
+					secondsEl.textContent = String(timeLeft.seconds).padStart(
+						2,
+						"0",
+					);
 			}
 
 			// Update immediately
@@ -295,7 +471,7 @@ const structuredData = {
 					gradientFrom: "from-[#FFC8DD]",
 					gradientTo: "to-[#FF8FAB]",
 					desktopPosition: { left: "calc(50% - 480px)", top: "8rem" },
-					mobilePosition: { left: "0.5rem", top: "5.5rem" }
+					mobilePosition: { left: "0.5rem", top: "5.5rem" },
 				},
 				{
 					title: "Racha activa",
@@ -303,8 +479,11 @@ const structuredData = {
 					icon: "heart",
 					gradientFrom: "from-[#A89CFF]",
 					gradientTo: "to-[#8EC5FC]",
-					desktopPosition: { right: "calc(50% - 480px)", bottom: "12rem" },
-					mobilePosition: { right: "0.5rem", bottom: "6rem" }
+					desktopPosition: {
+						right: "calc(50% - 480px)",
+						bottom: "12rem",
+					},
+					mobilePosition: { right: "0.5rem", bottom: "6rem" },
 				},
 				{
 					title: "Nueva nota",
@@ -312,8 +491,11 @@ const structuredData = {
 					icon: "message",
 					gradientFrom: "from-[#FF8FAB]",
 					gradientTo: "to-[#FFC8DD]",
-					desktopPosition: { left: "calc(50% - 520px)", top: "20rem" },
-					mobilePosition: { left: "0.5rem", bottom: "4rem" }
+					desktopPosition: {
+						left: "calc(50% - 520px)",
+						top: "20rem",
+					},
+					mobilePosition: { left: "0.5rem", bottom: "4rem" },
 				},
 				{
 					title: "Recuerdo compartido",
@@ -321,8 +503,11 @@ const structuredData = {
 					icon: "photo",
 					gradientFrom: "from-[#8EC5FC]",
 					gradientTo: "to-[#E0C3FC]",
-					desktopPosition: { right: "calc(50% - 520px)", top: "16rem" },
-					mobilePosition: { right: "0.5rem", top: "5.5rem" }
+					desktopPosition: {
+						right: "calc(50% - 520px)",
+						top: "16rem",
+					},
+					mobilePosition: { right: "0.5rem", top: "5.5rem" },
 				},
 			];
 
@@ -334,10 +519,12 @@ const structuredData = {
 			};
 
 			function renderCards() {
-				const container = document.getElementById('floating-cards-container');
+				const container = document.getElementById(
+					"floating-cards-container",
+				);
 				if (!container) return;
 
-				container.innerHTML = '';
+				container.innerHTML = "";
 				const isMobile = window.innerWidth < 768;
 
 				const mobilePositions = [
@@ -347,21 +534,26 @@ const structuredData = {
 					{ right: "1rem", bottom: "5rem" },
 				];
 
-				const cardsToRender = isMobile ? allCards.slice(0, 4) : allCards;
+				const cardsToRender = isMobile
+					? allCards.slice(0, 4)
+					: allCards;
 
 				cardsToRender.forEach((card, index) => {
-					const cardElement = document.createElement('div');
-					cardElement.className = 'absolute z-10 md:z-20 animate-float rounded-xl md:rounded-2xl bg-white/90 dark:bg-[#1A1726]/90 backdrop-blur-sm p-2.5 md:p-4 shadow-xl shadow-[#A89CFF]/10 dark:shadow-black/20 border border-[#E8D4F8]/30 dark:border-[#A89CFF]/20 floating-card group hover:scale-105 transition-transform';
+					const cardElement = document.createElement("div");
+					cardElement.className =
+						"absolute z-10 md:z-20 animate-float rounded-xl md:rounded-2xl bg-white/90 backdrop-blur-sm p-2.5 md:p-4 shadow-xl shadow-[#A89CFF]/10 border border-[#E8D4F8]/30 floating-card group hover:scale-105 transition-transform";
 					cardElement.style.animationDelay = `${(index + 1) * 0.5}s`;
 
-					const position = isMobile 
+					const position = isMobile
 						? mobilePositions[index % mobilePositions.length]
 						: card.desktopPosition;
 
 					if (position.left) cardElement.style.left = position.left;
-					if (position.right) cardElement.style.right = position.right;
+					if (position.right)
+						cardElement.style.right = position.right;
 					if (position.top) cardElement.style.top = position.top;
-					if (position.bottom) cardElement.style.bottom = position.bottom;
+					if (position.bottom)
+						cardElement.style.bottom = position.bottom;
 
 					cardElement.innerHTML = `
 						<div class="flex items-center gap-2 md:gap-3">
@@ -369,8 +561,8 @@ const structuredData = {
 								${icons[card.icon] || icons.heart}
 							</div>
 							<div>
-								<p class="text-[10px] md:text-xs text-[#6B7280] dark:text-[#A8A3B8] font-medium leading-tight">${card.title}</p>
-								<p class="text-xs md:text-sm font-semibold text-[#1E1B4B] dark:text-white leading-tight">${card.subtitle}</p>
+								<p class="text-[10px] md:text-xs text-[#6B7280] font-medium leading-tight">${card.title}</p>
+								<p class="text-xs md:text-sm font-semibold text-[#1E1B4B] leading-tight">${card.subtitle}</p>
 							</div>
 						</div>
 					`;
@@ -382,112 +574,141 @@ const structuredData = {
 			renderCards();
 
 			let resizeTimeout;
-			window.addEventListener('resize', () => {
+			window.addEventListener("resize", () => {
 				clearTimeout(resizeTimeout);
 				resizeTimeout = setTimeout(renderCards, 250);
 			});
 
 			// Form handling
-			const form = document.getElementById('notify-form');
-			const submitButton = document.getElementById('submit-button');
-			const buttonText = document.getElementById('button-text');
-			const buttonSpinner = document.getElementById('button-spinner');
-			const emailInput = document.getElementById('email-input');
-			const loadingOverlay = document.getElementById('loading-overlay');
-			const toast = document.getElementById('toast');
-			const toastIcon = document.getElementById('toast-icon');
-			const toastMessage = document.getElementById('toast-message');
+			const form = document.getElementById("notify-form");
+			const submitButton = document.getElementById("submit-button");
+			const buttonText = document.getElementById("button-text");
+			const buttonSpinner = document.getElementById("button-spinner");
+			const emailInput = document.getElementById("email-input");
+			const loadingOverlay = document.getElementById("loading-overlay");
+			const toast = document.getElementById("toast");
+			const toastIcon = document.getElementById("toast-icon");
+			const toastMessage = document.getElementById("toast-message");
 
-			function showToast(message, type = 'success') {
+			function showToast(message, type = "success") {
 				if (!toast || !toastIcon || !toastMessage) return;
 
-				const toastContainer = toast.querySelector('div');
+				const toastContainer = toast.querySelector("div");
 				if (!toastContainer) return;
 
-				toastIcon.innerHTML = '';
+				toastIcon.innerHTML = "";
 
-				if (type === 'success') {
+				if (type === "success") {
 					toastIcon.innerHTML = `
 						<svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 						</svg>
 					`;
-					toastContainer.classList.remove('border-red-200');
-					toastContainer.classList.add('border-green-200');
+					toastContainer.classList.remove("border-red-200");
+					toastContainer.classList.add("border-green-200");
 				} else {
 					toastIcon.innerHTML = `
 						<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
 						</svg>
 					`;
-					toastContainer.classList.remove('border-green-200');
-					toastContainer.classList.add('border-red-200');
+					toastContainer.classList.remove("border-green-200");
+					toastContainer.classList.add("border-red-200");
 				}
 
 				toastMessage.textContent = message;
-				toast.classList.remove('hidden');
+				toast.classList.remove("hidden");
 
 				setTimeout(() => {
-					toast.classList.add('hidden');
+					toast.classList.add("hidden");
 				}, 4000);
 			}
 
-			if (form && submitButton && emailInput && buttonText && buttonSpinner && loadingOverlay) {
-				form.addEventListener('submit', async (e) => {
+			if (
+				form &&
+				submitButton &&
+				emailInput &&
+				buttonText &&
+				buttonSpinner &&
+				loadingOverlay
+			) {
+				form.addEventListener("submit", async (e) => {
 					e.preventDefault();
 					const email = emailInput.value?.trim();
 
 					if (!email) {
-						showToast('Por favor, ingresa un email válido.', 'error');
+						showToast(
+							"Por favor, ingresa un email válido.",
+							"error",
+						);
 						emailInput.focus();
 						return;
 					}
 
 					submitButton.disabled = true;
-					buttonText.textContent = 'Enviando...';
-					buttonSpinner.classList.remove('hidden');
-					submitButton.classList.add('opacity-75', 'cursor-not-allowed');
-					loadingOverlay.classList.remove('hidden');
-					loadingOverlay.classList.add('flex');
+					buttonText.textContent = "Enviando...";
+					buttonSpinner.classList.remove("hidden");
+					submitButton.classList.add(
+						"opacity-75",
+						"cursor-not-allowed",
+					);
+					loadingOverlay.classList.remove("hidden");
+					loadingOverlay.classList.add("flex");
 
 					try {
-						const response = await fetch('/api/subscribe', {
-							method: 'POST',
-							headers: { 'Content-Type': 'application/json' },
+						const response = await fetch("/api/subscribe", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
 							body: JSON.stringify({ email }),
 						});
 
 						const data = await response.json();
 
 						if (response.ok) {
-							showToast(data.message || '¡Gracias! Te notificaremos cuando lancemos.', 'success');
+							showToast(
+								data.message ||
+									"¡Gracias! Te notificaremos cuando lancemos.",
+								"success",
+							);
 							form.reset();
 						} else {
-							showToast(data.error || 'Hubo un error. Por favor, intenta de nuevo.', 'error');
+							showToast(
+								data.error ||
+									"Hubo un error. Por favor, intenta de nuevo.",
+								"error",
+							);
 						}
 					} catch (error) {
-						console.error('Error:', error);
-						showToast('Hubo un error al enviar tu solicitud. Por favor, intenta de nuevo.', 'error');
+						console.error("Error:", error);
+						showToast(
+							"Hubo un error al enviar tu solicitud. Por favor, intenta de nuevo.",
+							"error",
+						);
 					} finally {
 						setTimeout(() => {
 							submitButton.disabled = false;
-							buttonText.textContent = 'Notificarme';
-							buttonSpinner.classList.add('hidden');
-							submitButton.classList.remove('opacity-75', 'cursor-not-allowed');
-							loadingOverlay.classList.add('hidden');
-							loadingOverlay.classList.remove('flex');
+							buttonText.textContent = "Notificarme";
+							buttonSpinner.classList.add("hidden");
+							submitButton.classList.remove(
+								"opacity-75",
+								"cursor-not-allowed",
+							);
+							loadingOverlay.classList.add("hidden");
+							loadingOverlay.classList.remove("flex");
 						}, 500);
 					}
 				});
 			}
 
 			// Smooth scroll for anchor links
-			document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-				anchor.addEventListener('click', function (e) {
+			document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+				anchor.addEventListener("click", function (e) {
 					e.preventDefault();
-					const target = document.querySelector(this.getAttribute('href'));
+					const target = document.querySelector(
+						this.getAttribute("href"),
+					);
 					if (target) {
-						target.scrollIntoView({ behavior: 'smooth' });
+						target.scrollIntoView({ behavior: "smooth" });
 					}
 				});
 			});

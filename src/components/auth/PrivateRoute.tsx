@@ -10,9 +10,9 @@ interface PrivateRouteProps {
   redirectTo?: string;
 }
 
-export default function PrivateRoute({ 
-  children, 
-  redirectTo = '/auth/solicitar-codigo' 
+export default function PrivateRoute({
+  children,
+  redirectTo = '/auth/solicitar-codigo'
 }: PrivateRouteProps) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,7 +22,7 @@ export default function PrivateRoute({
 
     const checkAuth = async () => {
       const { session, error } = await getSession();
-      
+
       if (mounted) {
         if (error) {
           console.error('Error checking session:', error);
@@ -63,10 +63,10 @@ export default function PrivateRoute({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#E8D4F8]/20 via-white to-[#FFC8DD]/10 dark:from-[#0F0D1A] dark:via-[#1A1726] dark:to-[#0F0D1A]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#E8D4F8]/20 via-white to-[#FFC8DD]/10">
         <div className="text-center">
           <div className="inline-block w-12 h-12 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-[#6B7280] dark:text-[#A8A3B8]">Verificando sesión...</p>
+          <p className="text-[#6B7280]">Verificando sesión...</p>
         </div>
       </div>
     );
@@ -75,10 +75,10 @@ export default function PrivateRoute({
   if (!isAuthenticated) {
     // Mientras redirige, mostrar loading
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#E8D4F8]/20 via-white to-[#FFC8DD]/10 dark:from-[#0F0D1A] dark:via-[#1A1726] dark:to-[#0F0D1A]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#E8D4F8]/20 via-white to-[#FFC8DD]/10">
         <div className="text-center">
           <div className="inline-block w-12 h-12 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-[#6B7280] dark:text-[#A8A3B8]">Redirigiendo...</p>
+          <p className="text-[#6B7280]">Redirigiendo...</p>
         </div>
       </div>
     );

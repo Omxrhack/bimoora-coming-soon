@@ -61,7 +61,7 @@ const toastStyles: Record<ToastType, { bg: string; border: string; icon: string;
 // Iconos según el tipo
 const ToastIcon: React.FC<{ type: ToastType; className?: string }> = ({ type, className }) => {
   const iconProps = { className: `w-5 h-5 ${className}`, strokeWidth: 2 };
-  
+
   switch (type) {
     case 'success':
       return <CheckCircle {...iconProps} />;
@@ -135,7 +135,7 @@ const ToastItem: React.FC<{ toast: Toast; onClose: (id: string) => void }> = ({ 
       >
         <X className="w-4 h-4 text-[#6B7280]" />
       </button>
-    </div>
+    </div >
   );
 };
 
@@ -146,7 +146,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const showToast = useCallback((type: ToastType, title: string, message?: string, duration?: number) => {
     const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newToast: Toast = { id, type, title, message, duration };
-    
+
     setToasts((prev) => [...prev, newToast]);
   }, []);
 
@@ -157,7 +157,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <ToastContext.Provider value={{ toasts, showToast, hideToast }}>
       {children}
-      
+
       {/* Container de toasts */}
       <div className="fixed top-4 right-4 z-[9999] flex flex-col gap-3">
         {toasts.map((toast) => (

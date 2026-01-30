@@ -2,96 +2,127 @@
 const faqs = [
   {
     question: "¿Bimoora es solo para parejas?",
-    answer: "Sí, Bimoora está diseñado específicamente para parejas que quieren un espacio privado para guardar sus recuerdos. Cada espacio compartido conecta exactamente a dos personas.",
+    answer:
+      "Sí, Bimoora está diseñado específicamente para parejas que quieren un espacio privado para guardar sus recuerdos. Cada espacio compartido conecta exactamente a dos personas.",
   },
   {
     question: "¿Mis recuerdos son realmente privados?",
-    answer: "Absolutamente. Tus recuerdos solo son visibles para ti y tu pareja. No compartimos, vendemos ni analizamos tu contenido. Utilizamos cifrado en tránsito y seguimos las mejores prácticas de seguridad.",
+    answer:
+      "Absolutamente. Tus recuerdos solo son visibles para ti y tu pareja. No compartimos, vendemos ni analizamos tu contenido. Utilizamos cifrado en tránsito y seguimos las mejores prácticas de seguridad.",
   },
   {
     question: "¿Puedo invitar a una persona diferente o cambiar de espacio?",
-    answer: "Sí. Puedes crear nuevos espacios o desvincular espacios existentes desde la configuración de tu cuenta. El proceso es sencillo y respeta la privacidad de ambas partes.",
+    answer:
+      "Sí. Puedes crear nuevos espacios o desvincular espacios existentes desde la configuración de tu cuenta. El proceso es sencillo y respeta la privacidad de ambas partes.",
   },
   {
     question: "¿Qué pasa si pierdo acceso a mi cuenta?",
-    answer: "Ofrecemos recuperación de cuenta mediante correo electrónico verificado. También recomendamos activar la verificación en dos pasos para mayor seguridad.",
+    answer:
+      "Ofrecemos recuperación de cuenta mediante correo electrónico verificado. También recomendamos activar la verificación en dos pasos para mayor seguridad.",
   },
   {
     question: "¿Cómo elimino mi cuenta y todos mis datos?",
-    answer: "Puedes solicitar la eliminación completa de tu cuenta y datos desde la configuración. El proceso es irreversible y elimina toda tu información de nuestros servidores en un plazo máximo de 30 días.",
-  },
-  {
-    question: "¿Hay modo oscuro disponible?",
-    answer: "Sí, Bimoora incluye modo oscuro completo. Puedes activarlo manualmente o configurarlo para que siga las preferencias de tu dispositivo.",
+    answer:
+      "Puedes solicitar la eliminación completa de tu cuenta y datos desde la configuración. El proceso es irreversible y elimina toda tu información de nuestros servidores en un plazo máximo de 30 días.",
   },
   {
     question: "¿Puedo exportar mis recuerdos?",
-    answer: "Los usuarios de los planes Plus y Pareja pueden exportar sus recuerdos en formatos comunes. Estamos trabajando para ampliar esta función a todos los planes.",
+    answer:
+      "Los usuarios de los planes Plus y Pareja pueden exportar sus recuerdos en formatos comunes. Estamos trabajando para ampliar esta función a todos los planes.",
   },
   {
     question: "¿Dónde puedo leer los Términos y la Política de Privacidad?",
-    answer: "Puedes acceder a nuestros Términos y Condiciones y Política de Privacidad desde el pie de página de esta página o directamente en /terms y /privacy.",
+    answer:
+      "Puedes acceder a nuestros Términos y Condiciones y Política de Privacidad desde el pie de página de esta página o directamente en /terms y /privacy.",
   },
-]
+];
 ---
 
-<section id="faq" class="py-20 lg:py-32 bg-white dark:bg-[#1A1726] relative overflow-hidden transition-colors duration-300">
+<section
+  id="faq"
+  class="py-20 lg:py-32 bg-white relative overflow-hidden transition-colors duration-300"
+>
   <!-- Background decorations -->
-  <div class="absolute top-1/2 left-0 w-[300px] h-[300px] bg-[#FFC8DD]/10 dark:bg-[#FF8FAB]/5 rounded-full blur-3xl -translate-x-1/2" />
-  <div class="absolute top-1/4 right-0 w-[400px] h-[400px] bg-[#E8D4F8]/15 dark:bg-[#E8D4F8]/5 rounded-full blur-3xl translate-x-1/2" />
+  <div
+    class="absolute top-1/2 left-0 w-[300px] h-[300px] bg-[#FFC8DD]/10 rounded-full blur-3xl -translate-x-1/2"
+  >
+  </div>
+  <div
+    class="absolute top-1/4 right-0 w-[400px] h-[400px] bg-[#E8D4F8]/15 rounded-full blur-3xl translate-x-1/2"
+  >
+  </div>
 
   <div class="container mx-auto px-4 lg:px-8 relative z-10">
     <!-- Header -->
     <div class="text-center max-w-2xl mx-auto mb-16">
-      <span class="inline-block px-4 py-1.5 rounded-full bg-[#A89CFF]/10 dark:bg-[#A89CFF]/20 text-[#A89CFF] font-medium text-sm tracking-wide uppercase mb-4">
+      <span
+        class="inline-block px-4 py-1.5 rounded-full bg-[#A89CFF]/10 text-[#A89CFF] font-medium text-sm tracking-wide uppercase mb-4"
+      >
         Preguntas frecuentes
       </span>
-      <h2 class="text-3xl lg:text-4xl xl:text-5xl font-bold text-[#1E1B4B] dark:text-white leading-tight mb-6">
+      <h2
+        class="text-3xl lg:text-4xl xl:text-5xl font-bold text-[#1E1B4B] leading-tight mb-6"
+      >
         Resolvemos tus dudas
       </h2>
-      <p class="text-lg text-[#6B7280] dark:text-[#A8A3B8]">
+      <p class="text-lg text-[#6B7280]">
         Si no encuentras lo que buscas, escríbenos y te ayudaremos.
       </p>
     </div>
 
     <!-- FAQ Accordion -->
     <div class="max-w-3xl mx-auto space-y-4">
-      {faqs.map((faq, index) => (
-        <details 
-          class="group bg-[#FDFBFF] dark:bg-[#252133] border border-[#E8D4F8]/50 dark:border-[#A89CFF]/20 rounded-2xl overflow-hidden hover:border-[#A89CFF]/30 transition-colors animate-fade-in-up"
-          style={`animation-delay: ${index * 0.1}s`}
-        >
-          <summary class="flex items-center justify-between cursor-pointer px-6 py-5 text-left text-[#1E1B4B] dark:text-white font-medium hover:text-[#A89CFF] transition-colors">
-            <span class="pr-4">{faq.question}</span>
-            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#E8D4F8]/30 dark:bg-[#A89CFF]/20 flex items-center justify-center group-open:bg-[#A89CFF] transition-colors">
-              <svg 
-                class="w-4 h-4 text-[#A89CFF] group-open:text-white group-open:rotate-180 transition-all duration-300" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </span>
-          </summary>
-          <div class="px-6 pb-5">
-            <p class="text-[#6B7280] dark:text-[#A8A3B8] leading-relaxed">
-              {faq.answer}
-            </p>
-          </div>
-        </details>
-      ))}
+      {
+        faqs.map((faq, index) => (
+          <details
+            class="group bg-[#FDFBFF] border border-[#E8D4F8]/50 rounded-2xl overflow-hidden hover:border-[#A89CFF]/30 transition-colors animate-fade-in-up"
+            style={`animation-delay: ${index * 0.1}s`}
+          >
+            <summary class="flex items-center justify-between cursor-pointer px-6 py-5 text-left text-[#1E1B4B] font-medium hover:text-[#A89CFF] transition-colors">
+              <span class="pr-4">{faq.question}</span>
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#E8D4F8]/30 flex items-center justify-center group-open:bg-[#A89CFF] transition-colors">
+                <svg
+                  class="w-4 h-4 text-[#A89CFF] group-open:text-white group-open:rotate-180 transition-all duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </span>
+            </summary>
+            <div class="px-6 pb-5">
+              <p class="text-[#6B7280] leading-relaxed">{faq.answer}</p>
+            </div>
+          </details>
+        ))
+      }
     </div>
 
     <!-- Contact CTA -->
     <div class="text-center mt-12">
-      <p class="text-[#6B7280] dark:text-[#A8A3B8] mb-4">¿Tienes más preguntas?</p>
-      <a 
-        href="mailto:soporte@bimoora.com" 
+      <p class="text-[#6B7280] mb-4">¿Tienes más preguntas?</p>
+      <a
+        href="mailto:soporte@bimoora.com"
         class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-medium rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-105 transition-all"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          ></path>
         </svg>
         Contáctanos
       </a>

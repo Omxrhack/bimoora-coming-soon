@@ -12,6 +12,10 @@ export const authService = {
    */
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
+      // IMPORTANTE: Para evitar doble email, usamos signUp solo para crear el usuario.
+      // El OTP se envía manualmente con signInWithOtp después.
+      // Nota: Si "Confirm email" está habilitado en Supabase, el usuario queda como "unconfirmed"
+      // pero signInWithOtp puede enviar OTP a usuarios no confirmados.
       const { data: authData, error } = await supabase.auth.signUp({
         email: data.email.trim().toLowerCase(),
         password: data.password,
@@ -19,9 +23,8 @@ export const authService = {
           data: {
             full_name: data.full_name || '',
           },
-          // Desactivar el envío automático de email de confirmación
-          // El OTP se enviará manualmente desde el componente
-          emailRedirectTo: undefined,
+          // No incluir emailRedirectTo para evitar que Supabase envíe email de confirmación
+          // con magic link. El template de OTP se manejará con signInWithOtp.
         },
       });
 
@@ -84,7 +87,7 @@ export const authService = {
         } else if (error.message.includes('Email not confirmed')) {
           friendlyMessage = 'Por favor, confirma tu email antes de iniciar sesión';
         }
-        
+
         return {
           success: false,
           message: friendlyMessage,
@@ -179,7 +182,7 @@ export const authService = {
   async getCurrentUser(): Promise<User | null> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) return null;
 
       return {
