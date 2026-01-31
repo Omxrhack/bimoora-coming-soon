@@ -1,10 +1,10 @@
-import { e as createComponent, r as renderTemplate, k as renderComponent, l as renderHead, u as unescapeHTML, g as addAttribute, h as createAstro } from '../../chunks/astro/server_D13BJ9Xf.mjs';
+import { e as createComponent, r as renderTemplate, k as renderComponent, l as renderHead, u as unescapeHTML, g as addAttribute, h as createAstro } from '../../chunks/astro/server_3KTu2lbS.mjs';
 import 'piccolore';
 /* empty css                                               */
 import { jsx, jsxs } from 'react/jsx-runtime';
 import { useState } from 'react';
-import { T as ToastProvider, u as useAuth, a as useToast, B as Button } from '../../chunks/CustomToast_YZEZrSNm.mjs';
-import { L as Label, I as Input, C as Checkbox } from '../../chunks/checkbox_CKO8kBAx.mjs';
+import { T as ToastProvider, u as useAuth, a as useToast, I as Input, B as Button } from '../../chunks/CustomToast_BrcIXjfe.mjs';
+import { L as Label, C as Checkbox } from '../../chunks/checkbox_w2PuhHK5.mjs';
 import { ArrowLeft, Mail, Lock, EyeOff, Eye, Heart } from 'lucide-react';
 import { L as LogoSinFondo } from '../../chunks/bimooralogo-sinfondo_BEx_simo.mjs';
 export { renderers } from '../../renderers.mjs';
@@ -30,10 +30,7 @@ function AccederFormContent() {
       password: formData.password
     });
     if (response.success) {
-      showToast("success", "¡Bienvenido!", response.message);
-      setTimeout(() => {
-        window.location.href = "/perfil";
-      }, 1500);
+      window.location.href = "/perfil";
     } else {
       showToast("error", "Error al acceder", response.error || response.message);
     }
@@ -44,6 +41,13 @@ function AccederFormContent() {
       showToast("error", `Error con ${provider}`, response.error || response.message);
     }
   };
+  if (isSubmitting) {
+    return /* @__PURE__ */ jsx("div", { className: "min-h-screen flex items-center justify-center bg-[#FDFBFF]", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-4", children: [
+      /* @__PURE__ */ jsx("div", { className: "w-16 h-16 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin" }),
+      /* @__PURE__ */ jsx("p", { className: "text-[#1E1B4B] font-semibold text-lg", children: "Iniciando sesión..." }),
+      /* @__PURE__ */ jsx("p", { className: "text-[#6B7280] text-sm", children: "Un momento por favor" })
+    ] }) });
+  }
   return /* @__PURE__ */ jsxs("div", { className: "min-h-screen flex relative overflow-hidden transition-colors duration-300", children: [
     /* @__PURE__ */ jsx("div", { className: "absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse", style: { animationDuration: "4s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse", style: { animationDuration: "4s", animationDelay: "1s" } }),

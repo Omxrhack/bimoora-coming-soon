@@ -1,80 +1,102 @@
-import { e as createComponent, l as renderHead, k as renderComponent, r as renderTemplate } from '../../chunks/astro/server_D13BJ9Xf.mjs';
+import { e as createComponent, l as renderHead, k as renderComponent, r as renderTemplate } from '../../chunks/astro/server_3KTu2lbS.mjs';
 import 'piccolore';
 /* empty css                                               */
 import { jsxs, jsx } from 'react/jsx-runtime';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowLeft, Shield, Mail, RefreshCw } from 'lucide-react';
-import { v as verifyOtp, r as requestOtp } from '../../chunks/authOtp_Colyiny7.mjs';
+import { v as verifyOtp, r as resendOtp } from '../../chunks/authOtp_9o-8vdWt.mjs';
 export { renderers } from '../../renderers.mjs';
 
 function VerifyCode({
   email: emailProp,
   redirectTo = "/perfil"
 }) {
-  const getInitialEmail = () => {
-    if (emailProp) return emailProp;
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("email") || "";
-    }
-    return "";
-  };
-  const getInitialType = () => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const typeParam = params.get("type");
-      if (typeParam && ["signup", "magiclink", "recovery", "email"].includes(typeParam)) {
-        return typeParam;
-      }
-    }
-    return "email";
-  };
-  const [email, setEmail] = useState(getInitialEmail);
-  const [otpType, setOtpType] = useState(getInitialType);
+  const [isMounted, setIsMounted] = useState(false);
+  const [email, setEmail] = useState(emailProp || "");
+  const [otpType, setOtpType] = useState("email");
   const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [cooldown, setCooldown] = useState(0);
   const inputRefs = useRef([]);
   const isVerifyingRef = useRef(false);
   const isResendingRef = useRef(false);
   const hasInitializedRef = useRef(false);
   useEffect(() => {
-    if (hasInitializedRef.current) return;
+    if (hasInitializedRef.current) {
+      console.log("[VerifyCode] Init blocked: already initialized");
+      return;
+    }
     hasInitializedRef.current = true;
+    console.log("[VerifyCode] Initializing component");
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (!emailProp) {
         const urlEmail = params.get("email");
-        if (urlEmail) setEmail(decodeURIComponent(urlEmail).trim().toLowerCase());
+        if (urlEmail) {
+          const decodedEmail = decodeURIComponent(urlEmail).trim().toLowerCase();
+          setEmail(decodedEmail);
+          console.log("[VerifyCode] Email from URL:", decodedEmail);
+        }
       }
-      const urlType = params.get("type");
-      if (urlType && ["email", "magiclink", "recovery", "signup"].includes(urlType)) {
-        setOtpType(urlType);
-      }
+      setOtpType("email");
+      console.log("[VerifyCode] OTP type forced to: email");
     }
+    setIsMounted(true);
   }, [emailProp]);
   useEffect(() => {
-    if (cooldown > 0) {
-      const timer = setTimeout(() => setCooldown(cooldown - 1), 1e3);
-      return () => clearTimeout(timer);
+    const savedCooldown = sessionStorage.getItem("otp_cooldown");
+    const savedTime = sessionStorage.getItem("otp_cooldown_timestamp");
+    if (savedCooldown && savedTime) {
+      const elapsed = Math.floor((Date.now() - parseInt(savedTime)) / 1e3);
+      const remaining = parseInt(savedCooldown) - elapsed;
+      if (remaining > 0) {
+        setCooldown(remaining);
+      } else {
+        sessionStorage.removeItem("otp_cooldown");
+        sessionStorage.removeItem("otp_cooldown_timestamp");
+      }
     }
-  }, [cooldown]);
-  useEffect(() => {
-    inputRefs.current[0]?.focus();
   }, []);
-  const handleCodeChange = (index, value) => {
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          sessionStorage.removeItem("otp_cooldown");
+          sessionStorage.removeItem("otp_cooldown_timestamp");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1e3);
+    return () => clearInterval(timer);
+  }, [cooldown]);
+  const startCooldown = (seconds) => {
+    setCooldown(seconds);
+    sessionStorage.setItem("otp_cooldown", seconds.toString());
+    sessionStorage.setItem("otp_cooldown_timestamp", Date.now().toString());
+  };
+  useEffect(() => {
+    if (isMounted && inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, [isMounted]);
+  const handleCodeChange = useCallback((index, value) => {
     const digit = value.replace(/[^0-9]/g, "").slice(-1);
-    const newCode = [...code];
-    newCode[index] = digit;
-    setCode(newCode);
+    setCode((prev) => {
+      const newCode = [...prev];
+      newCode[index] = digit;
+      return newCode;
+    });
     if (digit && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
-  };
-  const handleKeyDown = (index, e) => {
+  }, []);
+  const handleKeyDown = useCallback((index, e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       return;
@@ -82,85 +104,73 @@ function VerifyCode({
     if (e.key === "Backspace" && !code[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-  };
-  const handlePaste = (e) => {
+  }, [code]);
+  const handlePaste = useCallback((e) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData("text").replace(/[^0-9]/g, "").slice(0, 6);
     if (pasted.length === 6) {
       setCode(pasted.split(""));
       inputRefs.current[5]?.focus();
     }
-  };
-  const fullCode = code.join("");
-  const handleVerify = async (e) => {
+  }, []);
+  const handleVerify = useCallback(async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isVerifyingRef.current) {
-      console.log("[VerifyCode] Blocked: already verifying");
-      return;
-    }
-    if (loading) {
-      console.log("[VerifyCode] Blocked: loading state");
-      return;
-    }
-    if (fullCode.length !== 6) {
+    const fullCode2 = code.join("");
+    if (isVerifyingRef.current || isVerifying) return;
+    if (fullCode2.length !== 6) {
       setError("Ingresa el código completo de 6 dígitos");
       return;
     }
     isVerifyingRef.current = true;
-    setLoading(true);
+    setIsVerifying(true);
     setError(null);
-    setInfo(null);
-    console.log("[VerifyCode] Calling verifyOtp with type: email (forced)");
-    const { error: verifyError } = await verifyOtp(email, fullCode, "email");
-    console.log("[VerifyCode] verifyOtp result:", verifyError ? "error" : "success");
-    setLoading(false);
-    if (verifyError) {
+    setSuccess(null);
+    const result = await verifyOtp(email, fullCode2, otpType);
+    setIsVerifying(false);
+    if (result.error) {
       isVerifyingRef.current = false;
-      const msg = verifyError?.message || "Código inválido.";
-      const errCode = verifyError?.code || "";
-      if (errCode === "otp_expired" || msg.toLowerCase().includes("expired") || msg.toLowerCase().includes("expirado")) {
-        setError('Tu código ha expirado o ya fue usado. Solicita uno nuevo haciendo clic en "Reenviar código".');
-      } else if (msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("inválido")) {
-        setError("Código inválido. Verifica que ingresaste los 6 dígitos correctamente.");
-      } else {
-        setError("Código inválido o ya utilizado. Solicita uno nuevo.");
+      setError(result.message || "Error al verificar");
+      if (result.isInvalid || result.isExpired) {
+        setCode(["", "", "", "", "", ""]);
+        inputRefs.current[0]?.focus();
       }
-      setCode(["", "", "", "", "", ""]);
-      inputRefs.current[0]?.focus();
     } else {
-      setInfo("¡Verificado! Redirigiendo...");
+      setSuccess("¡Verificado! Redirigiendo...");
       setTimeout(() => {
         window.location.href = redirectTo;
       }, 1e3);
     }
-  };
-  const handleResend = async () => {
-    if (cooldown > 0 || isResendingRef.current || resending) return;
+  }, [code, email, otpType, isVerifying, redirectTo]);
+  const handleResend = useCallback(async () => {
+    if (cooldown > 0 || isResendingRef.current || isResending) return;
     isResendingRef.current = true;
-    setResending(true);
+    setIsResending(true);
     setError(null);
-    setInfo(null);
-    const { error: resendError } = await requestOtp(email, false);
-    setResending(false);
+    setSuccess(null);
+    const result = await resendOtp(email);
+    setIsResending(false);
     isResendingRef.current = false;
-    if (resendError) {
-      const msg = resendError?.message || "";
-      if (msg.toLowerCase().includes("rate") || msg.toLowerCase().includes("limit")) {
-        setError("Demasiados intentos. Espera unos minutos.");
-        setCooldown(120);
+    if (result.error) {
+      const msg = result.error.message || "";
+      if (result.isRateLimited || msg.includes("rate") || msg.includes("limit")) {
+        const waitTime = result.retryAfterSeconds || 60;
+        setError(`Demasiados intentos. Espera ${waitTime} segundos.`);
+        startCooldown(waitTime);
       } else {
         setError("No se pudo reenviar el código. Intenta más tarde.");
+        startCooldown(30);
       }
     } else {
-      setInfo("¡Nuevo código enviado! Revisa tu correo (también spam).");
-      setCooldown(60);
+      setSuccess("¡Nuevo código enviado! Revisa tu correo.");
+      startCooldown(60);
       setCode(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
+      setOtpType("email");
     }
-  };
-  return /* @__PURE__ */ jsxs("div", {
-    className: "min-h-screen flex relative overflow-hidden", children: [
+  }, [cooldown, email, isResending]);
+  const fullCode = code.join("");
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-screen flex relative overflow-hidden", children: [
     /* @__PURE__ */ jsx("div", { className: "absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse", style: { animationDuration: "4s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse", style: { animationDuration: "4s", animationDelay: "1s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse", style: { animationDuration: "4s", animationDelay: "2s" } }),
@@ -168,130 +178,99 @@ function VerifyCode({
     /* @__PURE__ */ jsx("div", { className: "absolute top-40 left-20 w-1.5 h-1.5 bg-[#FF8FAB]/40 rounded-full animate-pulse", style: { animationDuration: "2s", animationDelay: "0.5s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute bottom-40 right-32 w-2 h-2 bg-[#E8D4F8]/50 rounded-full animate-pulse", style: { animationDuration: "2s", animationDelay: "1s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-pulse", style: { animationDuration: "2s", animationDelay: "1.5s" } }),
-    /* @__PURE__ */ jsx("div", {
-      className: "flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10", children: /* @__PURE__ */ jsxs("div", {
-        className: "w-full max-w-md mx-auto", children: [
+    /* @__PURE__ */ jsx("div", { className: "flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10", children: /* @__PURE__ */ jsxs("div", { className: "w-full max-w-md mx-auto", children: [
       /* @__PURE__ */ jsxs(
-          "a",
-          {
-            href: "/auth/crear-cuenta",
-            className: "inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors mb-8",
-            children: [
+        "a",
+        {
+          href: "/auth/crear-cuenta",
+          className: "inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors mb-8",
+          children: [
             /* @__PURE__ */ jsx(ArrowLeft, { className: "w-4 h-4" }),
-              "Volver al registro"
-            ]
-          }
-        ),
-      /* @__PURE__ */ jsxs("div", {
-          className: "text-center mb-8", children: [
+            "Volver al registro"
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs("div", { className: "text-center mb-8", children: [
         /* @__PURE__ */ jsx("div", { className: "inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/20 mb-4", children: /* @__PURE__ */ jsx(Shield, { className: "w-8 h-8 text-[#A89CFF]" }) }),
         /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-[#1E1B4B] mb-2", children: "Verificar código" }),
         /* @__PURE__ */ jsx("p", { className: "text-[#6B7280]", children: "Ingresa el código de 6 dígitos enviado a" }),
-        /* @__PURE__ */ jsxs("div", {
-            className: "flex items-center justify-center gap-2 mt-2", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2 mt-2", children: [
           /* @__PURE__ */ jsx(Mail, { className: "w-4 h-4 text-[#A89CFF]" }),
-          /* @__PURE__ */ jsx("span", { className: "font-medium text-[#1E1B4B]", children: email })
-            ]
-          })
-          ]
-        }),
-      /* @__PURE__ */ jsxs("div", {
-          className: "bg-white/80 backdrop-blur-md rounded-2xl shadow-xl shadow-[#A89CFF]/10 p-8 border border-[#E8D4F8]/30", children: [
-        /* @__PURE__ */ jsxs("form", {
-            onSubmit: handleVerify, className: "space-y-6", children: [
-          /* @__PURE__ */ jsx("input", { type: "hidden", value: email }),
-          /* @__PURE__ */ jsxs("div", {
-              className: "space-y-3", children: [
+          /* @__PURE__ */ jsx("span", { className: "font-medium text-[#1E1B4B]", children: isMounted ? email : /* @__PURE__ */ jsx("span", { className: "inline-block w-40 h-5 bg-[#E8D4F8]/30 rounded animate-pulse" }) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "bg-white/80 backdrop-blur-md rounded-2xl shadow-xl shadow-[#A89CFF]/10 p-8 border border-[#E8D4F8]/30", children: [
+        /* @__PURE__ */ jsxs("form", { onSubmit: handleVerify, className: "space-y-6", children: [
+          /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
             /* @__PURE__ */ jsx("label", { className: "block text-sm font-medium text-[#1E1B4B] text-center", children: "Código de verificación" }),
-            /* @__PURE__ */ jsx("div", {
-                className: "flex justify-center gap-3", onPaste: handlePaste, children: code.map((digit, index) => /* @__PURE__ */ jsx(
-                  "input",
-                  {
-                    ref: (el) => {
-                      inputRefs.current[index] = el;
-                    },
-                    type: "text",
-                    inputMode: "numeric",
-                    maxLength: 1,
-                    value: digit,
-                    onChange: (e) => handleCodeChange(index, e.target.value),
-                    onKeyDown: (e) => handleKeyDown(index, e),
-                    className: "w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 border-[#E8D4F8] bg-white text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/50",
-                    "aria-label": `Dígito ${index + 1}`
-                  },
-                  index
-                ))
-              }),
-            /* @__PURE__ */ jsx("p", { className: "text-xs text-center text-[#9CA3AF]", children: "El código expira en 5 minutos" })
-              ]
-            }),
-              info && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-green-700 text-center font-medium", children: info }) }),
-              error && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-red-700 text-center font-medium", children: error }) }),
+            /* @__PURE__ */ jsx("div", { className: "flex justify-center gap-3", onPaste: handlePaste, children: code.map((digit, index) => /* @__PURE__ */ jsx(
+              "input",
+              {
+                ref: (el) => {
+                  inputRefs.current[index] = el;
+                },
+                type: "text",
+                inputMode: "numeric",
+                maxLength: 1,
+                value: digit,
+                onChange: (e) => handleCodeChange(index, e.target.value),
+                onKeyDown: (e) => handleKeyDown(index, e),
+                disabled: isVerifying,
+                className: "w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 border-[#E8D4F8] bg-white text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/50 disabled:opacity-50 disabled:cursor-not-allowed",
+                "aria-label": `Dígito ${index + 1}`
+              },
+              index
+            )) }),
+            /* @__PURE__ */ jsx("p", { className: "text-xs text-center text-[#9CA3AF]", children: "El código expira en 60 minutos" })
+          ] }),
+          success && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-green-700 text-center font-medium", children: success }) }),
+          error && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-red-700 text-center font-medium", children: error }) }),
           /* @__PURE__ */ jsx(
-                "button",
-                {
-                  type: "submit",
-                  disabled: loading || fullCode.length !== 6 || isVerifyingRef.current,
-                  onClick: (e) => {
-                    if (isVerifyingRef.current || loading) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }
-                  },
-                  className: "w-full px-6 py-3.5 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#A89CFF]/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none",
-                  children: loading ? /* @__PURE__ */ jsxs("span", {
-                    className: "flex items-center justify-center gap-2", children: [
-                /* @__PURE__ */ jsxs("svg", {
-                      className: "animate-spin h-5 w-5", viewBox: "0 0 24 24", children: [
-                  /* @__PURE__ */ jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", fill: "none" }),
-                  /* @__PURE__ */ jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
-                      ]
-                    }),
-                      "Verificando..."
-                    ]
-                  }) : "Verificar código"
-                }
-              )
-            ]
-          }),
-        /* @__PURE__ */ jsxs("div", {
-            className: "relative my-6", children: [
-          /* @__PURE__ */ jsx("div", { className: "absolute inset-0 flex items-center", children: /* @__PURE__ */ jsx("div", { className: "w-full border-t border-[#E8D4F8]/50" }) }),
-          /* @__PURE__ */ jsx("div", { className: "relative flex justify-center text-sm", children: /* @__PURE__ */ jsx("span", { className: "px-4 bg-white text-[#9CA3AF]", children: "¿No recibiste el código?" }) })
-            ]
-          }),
-        /* @__PURE__ */ jsxs(
             "button",
             {
-              type: "button",
-              onClick: handleResend,
-              disabled: resending || cooldown > 0,
-              className: "w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E8D4F8] text-[#A89CFF] font-medium rounded-xl hover:bg-[#A89CFF]/5 hover:border-[#A89CFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed",
-              children: [
-              /* @__PURE__ */ jsx(RefreshCw, { className: `w-4 h-4 ${resending ? "animate-spin" : ""}` }),
-                resending ? "Enviando..." : cooldown > 0 ? `Reenviar en ${cooldown}s` : "Reenviar código"
-              ]
+              type: "submit",
+              disabled: isVerifying || fullCode.length !== 6,
+              className: "w-full px-6 py-3.5 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#A89CFF]/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none",
+              children: isVerifying ? /* @__PURE__ */ jsxs("span", { className: "flex items-center justify-center gap-2", children: [
+                /* @__PURE__ */ jsxs("svg", { className: "animate-spin h-5 w-5", viewBox: "0 0 24 24", children: [
+                  /* @__PURE__ */ jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", fill: "none" }),
+                  /* @__PURE__ */ jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
+                ] }),
+                "Verificando..."
+              ] }) : "Verificar código"
             }
-          ),
-        /* @__PURE__ */ jsx("div", {
-            className: "mt-6 text-center", children: /* @__PURE__ */ jsx(
-              "button",
-              {
-                type: "button",
-                onClick: () => window.location.href = "/auth/crear-cuenta",
-                className: "text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors",
-                children: "← Usar otro correo electrónico"
-              }
-            )
-          })
-          ]
-        }),
+          )
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "relative my-6", children: [
+          /* @__PURE__ */ jsx("div", { className: "absolute inset-0 flex items-center", children: /* @__PURE__ */ jsx("div", { className: "w-full border-t border-[#E8D4F8]/50" }) }),
+          /* @__PURE__ */ jsx("div", { className: "relative flex justify-center text-sm", children: /* @__PURE__ */ jsx("span", { className: "px-4 bg-white text-[#9CA3AF]", children: "¿No recibiste el código?" }) })
+        ] }),
+        /* @__PURE__ */ jsxs(
+          "button",
+          {
+            type: "button",
+            onClick: handleResend,
+            disabled: isResending || cooldown > 0,
+            className: "w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E8D4F8] text-[#A89CFF] font-medium rounded-xl hover:bg-[#A89CFF]/5 hover:border-[#A89CFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+            children: [
+              /* @__PURE__ */ jsx(RefreshCw, { className: `w-4 h-4 ${isResending ? "animate-spin" : ""}` }),
+              isResending ? "Enviando..." : cooldown > 0 ? `Reenviar en ${cooldown}s` : "Reenviar código"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx("div", { className: "mt-6 text-center", children: /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => window.location.href = "/auth/crear-cuenta",
+            className: "text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors",
+            children: "← Usar otro correo electrónico"
+          }
+        ) })
+      ] }),
       /* @__PURE__ */ jsx("p", { className: "mt-8 text-center text-xs text-[#9CA3AF]", children: "Si no encuentras el correo, revisa tu carpeta de spam" })
-        ]
-      })
-    })
-    ]
-  });
+    ] }) })
+  ] });
 }
 
 const $$VerificarCodigo = createComponent(($$result, $$props, $$slots) => {
