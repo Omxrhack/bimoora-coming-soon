@@ -1,0 +1,232 @@
+---
+import LogoSinFondo from "../../assets/bimooralogo-sinfondo.png";
+
+const securityFeatures = [
+  {
+    icon: "shield-check",
+    title: "Cifrado de datos",
+    description:
+      "Toda tu información viaja cifrada. Ni siquiera nosotros podemos leer tus recuerdos.",
+  },
+  {
+    icon: "lock",
+    title: "Privacidad total",
+    description:
+      "Tu contenido es tuyo. No lo compartimos, vendemos ni usamos para publicidad.",
+  },
+  {
+    icon: "fingerprint",
+    title: "Autenticación segura",
+    description:
+      "Verificación en dos pasos y opciones biométricas para proteger tu cuenta.",
+  },
+  {
+    icon: "server",
+    title: "Servidores seguros",
+    description:
+      "Infraestructura con los más altos estándares de seguridad y respaldos automáticos.",
+  },
+];
+
+const iconPaths: Record<string, string> = {
+  "shield-check":
+    "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+  lock: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
+  fingerprint:
+    "M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4",
+  server:
+    "M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01",
+};
+---
+
+<section
+  id="seguridad"
+  class="py-20 lg:py-32 bg-gradient-to-b from-[#FDFBFF] to-white relative overflow-hidden transition-colors duration-300"
+>
+  <!-- Background decorations -->
+  <div
+    class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#A89CFF]/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"
+  >
+  </div>
+  <div
+    class="absolute top-1/4 left-0 w-[300px] h-[300px] bg-[#E8D4F8]/15 rounded-full blur-3xl -translate-x-1/2"
+  >
+  </div>
+
+  <div class="container mx-auto px-4 lg:px-8 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <!-- Content -->
+      <div>
+        <span
+          class="inline-block px-4 py-1.5 rounded-full bg-[#A89CFF]/10 text-[#A89CFF] font-medium text-sm tracking-wide uppercase mb-4"
+        >
+          Seguridad
+        </span>
+        <h2
+          class="text-3xl lg:text-4xl xl:text-5xl font-bold text-[#1E1B4B] leading-tight mb-6"
+        >
+          Tu privacidad es nuestra prioridad
+        </h2>
+        <p class="text-lg text-[#6B7280] mb-8">
+          Entendemos que tus recuerdos son íntimos. Por eso hemos construido
+          Bimoora con la seguridad como pilar fundamental.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-6">
+          {
+            securityFeatures.map((feature, index) => (
+              <div
+                class="flex gap-4 animate-fade-in-up"
+                style={`animation-delay: ${index * 0.1}s`}
+              >
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-[#A89CFF]/10 flex items-center justify-center">
+                  <svg
+                    class="w-6 h-6 text-[#A89CFF]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d={iconPaths[feature.icon]} />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-[#1E1B4B] mb-1">
+                    {feature.title}
+                  </h3>
+                  <p class="text-sm text-[#6B7280]">{feature.description}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Visual -->
+      <div class="relative">
+        <!-- Main card -->
+        <div
+          class="relative bg-white rounded-3xl shadow-2xl shadow-[#A89CFF]/20 p-8 border border-[#E8D4F8]/30"
+        >
+          <!-- Shield icon -->
+          <div
+            class="absolute -top-6 -right-6 w-20 h-20 rounded-2xl bg-gradient-to-br from-[#A89CFF] to-[#E8D4F8] flex items-center justify-center shadow-xl rotate-12"
+          >
+            <svg
+              class="w-10 h-10 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              ></path>
+            </svg>
+          </div>
+
+          <!-- Content -->
+          <div class="flex items-center gap-4 mb-6">
+            <div
+              class="w-14 h-14 rounded-full bg-gradient-to-br from-[#FFC8DD] to-[#FF8FAB] flex items-center justify-center p-0.5 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[#FF8FAB]/30 cursor-pointer"
+            >
+              <div
+                class="w-full h-full bg-white rounded-full flex items-center justify-center p-2 transition-transform duration-300 hover:rotate-12"
+              >
+                <img
+                  class="w-full h-full object-contain transition-transform duration-300"
+                  src={LogoSinFondo.src}
+                  alt="Bimoora"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div>
+              <h4 class="font-semibold text-[#1E1B4B]">Tu espacio privado</h4>
+              <p class="text-sm text-[#6B7280]">Solo para ti y tu pareja</p>
+            </div>
+          </div>
+
+          <!-- Security indicators -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 p-3 bg-[#FDFBFF] rounded-xl">
+              <div
+                class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center"
+              >
+                <svg
+                  class="w-4 h-4 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <span class="text-sm text-[#1E1B4B]"
+                >Cifrado de extremo a extremo</span
+              >
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-[#FDFBFF] rounded-xl">
+              <div
+                class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center"
+              >
+                <svg
+                  class="w-4 h-4 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <span class="text-sm text-[#1E1B4B]"
+                >Verificación en dos pasos</span
+              >
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-[#FDFBFF] rounded-xl">
+              <div
+                class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center"
+              >
+                <svg
+                  class="w-4 h-4 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <span class="text-sm text-[#1E1B4B]">Respaldos automáticos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating decorations -->
+        <div
+          class="absolute -bottom-4 -left-4 w-24 h-24 rounded-2xl bg-gradient-to-br from-[#8EC5FC] to-[#E0C3FC] opacity-30 blur-xl"
+        >
+        </div>
+        <div
+          class="absolute top-1/2 -right-8 w-16 h-16 rounded-full bg-[#FFC8DD]/40 blur-lg"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

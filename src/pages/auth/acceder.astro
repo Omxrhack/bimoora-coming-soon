@@ -1,0 +1,59 @@
+---
+import "../../styles/global.css";
+
+import AccederForm from "../../components/auth/AccederForm";
+import LogoSinFondo from "../../assets/bimooralogo-sinfondo.png";
+
+// Structured Data for SEO
+const structuredData = {
+	"@context": "https://schema.org",
+	"@type": "WebPage",
+	name: "Acceder - Bimoora",
+	description:
+		"Inicia sesión en Bimoora y accede a tu espacio privado con tu pareja.",
+};
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary Meta Tags -->
+		<title>Acceder — Bimoora</title>
+		<meta name="title" content="Acceder — Bimoora" />
+		<meta
+			name="description"
+			content="Inicia sesión en Bimoora y accede a tu espacio privado con tu pareja. Donde el amor deja memoria."
+		/>
+		<meta name="robots" content="noindex, nofollow" />
+		<meta name="theme-color" content="#A89CFF" />
+
+		<!-- Canonical URL -->
+		<link rel="canonical" href="https://bimoora.com/auth/acceder" />
+
+		<!-- Favicon -->
+		<link rel="icon" type="image/png" href={LogoSinFondo.src} />
+		<link rel="apple-touch-icon" href={LogoSinFondo.src} />
+
+		<!-- Preconnect for performance -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Structured Data (JSON-LD) -->
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify(structuredData)}
+		/>
+	</head>
+	<body
+		class="bg-gradient-to-br from-[#E8D4F8]/20 via-white to-[#FFC8DD]/10 transition-colors duration-300"
+	>
+		<AccederForm client:load />
+	</body>
+</html>

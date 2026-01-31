@@ -1,0 +1,152 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Heart, Home, ArrowLeft } from "lucide-react";
+---
+
+<Layout title="Página no encontrada - Bimoora">
+    <div class="min-h-screen flex relative overflow-hidden">
+        <!-- Background gradient orbs -->
+        <div
+            class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse [animation-duration:4s]"
+        >
+        </div>
+        <div
+            class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse [animation-duration:4s] [animation-delay:1s]"
+        >
+        </div>
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse [animation-duration:4s] [animation-delay:2s]"
+        >
+        </div>
+
+        <!-- Decorative particles -->
+        <div
+            class="absolute top-20 right-20 w-2 h-2 bg-[#A89CFF]/40 rounded-full animate-pulse [animation-duration:2s]"
+        >
+        </div>
+        <div
+            class="absolute top-40 left-20 w-1.5 h-1.5 bg-[#FF8FAB]/40 rounded-full animate-pulse [animation-duration:2s] [animation-delay:0.5s]"
+        >
+        </div>
+        <div
+            class="absolute bottom-40 right-32 w-2 h-2 bg-[#E8D4F8]/50 rounded-full animate-pulse [animation-duration:2s] [animation-delay:1s]"
+        >
+        </div>
+        <div
+            class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-pulse [animation-duration:2s] [animation-delay:1.5s]"
+        >
+        </div>
+        <!-- Main Content -->
+        <div
+            class="flex-1 flex flex-col items-center justify-center px-6 py-12 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10"
+        >
+            <div class="w-full max-w-2xl mx-auto text-center">
+                <!-- 404 Number with gradient -->
+                <div class="relative mb-8">
+                    <h1
+                        class="text-[180px] md:text-[240px] font-black bg-gradient-to-r from-[#A89CFF] via-[#E8D4F8] to-[#FFC8DD] bg-clip-text text-transparent leading-none select-none"
+                    >
+                        404
+                    </h1>
+                    <!-- Floating hearts -->
+                    <Heart
+                        className="absolute top-8 left-1/4 w-12 h-12 text-[#FF8FAB]/30 animate-bounce [animation-duration:3s]"
+                        client:load
+                    />
+                    <Heart
+                        className="absolute bottom-8 right-1/4 w-8 h-8 text-[#A89CFF]/30 animate-bounce [animation-duration:2.5s] [animation-delay:0.5s]"
+                        client:load
+                    />
+                </div>
+
+                <!-- Message Card -->
+                <div
+                    class="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl shadow-[#A89CFF]/10 p-8 md:p-12 border border-[#E8D4F8]/30 mb-8"
+                >
+                    <div
+                        class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/20 mb-6"
+                    >
+                        <Heart class="w-10 h-10 text-[#A89CFF]" />
+                    </div>
+
+                    <h2
+                        class="text-3xl md:text-4xl font-bold text-[#1E1B4B] mb-4"
+                    >
+                        ¡Ups! Página no encontrada
+                    </h2>
+
+                    <p class="text-lg text-[#6B7280] mb-8 max-w-md mx-auto">
+                        Parece que esta página se fue de luna de miel. No te
+                        preocupes, te ayudamos a encontrar el camino de vuelta.
+                    </p>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a
+                            href="/"
+                            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                        >
+                            <Home class="w-5 h-5" />
+                            Volver al inicio
+                        </a>
+
+                        <button
+                            onclick="window.history.back()"
+                            class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#E8D4F8] text-[#A89CFF] font-semibold rounded-xl hover:bg-[#E8D4F8]/20 hover:border-[#A89CFF]/50 transition-all"
+                        >
+                            <ArrowLeft class="w-5 h-5" />
+                            Página anterior
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Helpful Links -->
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto"
+                >
+                    <a
+                        href="/auth/crear-cuenta"
+                        class="p-4 bg-white/50 rounded-2xl border border-[#E8D4F8]/30 hover:bg-white/80 hover:border-[#A89CFF]/30 transition-all group"
+                    >
+                        <h3
+                            class="font-semibold text-[#1E1B4B] mb-1 group-hover:text-[#A89CFF] transition-colors"
+                        >
+                            Crear cuenta
+                        </h3>
+                        <p class="text-sm text-[#6B7280]">Únete a Bimoora</p>
+                    </a>
+
+                    <a
+                        href="/auth/acceder"
+                        class="p-4 bg-white/50 rounded-2xl border border-[#E8D4F8]/30 hover:bg-white/80 hover:border-[#A89CFF]/30 transition-all group"
+                    >
+                        <h3
+                            class="font-semibold text-[#1E1B4B] mb-1 group-hover:text-[#A89CFF] transition-colors"
+                        >
+                            Iniciar sesión
+                        </h3>
+                        <p class="text-sm text-[#6B7280]">Accede a tu cuenta</p>
+                    </a>
+
+                    <a
+                        href="/#features"
+                        class="p-4 bg-white/50 rounded-2xl border border-[#E8D4F8]/30 hover:bg-white/80 hover:border-[#A89CFF]/30 transition-all group"
+                    >
+                        <h3
+                            class="font-semibold text-[#1E1B4B] mb-1 group-hover:text-[#A89CFF] transition-colors"
+                        >
+                            Características
+                        </h3>
+                        <p class="text-sm text-[#6B7280]">Descubre Bimoora</p>
+                    </a>
+                </div>
+
+                <!-- Fun message -->
+                <p class="mt-8 text-sm text-[#9CA3AF] italic">
+                    "El amor verdadero siempre encuentra el camino... ¡incluso
+                    en una página 404!" 💕
+                </p>
+            </div>
+        </div>
+    </div>
+</Layout>

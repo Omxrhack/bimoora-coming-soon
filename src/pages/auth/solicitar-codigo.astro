@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RequestCode from '../../components/auth/RequestCode';
+---
+
+<Layout title="Iniciar sesión - Bimoora">
+  <div class="min-h-screen flex items-center justify-center py-12 px-4">
+    <RequestCode client:load redirectTo="/auth/verificar-codigo" />
+  </div>
+</Layout>

@@ -1,0 +1,13 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PrivateRoute from "../../components/auth/PrivateRoute";
+import OnboardingContainer from "../../components/onboarding/OnboardingContainer";
+---
+
+<Layout title="Crear Espacio - Bimoora">
+    <div class="min-h-screen bg-[#FDFBFF]">
+        <PrivateRoute client:load>
+            <OnboardingContainer client:only="react" />
+        </PrivateRoute>
+    </div>
+</Layout>

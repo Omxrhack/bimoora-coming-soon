@@ -1,8 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
 :root {
   font-family: 'Poppins', system-ui, sans-serif;
+
+  /* Light mode colors */
+  --bg-primary: #FDFBFF;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F8F6FC;
+  --text-primary: #1E1B4B;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border-color: rgba(232, 212, 248, 0.5);
+  --border-color-strong: rgba(232, 212, 248, 0.8);
+  --card-bg: #FFFFFF;
+  --card-shadow: rgba(168, 156, 255, 0.15);
+  --overlay-bg: rgba(253, 251, 255, 0.8);
 }
+
+
 
 body {
   margin: 0;
@@ -10,13 +26,19 @@ body {
   font-family: 'Poppins', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Animación float para las tarjetas */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -37,6 +59,7 @@ body {
     opacity: 0;
     transform: translate(-50%, -20px);
   }
+
   100% {
     opacity: 1;
     transform: translate(-50%, 0);
@@ -45,6 +68,23 @@ body {
 
 .animate-slide-down {
   animation: slide-down 0.3s ease-out;
+}
+
+/* Animación para FAQ accordion */
+@keyframes fade-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+details[open]>div {
+  animation: fade-slide-in 0.3s ease-out;
 }
 
 /* Animación de spin para el spinner */
@@ -90,7 +130,7 @@ body {
 }
 
 /* Asegurar que el contenido del botón esté sobre el efecto shine */
-.button-hover > * {
+.button-hover>* {
   position: relative;
   z-index: 2;
 }
@@ -100,6 +140,7 @@ body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -110,6 +151,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -126,10 +168,13 @@ body {
 
 /* Animación de pulso lento para los orbs */
 @keyframes pulse-slow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.5;
     transform: scale(1.05);
@@ -142,10 +187,13 @@ body {
 
 /* Animación de twinkle para partículas */
 @keyframes twinkle {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.2);
@@ -182,9 +230,12 @@ body {
 
 /* Animación de gradiente para el título */
 @keyframes gradient {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -192,4 +243,43 @@ body {
 
 .animate-gradient {
   animation: gradient 3s ease infinite;
+}
+
+/* Animación para la llama */
+@keyframes flame-flicker {
+
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  25% {
+    transform: scale(1.05) translateY(-2px);
+    opacity: 0.95;
+  }
+
+  50% {
+    transform: scale(0.98) translateY(1px);
+    opacity: 0.9;
+  }
+
+  75% {
+    transform: scale(1.02) translateY(-1px);
+    opacity: 0.95;
+  }
+}
+
+.animate-flame-flicker {
+  animation: flame-flicker 2s ease-in-out infinite;
+}
+
+/* Utilidad para ocultar scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
