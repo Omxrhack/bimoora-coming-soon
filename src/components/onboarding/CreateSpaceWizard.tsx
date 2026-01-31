@@ -188,7 +188,7 @@ export default function CreateSpaceWizard({ onBack }: CreateSpaceWizardProps) {
                 <div className="space-y-6">
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-[#1E1B4B]">Código de Invitación</label>
-                        <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 font-mono text-center text-lg tracking-widest text-[#1E1B4B]">
+                        <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 font-mono text-center text-sm md:text-base tracking-wider text-[#1E1B4B] break-all select-all">
                             {joinCode}
                         </div>
                     </div>
