@@ -41,7 +41,6 @@ export async function sendOtp(email: string, shouldCreateUser: boolean = false):
     };
   }
 
-  console.log('[authOtp] sendOtp called for:', normalizedEmail, 'shouldCreateUser:', shouldCreateUser);
 
   try {
     const { data, error } = await supabase.auth.signInWithOtp({
@@ -74,7 +73,9 @@ export async function sendOtp(email: string, shouldCreateUser: boolean = false):
       return { data: null, error, isRateLimited: false };
     }
 
-    console.log('[authOtp] OTP sent successfully');
+
+    console.log(' [authOtp] PETICIÓN EXITOSA - OTP ENVIADO A SUPABASE');
+
     return { data, error: null, isRateLimited: false };
 
   } catch (err) {
@@ -98,12 +99,52 @@ export async function resendOtp(email: string): Promise<OtpResult> {
   return sendOtp(email, false);
 }
 
+// Timeout para evitar que la UI se quede congelada (15 segundos)
+const REQUEST_TIMEOUT = 15000;
+
+// Helper para timeout
+const withTimeout = async <T>(promise: Promise<T>): Promise<T> => {
+  let timeoutId: NodeJS.Timeout;
+  const timeoutPromise = new Promise<T>((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error('Tiempo de espera agotado. Revisa tu conexión.')), REQUEST_TIMEOUT);
+  });
+  try {
+    const result = await Promise.race([promise, timeoutPromise]);
+    clearTimeout(timeoutId!);
+    return result;
+  } catch (error) {
+    clearTimeout(timeoutId!);
+    throw error;
+  }
+};
+
+/**
+ * Normaliza errores de Supabase a mensajes amigables en español
+ */
+function normalizeAuthError(error: any): string {
+  if (!error) return 'Error desconocido';
+  const msg = error.message?.toLowerCase() || '';
+  const code = error.code || '';
+
+  if (msg.includes('rate') || msg.includes('limit') || msg.includes('429')) return 'Demasiados intentos. Por favor espera unos minutos.';
+  if (code === 'otp_expired' || msg.includes('expired')) return 'El código ha expirado. Solicita uno nuevo.';
+  if (msg.includes('invalid') || msg.includes('check')) return 'Código incorrecto o inválido.';
+  if (msg.includes('network') || msg.includes('fetch')) return 'Error de conexión. Verifica tu internet.';
+  if (msg.includes('user not found')) return 'Usuario no encontrado.';
+
+  return 'Ocurrió un error. Intenta nuevamente.';
+}
+
 /**
  * Verifica el código OTP ingresado por el usuario.
  * 
+ * IMPORTANTE: Esta función intenta verificar con el tipo especificado primero.
+ * Si falla, intenta automáticamente con el otro tipo común (email/signup).
+ * Esto resuelve el problema de no saber si el token viene de signUp o signInWithOtp.
+ * 
  * @param email - Email del usuario
  * @param code - Código OTP de 6 dígitos (se sanitiza automáticamente)
- * @param type - Tipo de OTP: 'email' para signInWithOtp, 'signup' para flujo nativo de registro
+ * @param type - Tipo de OTP preferido: 'email' para signInWithOtp, 'signup' para registro
  */
 export async function verifyOtp(
   email: string,
@@ -122,47 +163,61 @@ export async function verifyOtp(
       data: null,
       error: new Error('El código debe tener exactamente 6 dígitos'),
       isExpired: false,
-      isInvalid: true
+      isInvalid: true,
+      message: 'Código incompleto'
     };
   }
 
-  try {
-    const { data, error } = await supabase.auth.verifyOtp({
+  // Función auxiliar para intentar verificar con un tipo específico
+  const tryVerify = async (verifyType: 'signup' | 'email' | 'magiclink' | 'recovery') => {
+    console.log('[authOtp] Trying verifyOtp with type:', verifyType);
+    const { data, error } = await withTimeout(supabase.auth.verifyOtp({
       email: sanitizedEmail,
       token: sanitizedCode,
-      type,
-    });
+      type: verifyType,
+    }));
+    return { data, error };
+  };
 
-    if (error) {
-      const errorMessage = error.message?.toLowerCase() || '';
-      const errorCode = (error as any)?.code || '';
+  try {
+    // Primer intento con el tipo especificado
+    let result = await tryVerify(type);
 
-      // Detectar expiración
-      const isExpired =
-        errorCode === 'otp_expired' ||
-        errorMessage.includes('expired') ||
-        errorMessage.includes('expirado');
+    // Si falla y el tipo es 'signup' o 'email', intentar con el otro
+    if (result.error && (type === 'signup' || type === 'email')) {
+      const alternativeType = type === 'signup' ? 'email' : 'signup';
+      console.log('[authOtp] First attempt failed, trying alternative type:', alternativeType);
 
-      // Detectar código inválido
-      const isInvalid =
-        errorMessage.includes('invalid') ||
-        errorMessage.includes('inválido');
+      const alternativeResult = await tryVerify(alternativeType);
 
-      console.log('[authOtp] verifyOtp error:', { isExpired, isInvalid, message: error.message });
+      // Si el alternativo funciona, usarlo
+      if (!alternativeResult.error) {
+        console.log('[authOtp] Alternative type succeeded:', alternativeType);
+        result = alternativeResult;
+      }
+    }
 
-      return { data: null, error, isExpired, isInvalid };
+    if (result.error) {
+      const message = normalizeAuthError(result.error);
+      const isExpired = message.includes('expirado');
+      const isInvalid = message.includes('incorrecto') || message.includes('inválido');
+
+      console.log('[authOtp] verifyOtp error:', { isExpired, isInvalid, message: result.error.message });
+
+      return { data: null, error: result.error, isExpired, isInvalid, message };
     }
 
     console.log('[authOtp] verifyOtp success - session created');
-    return { data, error: null, isExpired: false, isInvalid: false };
+    return { data: result.data, error: null, isExpired: false, isInvalid: false, message: null };
 
-  } catch (err) {
+  } catch (err: any) {
     console.error('[authOtp] Unexpected error in verifyOtp:', err);
     return {
       data: null,
-      error: err as Error,
+      error: err,
       isExpired: false,
-      isInvalid: false
+      isInvalid: false,
+      message: normalizeAuthError(err)
     };
   }
 }

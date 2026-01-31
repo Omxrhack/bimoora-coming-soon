@@ -88,12 +88,10 @@ export default function VerifyCode({
         }
       }
 
-      // Tipo de OTP
-      const urlType = params.get('type');
-      if (urlType && ['signup', 'magiclink', 'recovery', 'email'].includes(urlType)) {
-        setOtpType(urlType as typeof otpType);
-        console.log('[VerifyCode] OTP type from URL:', urlType);
-      }
+      // Tipo de OTP: SIEMPRE es email para este flujo
+      // Ignoramos cualquier parámetro 'type' de la URL para evitar confusiones
+      setOtpType('email');
+      console.log('[VerifyCode] OTP type forced to: email');
     }
 
     // Marcar como montado para evitar hydration mismatch
@@ -104,15 +102,37 @@ export default function VerifyCode({
   }, [emailProp]);
 
   // ========================================================================
-  // COOLDOWN TIMER
+  // PERSISTENCIA DE COOLDOWN
   // ========================================================================
   useEffect(() => {
+    // Al montar, recuperar cooldown si existe y es válido
+    const savedCooldown = sessionStorage.getItem('otp_cooldown');
+    const savedTime = sessionStorage.getItem('otp_cooldown_timestamp');
+
+    if (savedCooldown && savedTime) {
+      const elapsed = Math.floor((Date.now() - parseInt(savedTime)) / 1000);
+      const remaining = parseInt(savedCooldown) - elapsed;
+
+      if (remaining > 0) {
+        setCooldown(remaining);
+      } else {
+        sessionStorage.removeItem('otp_cooldown');
+        sessionStorage.removeItem('otp_cooldown_timestamp');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Timer del cooldown
     if (cooldown <= 0) return;
 
     const timer = setInterval(() => {
       setCooldown(prev => {
         if (prev <= 1) {
           clearInterval(timer);
+          // Limpiar storage al terminar
+          sessionStorage.removeItem('otp_cooldown');
+          sessionStorage.removeItem('otp_cooldown_timestamp');
           return 0;
         }
         return prev - 1;
@@ -121,6 +141,13 @@ export default function VerifyCode({
 
     return () => clearInterval(timer);
   }, [cooldown]);
+
+  // Helper para guardar cooldown
+  const startCooldown = (seconds: number) => {
+    setCooldown(seconds);
+    sessionStorage.setItem('otp_cooldown', seconds.toString());
+    sessionStorage.setItem('otp_cooldown_timestamp', Date.now().toString());
+  };
 
   // ========================================================================
   // AUTO-FOCUS (solo después de montar)
@@ -151,12 +178,10 @@ export default function VerifyCode({
   }, []);
 
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Prevenir submit con Enter
     if (e.key === 'Enter') {
       e.preventDefault();
       return;
     }
-    // Retroceder con backspace
     if (e.key === 'Backspace' && !code[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -181,50 +206,37 @@ export default function VerifyCode({
     const fullCode = code.join('');
 
     // Guards anti-repetición
-    if (isVerifyingRef.current) {
-      console.log('[VerifyCode] Verify blocked: already verifying (ref)');
-      return;
-    }
-    if (isVerifying) {
-      console.log('[VerifyCode] Verify blocked: already verifying (state)');
-      return;
-    }
+    if (isVerifyingRef.current || isVerifying) return;
 
     if (fullCode.length !== 6) {
       setError('Ingresa el código completo de 6 dígitos');
       return;
     }
 
-    // Bloquear inmediatamente (ref primero, luego state)
+    // Bloquear inmediatamente
     isVerifyingRef.current = true;
     setIsVerifying(true);
     setError(null);
     setSuccess(null);
 
-    console.log('[VerifyCode] Calling verifyOtp with type:', otpType);
-
+    // Usamos el servicio robusto que maneja tipos automáticamente
     const result = await verifyOtp(email, fullCode, otpType);
 
     setIsVerifying(false);
-    // NO liberar isVerifyingRef durante redirect para evitar doble llamada
 
     if (result.error) {
-      // Liberar guard solo si hay error (para permitir reintentar)
       isVerifyingRef.current = false;
+      // Usamos el mensaje normalizado del servicio
+      setError(result.message || 'Error al verificar');
 
-      if (result.isExpired) {
-        setError('Tu código ha expirado o ya fue usado. Haz clic en "Reenviar código" para obtener uno nuevo.');
-      } else if (result.isInvalid) {
-        setError('Código incorrecto. Verifica los 6 dígitos.');
-      } else {
-        setError('No se pudo verificar el código. Intenta de nuevo.');
+      // Limpiar código si es inválido
+      if (result.isInvalid || result.isExpired) {
+        setCode(['', '', '', '', '', '']);
+        inputRefs.current[0]?.focus();
       }
-
-      // Limpiar código
-      setCode(['', '', '', '', '', '']);
-      inputRefs.current[0]?.focus();
     } else {
       setSuccess('¡Verificado! Redirigiendo...');
+      // No liberamos isVerifyingRef para evitar doble submit durante redirect
       setTimeout(() => {
         window.location.href = redirectTo;
       }, 1000);
@@ -235,27 +247,12 @@ export default function VerifyCode({
   // REENVIAR CÓDIGO
   // ========================================================================
   const handleResend = useCallback(async () => {
-    // Guards anti-repetición
-    if (cooldown > 0) {
-      console.log('[VerifyCode] Resend blocked: cooldown active');
-      return;
-    }
-    if (isResendingRef.current) {
-      console.log('[VerifyCode] Resend blocked: already resending (ref)');
-      return;
-    }
-    if (isResending) {
-      console.log('[VerifyCode] Resend blocked: already resending (state)');
-      return;
-    }
+    if (cooldown > 0 || isResendingRef.current || isResending) return;
 
-    // Bloquear inmediatamente
     isResendingRef.current = true;
     setIsResending(true);
     setError(null);
     setSuccess(null);
-
-    console.log('[VerifyCode] Calling resendOtp for:', email);
 
     const result = await resendOtp(email);
 
@@ -263,21 +260,25 @@ export default function VerifyCode({
     isResendingRef.current = false;
 
     if (result.error) {
-      if (result.isRateLimited) {
+      // Usar mensaje normalizado o fallback
+      const msg = (result.error as any).message || '';
+
+      if (result.isRateLimited || msg.includes('rate') || msg.includes('limit')) {
         const waitTime = result.retryAfterSeconds || 60;
         setError(`Demasiados intentos. Espera ${waitTime} segundos.`);
-        setCooldown(waitTime);
+        startCooldown(waitTime);
       } else {
         setError('No se pudo reenviar el código. Intenta más tarde.');
-        setCooldown(30); // Cooldown mínimo en error
+        startCooldown(30); // Cooldown defensivo
       }
     } else {
-      setSuccess('¡Nuevo código enviado! Revisa tu correo (también spam).');
-      setCooldown(60); // Cooldown normal de 60s
+      setSuccess('¡Nuevo código enviado! Revisa tu correo.');
+      startCooldown(60);
+
+      // Reset inputs
       setCode(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
-      // Al reenviar manualmente, el nuevo token es tipo 'email'
-      setOtpType('email');
+      setOtpType('email'); // Reset a tipo email estándar
     }
   }, [cooldown, email, isResending]);
 

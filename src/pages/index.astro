@@ -1,5 +1,4 @@
 ---
-import { ViewTransitions } from "astro:transitions";
 import "../styles/global.css";
 
 // Components
@@ -127,9 +126,6 @@ const structuredData = {
 			type="application/ld+json"
 			set:html={JSON.stringify(structuredData)}
 		/>
-
-		<!-- View Transitions -->
-		<ViewTransitions />
 	</head>
 	<body class="transition-colors duration-300">
 		<!-- Navbar -->
@@ -175,6 +171,12 @@ const structuredData = {
 			<div
 				class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-twinkle"
 				style="animation-delay: 2s;"
+			>
+			</div>
+
+			<!-- Bottom gradient fade for smooth transition -->
+			<div
+				class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-[#FDFBFF] pointer-events-none z-20"
 			>
 			</div>
 

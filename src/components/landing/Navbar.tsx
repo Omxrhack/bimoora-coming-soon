@@ -71,6 +71,8 @@ export default function Navbar() {
 
           {/* Desktop Auth */}
           <div className="hidden lg:flex items-center gap-3">
+
+
             <AuthNavbar />
           </div>
 
@@ -105,11 +107,12 @@ export default function Navbar() {
               </a>
             ))}
           </nav>
-          <div className="pt-4 border-t border-[#E8D4F8]/50">
+          <div className="pt-4 border-t border-[#E8D4F8]/50 space-y-2">
+
             <AuthNavbar />
           </div>
         </div>
       </div>
-    </header>
+    </header >
   )
 }

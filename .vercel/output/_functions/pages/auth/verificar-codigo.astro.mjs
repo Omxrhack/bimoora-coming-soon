@@ -51,7 +51,7 @@ function VerifyCode({
         if (urlEmail) setEmail(decodeURIComponent(urlEmail).trim().toLowerCase());
       }
       const urlType = params.get("type");
-      if (urlType && ["signup", "magiclink", "recovery", "email"].includes(urlType)) {
+      if (urlType && ["email", "magiclink", "recovery", "signup"].includes(urlType)) {
         setOtpType(urlType);
       }
     }
@@ -159,7 +159,8 @@ function VerifyCode({
       inputRefs.current[0]?.focus();
     }
   };
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-screen flex relative overflow-hidden", children: [
+  return /* @__PURE__ */ jsxs("div", {
+    className: "min-h-screen flex relative overflow-hidden", children: [
     /* @__PURE__ */ jsx("div", { className: "absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#E8D4F8]/30 rounded-full blur-3xl -translate-y-1/2 animate-pulse", style: { animationDuration: "4s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#A89CFF]/20 rounded-full blur-3xl translate-y-1/2 animate-pulse", style: { animationDuration: "4s", animationDelay: "1s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#FFC8DD]/15 rounded-full blur-3xl animate-pulse", style: { animationDuration: "4s", animationDelay: "2s" } }),
@@ -167,105 +168,130 @@ function VerifyCode({
     /* @__PURE__ */ jsx("div", { className: "absolute top-40 left-20 w-1.5 h-1.5 bg-[#FF8FAB]/40 rounded-full animate-pulse", style: { animationDuration: "2s", animationDelay: "0.5s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute bottom-40 right-32 w-2 h-2 bg-[#E8D4F8]/50 rounded-full animate-pulse", style: { animationDuration: "2s", animationDelay: "1s" } }),
     /* @__PURE__ */ jsx("div", { className: "absolute bottom-20 left-32 w-1.5 h-1.5 bg-[#8EC5FC]/40 rounded-full animate-pulse", style: { animationDuration: "2s", animationDelay: "1.5s" } }),
-    /* @__PURE__ */ jsx("div", { className: "flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10", children: /* @__PURE__ */ jsxs("div", { className: "w-full max-w-md mx-auto", children: [
+    /* @__PURE__ */ jsx("div", {
+      className: "flex-1 flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#FDFBFF]/80 backdrop-blur-sm relative z-10", children: /* @__PURE__ */ jsxs("div", {
+        className: "w-full max-w-md mx-auto", children: [
       /* @__PURE__ */ jsxs(
-        "a",
-        {
-          href: "/auth/crear-cuenta",
-          className: "inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors mb-8",
-          children: [
-            /* @__PURE__ */ jsx(ArrowLeft, { className: "w-4 h-4" }),
-            "Volver al registro"
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxs("div", { className: "text-center mb-8", children: [
-        /* @__PURE__ */ jsx("div", { className: "inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/20 mb-4", children: /* @__PURE__ */ jsx(Shield, { className: "w-8 h-8 text-[#A89CFF]" }) }),
-        /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-[#1E1B4B] mb-2", children: "Verificar código" }),
-        /* @__PURE__ */ jsx("p", { className: "text-[#6B7280]", children: "Ingresa el código de 6 dígitos enviado a" }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2 mt-2", children: [
-          /* @__PURE__ */ jsx(Mail, { className: "w-4 h-4 text-[#A89CFF]" }),
-          /* @__PURE__ */ jsx("span", { className: "font-medium text-[#1E1B4B]", children: email })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "bg-white/80 backdrop-blur-md rounded-2xl shadow-xl shadow-[#A89CFF]/10 p-8 border border-[#E8D4F8]/30", children: [
-        /* @__PURE__ */ jsxs("form", { onSubmit: handleVerify, className: "space-y-6", children: [
-          /* @__PURE__ */ jsx("input", { type: "hidden", value: email }),
-          /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-sm font-medium text-[#1E1B4B] text-center", children: "Código de verificación" }),
-            /* @__PURE__ */ jsx("div", { className: "flex justify-center gap-3", onPaste: handlePaste, children: code.map((digit, index) => /* @__PURE__ */ jsx(
-              "input",
-              {
-                ref: (el) => {
-                  inputRefs.current[index] = el;
-                },
-                type: "text",
-                inputMode: "numeric",
-                maxLength: 1,
-                value: digit,
-                onChange: (e) => handleCodeChange(index, e.target.value),
-                onKeyDown: (e) => handleKeyDown(index, e),
-                className: "w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 border-[#E8D4F8] bg-white text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/50",
-                "aria-label": `Dígito ${index + 1}`
-              },
-              index
-            )) }),
-            /* @__PURE__ */ jsx("p", { className: "text-xs text-center text-[#9CA3AF]", children: "El código expira en 5 minutos" })
-          ] }),
-          info && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-green-700 text-center font-medium", children: info }) }),
-          error && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-red-700 text-center font-medium", children: error }) }),
-          /* @__PURE__ */ jsx(
-            "button",
-            {
-              type: "submit",
-              disabled: loading || fullCode.length !== 6 || isVerifyingRef.current,
-              onClick: (e) => {
-                if (isVerifyingRef.current || loading) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-              },
-              className: "w-full px-6 py-3.5 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#A89CFF]/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none",
-              children: loading ? /* @__PURE__ */ jsxs("span", { className: "flex items-center justify-center gap-2", children: [
-                /* @__PURE__ */ jsxs("svg", { className: "animate-spin h-5 w-5", viewBox: "0 0 24 24", children: [
-                  /* @__PURE__ */ jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", fill: "none" }),
-                  /* @__PURE__ */ jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
-                ] }),
-                "Verificando..."
-              ] }) : "Verificar código"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "relative my-6", children: [
-          /* @__PURE__ */ jsx("div", { className: "absolute inset-0 flex items-center", children: /* @__PURE__ */ jsx("div", { className: "w-full border-t border-[#E8D4F8]/50" }) }),
-          /* @__PURE__ */ jsx("div", { className: "relative flex justify-center text-sm", children: /* @__PURE__ */ jsx("span", { className: "px-4 bg-white text-[#9CA3AF]", children: "¿No recibiste el código?" }) })
-        ] }),
-        /* @__PURE__ */ jsxs(
-          "button",
+          "a",
           {
-            type: "button",
-            onClick: handleResend,
-            disabled: resending || cooldown > 0,
-            className: "w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E8D4F8] text-[#A89CFF] font-medium rounded-xl hover:bg-[#A89CFF]/5 hover:border-[#A89CFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+            href: "/auth/crear-cuenta",
+            className: "inline-flex items-center gap-2 text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors mb-8",
             children: [
-              /* @__PURE__ */ jsx(RefreshCw, { className: `w-4 h-4 ${resending ? "animate-spin" : ""}` }),
-              resending ? "Enviando..." : cooldown > 0 ? `Reenviar en ${cooldown}s` : "Reenviar código"
+            /* @__PURE__ */ jsx(ArrowLeft, { className: "w-4 h-4" }),
+              "Volver al registro"
             ]
           }
         ),
-        /* @__PURE__ */ jsx("div", { className: "mt-6 text-center", children: /* @__PURE__ */ jsx(
-          "button",
-          {
-            type: "button",
-            onClick: () => window.location.href = "/auth/crear-cuenta",
-            className: "text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors",
-            children: "← Usar otro correo electrónico"
-          }
-        ) })
-      ] }),
+      /* @__PURE__ */ jsxs("div", {
+          className: "text-center mb-8", children: [
+        /* @__PURE__ */ jsx("div", { className: "inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#A89CFF]/20 to-[#E8D4F8]/20 mb-4", children: /* @__PURE__ */ jsx(Shield, { className: "w-8 h-8 text-[#A89CFF]" }) }),
+        /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-[#1E1B4B] mb-2", children: "Verificar código" }),
+        /* @__PURE__ */ jsx("p", { className: "text-[#6B7280]", children: "Ingresa el código de 6 dígitos enviado a" }),
+        /* @__PURE__ */ jsxs("div", {
+            className: "flex items-center justify-center gap-2 mt-2", children: [
+          /* @__PURE__ */ jsx(Mail, { className: "w-4 h-4 text-[#A89CFF]" }),
+          /* @__PURE__ */ jsx("span", { className: "font-medium text-[#1E1B4B]", children: email })
+            ]
+          })
+          ]
+        }),
+      /* @__PURE__ */ jsxs("div", {
+          className: "bg-white/80 backdrop-blur-md rounded-2xl shadow-xl shadow-[#A89CFF]/10 p-8 border border-[#E8D4F8]/30", children: [
+        /* @__PURE__ */ jsxs("form", {
+            onSubmit: handleVerify, className: "space-y-6", children: [
+          /* @__PURE__ */ jsx("input", { type: "hidden", value: email }),
+          /* @__PURE__ */ jsxs("div", {
+              className: "space-y-3", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-sm font-medium text-[#1E1B4B] text-center", children: "Código de verificación" }),
+            /* @__PURE__ */ jsx("div", {
+                className: "flex justify-center gap-3", onPaste: handlePaste, children: code.map((digit, index) => /* @__PURE__ */ jsx(
+                  "input",
+                  {
+                    ref: (el) => {
+                      inputRefs.current[index] = el;
+                    },
+                    type: "text",
+                    inputMode: "numeric",
+                    maxLength: 1,
+                    value: digit,
+                    onChange: (e) => handleCodeChange(index, e.target.value),
+                    onKeyDown: (e) => handleKeyDown(index, e),
+                    className: "w-12 h-14 text-center text-2xl font-bold rounded-xl border-2 border-[#E8D4F8] bg-white text-[#1E1B4B] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all hover:border-[#A89CFF]/50",
+                    "aria-label": `Dígito ${index + 1}`
+                  },
+                  index
+                ))
+              }),
+            /* @__PURE__ */ jsx("p", { className: "text-xs text-center text-[#9CA3AF]", children: "El código expira en 5 minutos" })
+              ]
+            }),
+              info && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-green-700 text-center font-medium", children: info }) }),
+              error && /* @__PURE__ */ jsx("div", { className: "p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl", children: /* @__PURE__ */ jsx("p", { className: "text-sm text-red-700 text-center font-medium", children: error }) }),
+          /* @__PURE__ */ jsx(
+                "button",
+                {
+                  type: "submit",
+                  disabled: loading || fullCode.length !== 6 || isVerifyingRef.current,
+                  onClick: (e) => {
+                    if (isVerifyingRef.current || loading) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                  },
+                  className: "w-full px-6 py-3.5 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white font-semibold rounded-xl shadow-lg shadow-[#A89CFF]/25 hover:opacity-90 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#A89CFF]/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none",
+                  children: loading ? /* @__PURE__ */ jsxs("span", {
+                    className: "flex items-center justify-center gap-2", children: [
+                /* @__PURE__ */ jsxs("svg", {
+                      className: "animate-spin h-5 w-5", viewBox: "0 0 24 24", children: [
+                  /* @__PURE__ */ jsx("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4", fill: "none" }),
+                  /* @__PURE__ */ jsx("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })
+                      ]
+                    }),
+                      "Verificando..."
+                    ]
+                  }) : "Verificar código"
+                }
+              )
+            ]
+          }),
+        /* @__PURE__ */ jsxs("div", {
+            className: "relative my-6", children: [
+          /* @__PURE__ */ jsx("div", { className: "absolute inset-0 flex items-center", children: /* @__PURE__ */ jsx("div", { className: "w-full border-t border-[#E8D4F8]/50" }) }),
+          /* @__PURE__ */ jsx("div", { className: "relative flex justify-center text-sm", children: /* @__PURE__ */ jsx("span", { className: "px-4 bg-white text-[#9CA3AF]", children: "¿No recibiste el código?" }) })
+            ]
+          }),
+        /* @__PURE__ */ jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: handleResend,
+              disabled: resending || cooldown > 0,
+              className: "w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E8D4F8] text-[#A89CFF] font-medium rounded-xl hover:bg-[#A89CFF]/5 hover:border-[#A89CFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+              children: [
+              /* @__PURE__ */ jsx(RefreshCw, { className: `w-4 h-4 ${resending ? "animate-spin" : ""}` }),
+                resending ? "Enviando..." : cooldown > 0 ? `Reenviar en ${cooldown}s` : "Reenviar código"
+              ]
+            }
+          ),
+        /* @__PURE__ */ jsx("div", {
+            className: "mt-6 text-center", children: /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => window.location.href = "/auth/crear-cuenta",
+                className: "text-sm text-[#6B7280] hover:text-[#A89CFF] transition-colors",
+                children: "← Usar otro correo electrónico"
+              }
+            )
+          })
+          ]
+        }),
       /* @__PURE__ */ jsx("p", { className: "mt-8 text-center text-xs text-[#9CA3AF]", children: "Si no encuentras el correo, revisa tu carpeta de spam" })
-    ] }) })
-  ] });
+        ]
+      })
+    })
+    ]
+  });
 }
 
 const $$VerificarCodigo = createComponent(($$result, $$props, $$slots) => {

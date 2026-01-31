@@ -5,11 +5,15 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, User, Mail, Calendar, LogOut, Heart, Settings, Edit2 } from "lucide-react"
 import { useAuth } from "@/hooks/useAuth"
 import { ToastProvider, useToast } from "@/components/ui/CustomToast"
+import CoupleSpaces from "@/components/profile/CoupleSpaces"
 
 function ProfileContentInner() {
   const { user, isLoading, logout } = useAuth()
   const { showToast } = useToast()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [editedName, setEditedName] = useState('')
+  const [isSavingName, setIsSavingName] = useState(false)
 
   // Redirigir si no hay usuario autenticado
   useEffect(() => {
@@ -22,13 +26,61 @@ function ProfileContentInner() {
     setIsLoggingOut(true)
     const response = await logout()
     if (response.success) {
-      showToast('success', '¡Hasta pronto!', 'Has cerrado sesión correctamente')
-      setTimeout(() => {
-        window.location.href = '/'
-      }, 1500)
+      // No mostrar toast, el estado isLoggingOut ya muestra el loading
+      // Redirigir directamente
+      window.location.href = '/'
     } else {
       showToast('error', 'Error', response.error || 'No se pudo cerrar sesión')
       setIsLoggingOut(false)
+    }
+  }
+
+  const handleEditName = () => {
+    setEditedName(user?.full_name || '')
+    setIsEditingName(true)
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditingName(false)
+    setEditedName('')
+  }
+
+  const handleSaveName = async () => {
+    const trimmedName = editedName.trim()
+
+    if (!trimmedName) {
+      showToast('error', 'Error', 'El nombre no puede estar vacío')
+      return
+    }
+
+    if (trimmedName.length < 2) {
+      showToast('error', 'Error', 'El nombre debe tener al menos 2 caracteres')
+      return
+    }
+
+    if (trimmedName.length > 100) {
+      showToast('error', 'Error', 'El nombre es demasiado largo')
+      return
+    }
+
+    setIsSavingName(true)
+
+    try {
+      const { updateUserProfile } = await import('@/services/authService')
+      const response = await updateUserProfile({ full_name: trimmedName })
+
+      if (response.success) {
+        // Mantener el loading activo y recargar directamente
+        // No quitamos setIsSavingName(false) para que siga mostrando el loading
+        await new Promise(resolve => setTimeout(resolve, 500))
+        window.location.reload()
+      } else {
+        showToast('error', 'Error', response.error || 'No se pudo actualizar el nombre')
+        setIsSavingName(false)
+      }
+    } catch (error) {
+      showToast('error', 'Error', 'Ocurrió un error inesperado')
+      setIsSavingName(false)
     }
   }
 
@@ -39,6 +91,32 @@ function ProfileContentInner() {
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin" />
           <p className="text-[#6B7280]">Cargando...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Mostrar loading mientras se guarda el perfil
+  if (isSavingName) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFBFF]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[#1E1B4B] font-semibold text-lg">Actualizando perfil...</p>
+          <p className="text-[#6B7280] text-sm">Un momento por favor</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Mostrar loading mientras se cierra sesión
+  if (isLoggingOut) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFBFF]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[#1E1B4B] font-semibold text-lg">Cerrando sesión...</p>
+          <p className="text-[#6B7280] text-sm">Hasta pronto</p>
         </div>
       </div>
     )
@@ -109,23 +187,61 @@ function ProfileContentInner() {
             {/* Profile Info */}
             <div className="pt-16 pb-8 px-8">
               {/* Name and Edit */}
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h1 className="text-2xl font-bold text-[#1E1B4B] mb-1 transition-colors">
-                    {user.full_name || 'Usuario de Bimoora'}
-                  </h1>
-                  <p className="text-[#6B7280] text-sm transition-colors">
-                    Miembro de Bimoora
-                  </p>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-[#E8D4F8] text-[#A89CFF] hover:bg-[#E8D4F8]/20"
-                >
-                  <Edit2 className="w-4 h-4 mr-2" />
-                  Editar
-                </Button>
+              <div className="mb-6">
+                {!isEditingName ? (
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h1 className="text-2xl font-bold text-[#1E1B4B] mb-1 transition-colors">
+                        {user.full_name || 'Usuario de Bimoora'}
+                      </h1>
+                      <p className="text-[#6B7280] text-sm transition-colors">
+                        Miembro de Bimoora
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleEditName}
+                      className="border-[#E8D4F8] text-[#A89CFF] hover:bg-[#E8D4F8]/20"
+                    >
+                      <Edit2 className="w-4 h-4 mr-2" />
+                      Editar
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-[#1E1B4B] mb-2">
+                        Nombre completo
+                      </label>
+                      <input
+                        type="text"
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                        placeholder="Tu nombre completo"
+                        className="w-full px-4 py-3 rounded-xl border-2 border-[#E8D4F8] bg-white text-[#1E1B4B] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#A89CFF]/50 focus:border-[#A89CFF] transition-all"
+                        autoFocus
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={handleSaveName}
+                        disabled={isSavingName}
+                        className="flex-1 bg-gradient-to-r from-[#A89CFF] to-[#E8D4F8] text-white hover:opacity-90"
+                      >
+                        {isSavingName ? 'Guardando...' : 'Guardar'}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleCancelEdit}
+                        disabled={isSavingName}
+                        className="flex-1 border-[#E8D4F8] text-[#6B7280] hover:bg-[#E8D4F8]/20"
+                      >
+                        Cancelar
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Info Cards */}
@@ -179,16 +295,9 @@ function ProfileContentInner() {
             </div>
           </div>
 
-          {/* Coming Soon Features */}
-          <div className="mt-8 p-6 bg-white/50 rounded-2xl border border-[#E8D4F8]/30 text-center transition-colors">
-            <Heart className="w-8 h-8 text-[#A89CFF] mx-auto mb-3" />
-            <h3 className="text-lg font-semibold text-[#1E1B4B] mb-2">
-              ¡Próximamente más funciones!
-            </h3>
-            <p className="text-[#6B7280] text-sm">
-              Estamos trabajando en nuevas características para tu perfil.
-              Pronto podrás conectar con tu pareja y más.
-            </p>
+          {/* Couple Spaces */}
+          <div className="mt-8">
+            <CoupleSpaces />
           </div>
         </div>
       </div>

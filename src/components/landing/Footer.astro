@@ -1,4 +1,6 @@
 ---
+import LogoSinFondo from "../../assets/bimooralogo-sinfondo.png";
+
 const footerLinks = {
   producto: [
     { label: "Funciones", href: "#funciones" },
@@ -30,31 +32,38 @@ const socialIcons: Record<string, string> = {
   twitter:
     "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
 };
-import LogoPng from "../../assets/bimooralogo-sin.png";
 ---
 
-<footer
-  class="bg-[#FDFBFF] border-t border-[#E8D4F8]/50 transition-colors duration-300"
->
+<footer class="relative bg-[#FDFBFF] transition-colors duration-300">
+  <!-- Gradient overlay instead of border -->
+  <div
+    class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E8D4F8]/50 to-transparent"
+  >
+  </div>
   <div class="container mx-auto px-4 lg:px-8 py-12 lg:py-16">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
       <!-- Brand -->
       <div class="col-span-2 md:col-span-1">
         <a
           href="/"
-          class="flex items-center gap-2 text-[#1E1B4B] font-semibold text-xl"
+          class="flex items-center gap-2 text-[#1E1B4B] font-semibold text-xl group"
         >
           <span
-            class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#A89CFF] to-[#E8D4F8] flex items-center justify-center text-white text-sm font-bold shadow-md overflow-hidden"
+            class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#A89CFF] to-[#E8D4F8] flex items-center justify-center text-white text-sm font-bold shadow-md overflow-hidden p-1 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#A89CFF]/30"
           >
-            <img
-              class="w-full h-full object-cover"
-              src={LogoPng.src}
-              alt="Bimoora Logo"
-            />
+            <span
+              class="w-full h-full bg-white rounded-md flex items-center justify-center p-1 transition-transform duration-300 group-hover:rotate-6"
+            >
+              <img
+                class="w-full h-full object-contain transition-transform duration-300"
+                src={LogoSinFondo.src}
+                alt="Bimoora Logo"
+                loading="lazy"
+              />
+            </span>
           </span>
           <span
-            class="bg-gradient-to-r from-[#1E1B4B] to-[#A89CFF] bg-clip-text text-transparent"
+            class="bg-gradient-to-r from-[#1E1B4B] to-[#A89CFF] bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105"
           >
             Bimoora
           </span>

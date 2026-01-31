@@ -258,6 +258,43 @@ export const authService = {
   },
 
   /**
+   * Actualizar perfil del usuario
+   */
+  async updateUserProfile(updates: { full_name?: string; avatar_url?: string }): Promise<AuthResponse> {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        data: updates,
+      });
+
+      if (error) {
+        return {
+          success: false,
+          message: 'Error al actualizar perfil',
+          error: error.message,
+        };
+      }
+
+      return {
+        success: true,
+        message: 'Perfil actualizado correctamente',
+        user: data.user ? {
+          id: data.user.id,
+          email: data.user.email!,
+          full_name: data.user.user_metadata?.full_name,
+          avatar_url: data.user.user_metadata?.avatar_url,
+          created_at: data.user.created_at,
+        } : undefined,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Error inesperado',
+        error: String(error),
+      };
+    }
+  },
+
+  /**
    * Escuchar cambios en la sesión
    */
   onAuthStateChange(callback: (user: User | null) => void) {
@@ -276,3 +313,6 @@ export const authService = {
     });
   },
 };
+
+// Named exports para funciones específicas
+export const { updateUserProfile, getCurrentUser, logout } = authService;

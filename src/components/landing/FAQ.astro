@@ -75,12 +75,12 @@ const faqs = [
       {
         faqs.map((faq, index) => (
           <details
-            class="group bg-[#FDFBFF] border border-[#E8D4F8]/50 rounded-2xl overflow-hidden hover:border-[#A89CFF]/30 transition-colors animate-fade-in-up"
+            class="group bg-[#FDFBFF] border border-[#E8D4F8]/50 rounded-2xl overflow-hidden hover:border-[#A89CFF]/30 hover:shadow-md hover:shadow-[#A89CFF]/10 transition-all duration-300 animate-fade-in-up"
             style={`animation-delay: ${index * 0.1}s`}
           >
-            <summary class="flex items-center justify-between cursor-pointer px-6 py-5 text-left text-[#1E1B4B] font-medium hover:text-[#A89CFF] transition-colors">
+            <summary class="flex items-center justify-between cursor-pointer px-6 py-5 text-left text-[#1E1B4B] font-medium hover:text-[#A89CFF] hover:bg-[#E8D4F8]/10 transition-all duration-300">
               <span class="pr-4">{faq.question}</span>
-              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#E8D4F8]/30 flex items-center justify-center group-open:bg-[#A89CFF] transition-colors">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#E8D4F8]/30 flex items-center justify-center group-open:bg-[#A89CFF] group-open:scale-110 transition-all duration-300">
                 <svg
                   class="w-4 h-4 text-[#A89CFF] group-open:text-white group-open:rotate-180 transition-all duration-300"
                   fill="none"
@@ -96,7 +96,7 @@ const faqs = [
                 </svg>
               </span>
             </summary>
-            <div class="px-6 pb-5">
+            <div class="px-6 pb-5 animate-slide-down">
               <p class="text-[#6B7280] leading-relaxed">{faq.answer}</p>
             </div>
           </details>

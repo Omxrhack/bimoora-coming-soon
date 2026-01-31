@@ -7,7 +7,7 @@
 // ÚNICA ubicación donde se llama sendOtp (además del botón Reenviar en VerifyCode).
 // ============================================================================
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { sendOtp } from '@/services/authOtp';
 import { ArrowLeft, Mail } from 'lucide-react';
 
@@ -36,16 +36,40 @@ export default function RequestCode({
   const isSubmittingRef = useRef(false);
 
   // ========================================================================
+  // PERSISTENCIA DE COOLDOWN
+  // ========================================================================
+  useEffect(() => {
+    // Al montar, recuperar cooldown si existe y es válido
+    const savedCooldown = sessionStorage.getItem('req_otp_cooldown');
+    const savedTime = sessionStorage.getItem('req_otp_cooldown_timestamp');
+
+    if (savedCooldown && savedTime) {
+      const elapsed = Math.floor((Date.now() - parseInt(savedTime)) / 1000);
+      const remaining = parseInt(savedCooldown) - elapsed;
+
+      if (remaining > 0) {
+        setCooldown(remaining);
+      } else {
+        sessionStorage.removeItem('req_otp_cooldown');
+        sessionStorage.removeItem('req_otp_cooldown_timestamp');
+      }
+    }
+  }, []);
+
+  // ========================================================================
   // COOLDOWN TIMER
   // ========================================================================
   // Se activa si hay rate limit
-  useState(() => {
+  useEffect(() => {
     if (cooldown <= 0) return;
 
     const timer = setInterval(() => {
       setCooldown(prev => {
         if (prev <= 1) {
           clearInterval(timer);
+          // Limpiar storage al terminar
+          sessionStorage.removeItem('req_otp_cooldown');
+          sessionStorage.removeItem('req_otp_cooldown_timestamp');
           return 0;
         }
         return prev - 1;
@@ -53,7 +77,14 @@ export default function RequestCode({
     }, 1000);
 
     return () => clearInterval(timer);
-  });
+  }, [cooldown]);
+
+  // Helper para guardar cooldown
+  const startCooldown = (seconds: number) => {
+    setCooldown(seconds);
+    sessionStorage.setItem('req_otp_cooldown', seconds.toString());
+    sessionStorage.setItem('req_otp_cooldown_timestamp', Date.now().toString());
+  };
 
   // ========================================================================
   // SUBMIT HANDLER
@@ -63,16 +94,8 @@ export default function RequestCode({
     e.stopPropagation();
 
     // Guards anti-repetición
-    if (isSubmittingRef.current) {
-      console.log('[RequestCode] Submit blocked: already submitting (ref)');
-      return;
-    }
-    if (isLoading) {
-      console.log('[RequestCode] Submit blocked: already loading (state)');
-      return;
-    }
-    if (cooldown > 0) {
-      console.log('[RequestCode] Submit blocked: cooldown active');
+    if (isSubmittingRef.current || isLoading || cooldown > 0) {
+      console.log('[RequestCode] Submit blocked: already submitting, loading, or cooldown active');
       return;
     }
 
@@ -96,12 +119,14 @@ export default function RequestCode({
     isSubmittingRef.current = false;
 
     if (result.error) {
-      if (result.isRateLimited) {
+      // Usar mensaje normalizado o fallback
+      const msg = (result.error as any).message || '';
+
+      if (result.isRateLimited || msg.includes('rate') || msg.includes('limit')) {
         const waitTime = result.retryAfterSeconds || 60;
         setError(`Demasiados intentos. Espera ${waitTime} segundos.`);
-        setCooldown(waitTime);
+        startCooldown(waitTime);
       } else {
-        const msg = (result.error as Error)?.message || '';
         if (msg.toLowerCase().includes('not found') || msg.toLowerCase().includes('no user')) {
           setError('No existe una cuenta con este email. ¿Quieres registrarte?');
         } else {
@@ -110,7 +135,9 @@ export default function RequestCode({
       }
     } else {
       setSuccess('¡Código enviado! Revisa tu correo electrónico.');
-      // Redirigir a verificación
+
+      // IMPORTANTE: Solo navegamos si NO hubo error (incluyendo rate limits 429)
+      // Si hubo error, el usuario permanece aquí para ver el mensaje.
       setTimeout(() => {
         const type = isSignup ? 'signup' : 'email';
         window.location.href = `${redirectTo}?email=${encodeURIComponent(trimmedEmail)}&type=${type}`;

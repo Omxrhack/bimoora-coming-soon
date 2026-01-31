@@ -1,0 +1,19 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Espacio de Pareja - Bimoora">
+    <div id="space-root"></div>
+</Layout>
+
+<script>
+    import { createRoot } from "react-dom/client";
+    import React from "react";
+    import SpaceContent from "../../components/space/SpaceContent";
+
+    const container = document.getElementById("space-root");
+    if (container) {
+        const root = createRoot(container);
+        root.render(React.createElement(SpaceContent));
+    }
+</script>

@@ -70,6 +70,23 @@ body {
   animation: slide-down 0.3s ease-out;
 }
 
+/* Animación para FAQ accordion */
+@keyframes fade-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+details[open]>div {
+  animation: fade-slide-in 0.3s ease-out;
+}
+
 /* Animación de spin para el spinner */
 @keyframes spin {
   to {
@@ -226,4 +243,43 @@ body {
 
 .animate-gradient {
   animation: gradient 3s ease infinite;
+}
+
+/* Animación para la llama */
+@keyframes flame-flicker {
+
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  25% {
+    transform: scale(1.05) translateY(-2px);
+    opacity: 0.95;
+  }
+
+  50% {
+    transform: scale(0.98) translateY(1px);
+    opacity: 0.9;
+  }
+
+  75% {
+    transform: scale(1.02) translateY(-1px);
+    opacity: 0.95;
+  }
+}
+
+.animate-flame-flicker {
+  animation: flame-flicker 2s ease-in-out infinite;
+}
+
+/* Utilidad para ocultar scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

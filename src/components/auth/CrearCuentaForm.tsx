@@ -87,12 +87,10 @@ function CrearCuentaFormContent() {
       // ====================================================================
 
       console.log('[CrearCuenta] Registration successful, redirecting to verify')
-      showToast('success', '¡Cuenta creada!', 'Revisa tu correo para verificar')
-
-      setTimeout(() => {
-        // type=signup porque el email viene del flujo de signUp
-        window.location.href = `/auth/verificar-codigo?email=${encodeURIComponent(normalizedEmail)}&type=signup`
-      }, 1500)
+      // No mostrar toast, el estado isSubmitting ya muestra el loading
+      // Redirigir directamente
+      // type=signup porque el email viene del flujo de signUp
+      window.location.href = `/auth/verificar-codigo?email=${encodeURIComponent(normalizedEmail)}&type=signup`
     } else {
       showToast('error', 'Error al registrar', response.error || response.message)
     }
@@ -103,6 +101,19 @@ function CrearCuentaFormContent() {
     if (!response.success) {
       showToast('error', `Error con ${provider}`, response.error || response.message)
     }
+  }
+
+  // Mostrar pantalla de carga completa cuando está enviando
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFBFF]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[#1E1B4B] font-semibold text-lg">Creando tu cuenta...</p>
+          <p className="text-[#6B7280] text-sm">Un momento por favor</p>
+        </div>
+      </div>
+    )
   }
 
   return (

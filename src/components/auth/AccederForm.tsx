@@ -35,11 +35,9 @@ function AccederFormContent() {
     })
 
     if (response.success) {
-      showToast('success', '¡Bienvenido!', response.message)
-      // Redirigir al perfil
-      setTimeout(() => {
-        window.location.href = '/perfil'
-      }, 1500)
+      // No mostrar toast, el estado isSubmitting ya muestra el loading
+      // Redirigir directamente
+      window.location.href = '/perfil'
     } else {
       showToast('error', 'Error al acceder', response.error || response.message)
     }
@@ -50,6 +48,19 @@ function AccederFormContent() {
     if (!response.success) {
       showToast('error', `Error con ${provider}`, response.error || response.message)
     }
+  }
+
+  // Mostrar pantalla de carga completa cuando está enviando
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFBFF]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-[#A89CFF] border-t-transparent rounded-full animate-spin" />
+          <p className="text-[#1E1B4B] font-semibold text-lg">Iniciando sesión...</p>
+          <p className="text-[#6B7280] text-sm">Un momento por favor</p>
+        </div>
+      </div>
+    )
   }
 
   return (
