@@ -27,3 +27,6 @@ pnpm-debug.log*
 .netlify
 sql
 police
+
+# Vercel
+.vercel
